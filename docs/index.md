@@ -1,37 +1,65 @@
-## Welcome to GitHub Pages
+**[Home](index.html) |  [Real-world Examples](examples.html)**
 
-You can use the [editor on GitHub](https://github.com/udayRage/geoAnalytics/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
+# Tutorial on geoAnalytics Python Package
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## Topic 1: Setting up the computing environment
 
-### Markdown
+Our geoAnalytics package uses  PostGres and PostGIS for storing raster data. Furthermore, geoAnalytics package uses SPARK for running distributed algorithms. Thus, it is important for
+the administrator to setup the necessary computing environment.  
+  
+###1.1. Pre-requisite
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+- [Setting up PostGres and PostGIS in Ubuntu](postGres.html)
+- [Setting up of Hadoop and Spark](https://phoenixnap.com/kb/install-spark-on-ubuntu)  [Spark environment is not mandatory]
+- [Install GDAL and other library](gdal.html)
 
-```markdown
-Syntax highlighted code block
+###1.2. Installation
 
-# Header 1
-## Header 2
-### Header 3
+        pip install geoAnalytics
 
-- Bulleted
-- List
+## Topic 2:  Repository connection
 
-1. Numbered
-2. List
+Execute the below commands to establish a connection to the repository. Please note that the below commands have to be executed only once to establish connection for the next time.
 
-**Bold** and _Italic_ and `Code` text
+### 2.1. Establishing connection to the repository
+    from osgeo import gdal
+    from geoAnalytics import repository as repo
+    repo.connect(repositoryName='repositoryName',hostIP='ipaddress',user='userName', password='passwd')
+    # Re-execute the above step if there exists any typo 
 
-[Link](url) and ![Image](src)
-```
+### 2.2. Testing the repository connection
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+    repo.testConnection()
 
-### Jekyll Themes
+Please contact the system administrator if you face any issues after executing the above command.
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/udayRage/geoAnalytics/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+## Topic 3: Repository maintenance
 
-### Support or Contact
+### 3.1. Creation of a new repository
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+    repo.create(repositoryName='repoName',totalBands=numberOfBands)
+
+### 3.2. Cloning a repository
+
+    repo.clone(repositoryName='sourceRepositoryName', cloneRepositoryName='newRepositoryName')
+
+### 3.3. Deleting a band in a repository
+
+    repo.deleteBand(repositoryName='clone_kaguya_MI_test', bandNumber='1')
+
+### 3.4. Deleting a repository
+
+    repo.delete(repositoryName='clone_kaguya_MI_test')
+
+### 3.5. Size of a repository
+
+    repo.getSize(repositoryName='sourceRepositoryName')
+
+## Topic 4: Reading a repository
+
+
+## Topic 5: Data analytics
+
+### 5.1. Clustering algorithms
+
+
