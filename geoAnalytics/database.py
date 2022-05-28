@@ -11,25 +11,12 @@ import glob
 import sys
 import os
 import threading
-
-# import csv2raster
-# from config import config
-# from shapely import geos, wkb, wkt
-# from osgeo import gdal
-# import numpy as Numeric
-# import pandas as pd
-# import subprocess
-# import psycopg2
-# import random
-# import sys
-# import os
-# import threading
-# import glob
+from tqdm import tqdm
 
 
 def connect(dbName, hostIP, user, password, port=5432):
     """
-    Connect to the database
+    Connect to the database using the parameters.
 
     :param dbName: name of the database
     :param hostIP: host IP
@@ -48,7 +35,8 @@ def connect(dbName, hostIP, user, password, port=5432):
 
 def disconnect():
     """
-    Disconnect from the database
+    Disconnect from the database. 
+
     """
     conn = None
     # read database configuration
@@ -234,7 +222,7 @@ def insertRaster(repositoryName, fileName, totalBands, scalingFactor, SRID=4326)
         os.remove(tempFile)
 
 
-def insertRasterFolder(repositoryName, folderName, totalBands, scalingFactor, SRID=4326):
+def insertRasterFolder(repositoryName, folderName, totalBands, scalingFactor, extension=".lbl",SRID=4326):
     """
     Insert a TIFF file into the database
 
@@ -246,21 +234,29 @@ def insertRasterFolder(repositoryName, folderName, totalBands, scalingFactor, SR
     """
     files = []
     for file in os.listdir(folderName):
-        if file.endswith(".lbl"):
+        if file.endswith(extension):
             files.append(file)
 
     print(files)
 
-    threads = []
+    # single thread
+    for i in tqdm(range(len(files))):
+        tempFile = _r2tsv(totalBands, folderName + '/' + files[i], scalingFactor, SRID)
+        insertCSV(tempFile, repositoryName)
+        if os.path.exists(tempFile):
+            os.remove(tempFile)
 
-    for file in files:
-        t = threading.Thread(target=insertRaster, args=(
-            repositoryName, folderName + '/' + file, totalBands, scalingFactor, SRID))
-        threads.append(t)
-        t.start()
+    # multiprocessing
 
-    for t in threads:
-        t.join()
+    # threads = []
+    # for file in files:
+    #     t = threading.Thread(target=insertRaster, args=(
+    #         repositoryName, folderName + '/' + file, totalBands, scalingFactor, SRID))
+    #     threads.append(t)
+    #     t.start()
+
+    # for t in threads:
+    #     t.join()
 
 
 def insertCSV(filename, repositoryName, seperator=' '):
