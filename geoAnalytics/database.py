@@ -237,7 +237,7 @@ def insertRasterFolder(repositoryName, folderName, totalBands, scalingFactor, ex
         if file.endswith(extension):
             files.append(file)
 
-    print(files)
+#     print(files)
 
     # single thread
     for i in tqdm(range(len(files))):
@@ -280,13 +280,13 @@ def insertCSV(filename, repositoryName, seperator=' '):
             filename) + "' DELIMITER '" + str(seperator) + "' CSV;"
         curr.execute(buffer)
         conn.commit()
-        print('File inserted')
+#         print('File inserted')
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
     finally:
         if conn is not None:
             conn.close()
-            print('Repository connection closed.')
+#             print('Repository connection closed.')
 
 
 def _r2tsv(endBand, srcfile, scalingFactor, SRID):
