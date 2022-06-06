@@ -4,7 +4,7 @@ import psycopg2
 import numpy as np
 import pandas as pd
 
-def kMeans(dataframe, k, max_iter=300):
+def kMeans(dataframe, k, max_iter=100):
     """
     K-Means clustering algorithm
     :param dataframe: data to be clustered
