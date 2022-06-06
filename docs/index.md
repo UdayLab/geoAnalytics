@@ -45,7 +45,7 @@ Please contact the system administrator if you face any issues after executing t
 
 ### 3.3. Deleting a band in a repository
 
-    repo.deleteBand(repositoryName='clone_kaguya_MI_test', bandNumber='1')
+    repo.deleteBands(repositoryName='clone_kaguya_MI_test', bandNumber='1')
 
 ### 3.4. Deleting a repository
 
@@ -60,6 +60,19 @@ Please contact the system administrator if you face any issues after executing t
 
 ## Topic 5: Data analytics
 
-### 5.1. Clustering algorithms
+
+### 5.1. Imputation
+
+### 5.2. Clustering algorithms
+
+### 5.3. Classification
+
+### 5.4. Pattern mining
+
+### 5.5. Finding K-nearest neighbors
+
+### 5.6. Image fusion
+
+## Topic 6: Graphs
 
 

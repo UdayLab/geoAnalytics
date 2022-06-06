@@ -5,7 +5,7 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name = 'geoAnalytics',
-    version = '2022.05.31',
+    version = '2022.05.31.2',
     author = 'Rage Uday Kiran',
     author_email = 'uday.rage@gmail.com',
     description = 'This software is being developed at the University of Aizu, Aizu-Wakamatsu, Fukushima, Japan',
@@ -21,8 +21,7 @@ setuptools.setup(
         'resource',
         'validators',
         'urllib3',
-        'psycopg2-binary',
-        'GDAL',
+        'psycopg2-binary'
     ],
     classifiers = [
         'Development Status :: 3 - Alpha',      # Chose either "3 - Alpha", "4 - Beta" or "5 - Production/Stable" as the current state of your package
