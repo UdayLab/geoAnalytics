@@ -12,6 +12,8 @@ import sys
 import os
 import threading
 from tqdm import tqdm
+import multiprocessing
+import time
 
 
 def connect(dbName, hostIP, user, password, port=5432):
@@ -222,7 +224,8 @@ def insertRaster(repositoryName, fileName, totalBands, scalingFactor, SRID=4326)
         os.remove(tempFile)
 
 
-def insertRasterFolder(repositoryName, folderName, totalBands, scalingFactor, extension=".lbl",SRID=4326):
+
+def insertRasterFolder(repositoryName, folderName, totalBands, scalingFactor, extension=".lbl",SRID=4326, threads = 16):
     """
     Insert a TIFF file into the database
 
@@ -231,33 +234,38 @@ def insertRasterFolder(repositoryName, folderName, totalBands, scalingFactor, ex
     :param totalBands: number of bands
     :param SRID: spatial reference ID
     :param scalingFactor: scaling factor
+    :param threads: number of threads to spawn
     """
     files = []
     for file in os.listdir(folderName):
         if file.endswith(extension):
             files.append(file)
 
-#     print(files)
+    print(files)
 
     # single thread
-    for i in tqdm(range(len(files))):
-        tempFile = _r2tsv(totalBands, folderName + '/' + files[i], scalingFactor, SRID)
-        insertCSV(tempFile, repositoryName)
-        if os.path.exists(tempFile):
-            os.remove(tempFile)
+    # for i in tqdm(range(len(files))):
+    #     tempFile = _r2tsv(totalBands, folderName + '/' + files[i], scalingFactor, SRID)
+    #     insertCSV(tempFile, repositoryName)
+    #     if os.path.exists(tempFile):
+    #         os.remove(tempFile)
 
-    # multiprocessing
-
-    # threads = []
-    # for file in files:
-    #     t = threading.Thread(target=insertRaster, args=(
-    #         repositoryName, folderName + '/' + file, totalBands, scalingFactor, SRID))
-    #     threads.append(t)
-    #     t.start()
-
-    # for t in threads:
-    #     t.join()
-
+    # multiprocessing 
+    
+    pbar = tqdm(total=len(files))
+    pool = multiprocessing.Pool(threads)
+#     start_time = time.perf_counter()
+    
+    def update(*a):
+        pbar.update()
+    for i in range(pbar.total):
+        pool.apply_async(insertRaster, args=(repositoryName, folderName + '/' + files[i], totalBands, scalingFactor, SRID),callback=update)
+    pool.close()
+    pool.join()
+    # processes = [pool.apply_async(insertRaster, args=(repositoryName, folderName + '/' + file, totalBands, scalingFactor, SRID)) for file in files]
+    # result = [p.get() for p in processes]
+#     finish_time = time.perf_counter()
+#     print(f"Program finished in {finish_time-start_time} seconds")
 
 def insertCSV(filename, repositoryName, seperator=' '):
     """

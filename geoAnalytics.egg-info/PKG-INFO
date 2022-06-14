@@ -1,11 +1,12 @@
 Metadata-Version: 2.1
 Name: geoAnalytics
-Version: 2022.5.31.4
+Version: 2022.5.31.5
 Summary: This software is being developed at the University of Aizu, Aizu-Wakamatsu, Fukushima, Japan
 Home-page: https://github.com/udayRage/geoAnalytics
 Author: Rage Uday Kiran
 Author-email: uday.rage@gmail.com
 License: GPLv3
+Platform: UNKNOWN
 Classifier: Development Status :: 3 - Alpha
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
@@ -29,3 +30,5 @@ License-File: LICENSE
 
           pip install mplcursors matplotlib sklearn pandas
           
+
+
