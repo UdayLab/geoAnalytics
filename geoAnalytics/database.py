@@ -372,28 +372,29 @@ def _r2tsv(endBand, srcfile, scalingFactor, SRID):
     return tempFile
 
 
-# def addBandToRepository(self, repositoryName, bandFormula):
-#     # Add a column to a table using alter Command
-#     try:
-#         conn = None
-#         # read database configuration
-#         params = config()
-#         # connect to the PostgreSQL database
-#         conn = psycopg2.connect(**params)
-#         # create a new cursor
-#         curr = conn.cursor()
-#         # describe table command
+def addBandToRepository(self, repositoryName, bandFormula):
+    # Add a column to a table using alter Command
+    try:
+        conn = None
+        # read database configuration
+        params = config()
+        # connect to the PostgreSQL database
+        conn = psycopg2.connect(**params)
+        # create a new cursor
+        curr = conn.cursor()
+        # describe table command
 
-#         curr.execute("ALTER TABLE " + repositoryName + " ADD COLUMN B" +
-#                      str(bandNumber) + " float" + ";")
-#         conn.commit()
-#         print('Band added to repository')
-#     except (Exception, psycopg2.DatabaseError) as error:
-#         print(error)
-#     finally:
-#         if conn is not None:
-#             conn.close()
-#             print('Repository connection closed.')
+        curr.execute("ALTER TABLE " + repositoryName + " ADD COLUMN B" +
+                     str(bandNumber) + " float" + ";")
+        conn.commit()
+        print('Band added to repository')
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
+            print('Repository connection closed.')
+
 
 def deleteBandInRepository(repositoryName, bandNumber):
     # This function will delete the band number attribute from the table.
