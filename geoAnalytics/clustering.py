@@ -179,8 +179,9 @@ def opticsClustering(dataframe, min_samples=5, eps=None):
 
 def spectralClustering(dataframe, n_clusters=8, assign_labels='discretize'):
     """
-    OPTICS :closely related to DBSCAN, finds core sample of high density and expands clusters from them
+     Spectral Clustering - useful when the structure of the individual clusters is highly non-convex
     :param dataframe: data to be clustered
+    :param n_clusters : The dimension of the projection subspace
     :param assign_labels : {‘kmeans’, ‘discretize’, ‘cluster_qr’}, default=’kmeans’
     :return: list of cluster labels
     """
@@ -199,7 +200,7 @@ def spectralClustering(dataframe, n_clusters=8, assign_labels='discretize'):
 def gaussianMixture(dataframe, n_components=1, max_iters=100, covariance_type="full", init_params='kmeans',
                     random_state=0):
     """
-    OPTICS :closely related to DBSCAN, finds core sample of high density and expands clusters from them
+     To estimate the parameters of a Gaussian mixture distribution
     :param dataframe: data to be clustered
     :param max_iter : int, default=100
     :param random_state : int, RandomState instance or None, default=None
