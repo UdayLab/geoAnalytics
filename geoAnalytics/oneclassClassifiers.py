@@ -13,7 +13,7 @@ def rasterFuzzyTSC(training, testing,topElements):
     startTime = time.time()
 
     # To drop the first column which is a class label of each sample
-    training.drop(0, axis='columns', inplace=True)
+    # training.drop(0, axis='columns', inplace=True)
 
     # separating classes into different dictionary variables and creating mean, min and max curves
     maxData = training.max(axis=0)
@@ -61,7 +61,7 @@ def rasterFuzzyTSC(training, testing,topElements):
 
 def rasterOneNNDTW(training, testing,topElements):
     startTime = time.time()
-    training.drop(0, axis='columns', inplace=True)
+    # training.drop(0, axis='columns', inplace=True)
     num_rows_test, num_columns_test = testing.shape
     num_rows_train, num_columns_train = training.shape
     training_noclass = training  # self.training[:, 1:]
@@ -92,7 +92,7 @@ def rasterOneNNDTW(training, testing,topElements):
 
 def rasterOneNNED(training, testing,topElements):
     startTime = time.time()
-    training.drop(0, axis='columns', inplace=True)
+    # training.drop(0, axis='columns', inplace=True)
     num_rows_test, num_columns_test = testing.shape
     num_rows_train, num_columns_train = training.shape
     predicted_label = None
@@ -122,7 +122,7 @@ def rasterOneNNED(training, testing,topElements):
 
 def rasterOneNNHausdorff(training, testing,topElements):
     startTime = time.time()
-    training.drop(0, axis='columns', inplace=True)
+    # training.drop(0, axis='columns', inplace=True)
     num_rows_test, num_columns_test = testing.shape
     num_rows_train, num_columns_train = training.shape
     training_noclass = training  # self.training[:, 1:]
@@ -152,7 +152,7 @@ def rasterOneNNHausdorff(training, testing,topElements):
 
 def rasterOneNNMaxNorm(training, testing,topElements):
     startTime = time.time()
-    training.drop(0, axis='columns', inplace=True)
+    # training.drop(0, axis='columns', inplace=True)
     num_rows_test, num_columns_test = testing.shape
     num_rows_train, num_columns_train =     training.shape
     newColumn = list()
@@ -175,7 +175,7 @@ def rasterOneNNMaxNorm(training, testing,topElements):
 
     testing['1NNmaxNorm'] = newColumn
     N = topElements
-    sortedDF = self.testing.sort_values('1NNmaxNorm').head(N)
+    sortedDF = testing.sort_values('1NNmaxNorm').head(N)
     getStatistics(startTime)
     return testing,sortedDF
 
