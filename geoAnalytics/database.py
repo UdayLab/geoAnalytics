@@ -276,6 +276,7 @@ def insertCSV(filename, repositoryName, seperator=' '):
     :param seperator: seperator
     """
 
+    # global metadata
     try:
         conn = None
         # read database configuration
@@ -288,13 +289,17 @@ def insertCSV(filename, repositoryName, seperator=' '):
             filename) + "' DELIMITER '" + str(seperator) + "' CSV;"
         curr.execute(buffer)
         conn.commit()
+
 #         print('File inserted')
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
     finally:
         if conn is not None:
             conn.close()
+
+    return gdal.Open(filename).GetMetadata()
 #             print('Repository connection closed.')
+
 
 
 def _r2tsv(endBand, srcfile, scalingFactor, SRID):
