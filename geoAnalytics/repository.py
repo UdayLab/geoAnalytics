@@ -93,7 +93,7 @@ def testConnection():
         print(error)
 
 
-def createRepository(repositoryName, totalBands, SRID=4326):
+def create(repositoryName, totalBands, SRID=4326):
     """
     Create a repository in the database
 
@@ -128,7 +128,7 @@ def createRepository(repositoryName, totalBands, SRID=4326):
             print('Repository connection closed.')
 
 
-def deleteRepository(repositoryName):
+def delete(repositoryName):
     """
     Delete a repository from the database
 
@@ -154,7 +154,7 @@ def deleteRepository(repositoryName):
             print('Repository connection closed.')
 
 
-def cloneRepository(repositoryName, cloneRepositoryName):
+def clone(repositoryName, cloneRepositoryName):
     """
     Clone a repository from the database
 
@@ -181,7 +181,7 @@ def cloneRepository(repositoryName, cloneRepositoryName):
             print('Repository connection closed.')
 
 
-def renameRepository(repositoryName, newRepositoryName):
+def rename(repositoryName, newRepositoryName):
     """
     Change the name of a repository in the database
 
@@ -218,6 +218,7 @@ def insertRaster(repositoryName, fileName, totalBands, scalingFactor, SRID=4326)
     :param SRID: spatial reference ID
     :param scalingFactor: scaling factor
     """
+    
     tempFile = _r2tsv(totalBands, fileName, scalingFactor, SRID)
     insertCSV(tempFile, repositoryName)
     if os.path.exists(tempFile):
@@ -377,7 +378,7 @@ def _r2tsv(endBand, srcfile, scalingFactor, SRID):
     return tempFile
 
 
-def addBandToRepository(self, repositoryName, bandFormula):
+def addBand(self, repositoryName, bandFormula):
     # Add a column to a table using alter Command
     try:
         conn = None
@@ -390,7 +391,7 @@ def addBandToRepository(self, repositoryName, bandFormula):
         # describe table command
 
         curr.execute("ALTER TABLE " + repositoryName + " ADD COLUMN B" +
-                     str(bandNumber) + " float" + ";")
+                     str(bandFormula) + " float" + ";")
         conn.commit()
         print('Band added to repository')
     except (Exception, psycopg2.DatabaseError) as error:
@@ -401,7 +402,7 @@ def addBandToRepository(self, repositoryName, bandFormula):
             print('Repository connection closed.')
 
 
-def deleteBandInRepository(repositoryName, bandNumber):
+def deleteBand(repositoryName, bandNumber):
     # This function will delete the band number attribute from the table.
     try:
         conn = None
@@ -498,39 +499,39 @@ def getDataframe(repositoryName, Bands="*", SRID=4326):
             print('Repository connection closed.')
 
 
-def getDataframe(repositoryName, Bands="*", SRID=4326):
-    """
-    Get a dataframe from the database for a given envelope
-
-    :param repositoryName: name of the repository
-    :param Bands: bands to be extracted
-    :param SRID: spatial reference ID
-    """
-
-    # connect to database
-    # create geoTIFF file
-    # gDal transform to geoTIFF
-    print('Getting dataframe from database')
-
-    try:
-        conn = None
-        # read database configuration
-        params = config()
-        # connect to the PostgreSQL database
-        conn = psycopg2.connect(**params)
-        query = "SELECT ST_X(geog) as x, ST_Y(geog) as y, " + \
-            Bands + " FROM " + str(repositoryName) + ";"
-        dataFrameEnvelope = pd.read_sql_query(query, conn)
-        print('Dataframe created')
-        if Bands == "*":
-            dataFrameEnvelope = dataFrameEnvelope.drop(columns=["geog"])
-        return dataFrameEnvelope
-    except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
-    finally:
-        if conn is not None:
-            conn.close()
-            print('Repository connection closed.')
+# def getDataframe(repositoryName, Bands="*", SRID=4326):
+#     """
+#     Get a dataframe from the database for a given envelope
+#
+#     :param repositoryName: name of the repository
+#     :param Bands: bands to be extracted
+#     :param SRID: spatial reference ID
+#     """
+#
+#     # connect to database
+#     # create geoTIFF file
+#     # gDal transform to geoTIFF
+#     print('Getting dataframe from database')
+#
+#     try:
+#         conn = None
+#         # read database configuration
+#         params = config()
+#         # connect to the PostgreSQL database
+#         conn = psycopg2.connect(**params)
+#         query = "SELECT ST_X(geog) as x, ST_Y(geog) as y, " + \
+#             Bands + " FROM " + str(repositoryName) + ";"
+#         dataFrameEnvelope = pd.read_sql_query(query, conn)
+#         print('Dataframe created')
+#         if Bands == "*":
+#             dataFrameEnvelope = dataFrameEnvelope.drop(columns=["geog"])
+#         return dataFrameEnvelope
+#     except (Exception, psycopg2.DatabaseError) as error:
+#         print(error)
+#     finally:
+#         if conn is not None:
+#             conn.close()
+#             print('Repository connection closed.')
 
 
 def getDataframeForEnvelope(repositoryName, Xmin, Ymin, Xmax, Ymax, Bands="*", SRID=4326):
