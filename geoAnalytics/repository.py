@@ -37,7 +37,7 @@ def connect(dbName, hostIP, user, password, port=5432):
 
 def disconnect():
     """
-    Disconnect from the database 
+    Disconnect from the database. 
 
     """
     conn = None
