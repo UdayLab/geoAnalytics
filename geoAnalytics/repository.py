@@ -298,7 +298,7 @@ def insertCSV(filename, repositoryName, seperator=' '):
         if conn is not None:
             conn.close()
 
-    return gdal.Open(filename).GetMetadata()
+    # return gdal.Open(filename).GetMetadata()
 #             print('Repository connection closed.')
 
 
