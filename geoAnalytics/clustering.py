@@ -9,8 +9,6 @@ from sklearn.cluster import AffinityPropagation
 from sklearn.preprocessing import StandardScaler
 from sklearn.mixture import GaussianMixture
 from numpy import unique
-
-
 import psycopg2
 import numpy as np
 import pandas as pd
