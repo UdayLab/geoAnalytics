@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>geoAnalytics.repository &mdash; geoAnalytics 2023.07.21 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            geoAnalytics
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">geoAnalytics</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">geoAnalytics</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">geoAnalytics.repository</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for geoAnalytics.repository</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">geoAnalytics</span> <span class="kn">import</span> <span class="n">csv2raster</span>
+<span class="kn">from</span> <span class="nn">geoAnalytics.config</span> <span class="kn">import</span> <span class="n">config</span>
+<span class="kn">from</span> <span class="nn">shapely</span> <span class="kn">import</span> <span class="n">geos</span><span class="p">,</span> <span class="n">wkb</span><span class="p">,</span> <span class="n">wkt</span>
+<span class="kn">from</span> <span class="nn">osgeo</span> <span class="kn">import</span> <span class="n">gdal</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">Numeric</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">psycopg2</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+
+<div class="viewcode-block" id="connect"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.repository.connect">[docs]</a><span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="n">dbName</span><span class="p">,</span> <span class="n">hostIP</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">5432</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Connect to the database using the parameters.</span>
+
+<span class="sd">    :param dbName: name of the database</span>
+<span class="sd">    :param hostIP: host IP</span>
+<span class="sd">    :param user: user name</span>
+<span class="sd">    :param password: password</span>
+<span class="sd">    :param port: port</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">dbName</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;database.ini&#39;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">dbFile</span><span class="p">:</span>
+            <span class="n">dbFile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;[postgresql]</span><span class="se">\n</span><span class="s2">host = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">hostIP</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">port = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">port</span><span class="p">)</span> <span class="o">+</span>
+                         <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">database = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dbName</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">user = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">user</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">password = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">password</span><span class="p">))</span>
+            <span class="n">dbFile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">connection</span> <span class="o">=</span> <span class="n">testConnection</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="disconnect"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.repository.disconnect">[docs]</a><span class="k">def</span> <span class="nf">disconnect</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Disconnect from the database</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1"># read database configuration</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span>
+    <span class="c1"># connect to the PostgreSQL database</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+    <span class="c1"># create a new cursor</span>
+    <span class="n">curr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">conn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Disconnecting from repository&quot;</span><span class="p">)</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Disconnected from repository&quot;</span><span class="p">)</span></div>
+
+<span class="c1"># def reConnect(self, dbName=&quot;&quot;, hostIP=&quot;&quot;, user=&quot;&quot;, password=&quot;&quot;, port=5432):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Edit the connection to the database</span>
+<span class="c1">#</span>
+<span class="c1">#     :param dbName: name of the database</span>
+<span class="c1">#     :param hostIP: host IP</span>
+<span class="c1">#     :param user: user name</span>
+<span class="c1">#     :param password: password</span>
+<span class="c1">#     :param port: port</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     conn = None</span>
+<span class="c1">#     if dbName != &quot;&quot;:</span>
+<span class="c1">#         with open(&#39;ini&#39;, &quot;w&quot;) as dbFile:</span>
+<span class="c1">#             buffer = &quot;[postgresql]\nhost = &quot; + hostIP + &quot;\nport = &quot; + str(</span>
+<span class="c1">#                 port) + &quot;\ndatabase = &quot; + dbName + &quot;\nuser = &quot; + user + &quot;\npassword = &quot; + password</span>
+<span class="c1">#             dbFile.write(buffer)</span>
+<span class="c1">#             dbFile.close()</span>
+<span class="c1">#     self.testConnection()</span>
+
+
+<div class="viewcode-block" id="testConnection"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.repository.testConnection">[docs]</a><span class="k">def</span> <span class="nf">testConnection</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Test the connection to the database</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># read database configuration</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span>
+        <span class="c1"># connect to the PostgreSQL database</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+        <span class="c1"># create a new cursor</span>
+        <span class="n">curr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">curr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;select version();&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">curr</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;You are now connected&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">,</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">DatabaseError</span><span class="p">)</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="create"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.repository.create">[docs]</a><span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">repositoryName</span><span class="p">,</span> <span class="n">totalBands</span><span class="p">,</span> <span class="n">SRID</span><span class="o">=</span><span class="mi">4326</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a repository in the database</span>
+
+<span class="sd">    :param repositoryName: name of the repository</span>
+<span class="sd">    :param totalBands: total number of bands</span>
+<span class="sd">    :param SRID: spatial reference ID</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># read database configuration</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span>
+        <span class="c1"># connect to the PostgreSQL database</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+        <span class="c1"># create a new cursor</span>
+        <span class="n">curr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="c1"># total bands is number</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;geog geometry(POINT,&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">SRID</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;),&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">totalBands</span><span class="p">):</span>
+            <span class="n">query</span> <span class="o">+=</span> <span class="s1">&#39;b&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; float,&#39;</span>
+        <span class="n">query</span> <span class="o">+=</span> <span class="s1">&#39;b&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">totalBands</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; float&#39;</span>
+        <span class="n">curr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;create table &quot;</span> <span class="o">+</span> <span class="n">repositoryName</span> <span class="o">+</span> <span class="s2">&quot;(&quot;</span> <span class="o">+</span> <span class="n">query</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">)</span>
+        <span class="n">curr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;CREATE INDEX index_&quot;</span> <span class="o">+</span> <span class="n">repositoryName</span> <span class="o">+</span>
+                     <span class="s2">&quot; ON &quot;</span> <span class="o">+</span> <span class="n">repositoryName</span> <span class="o">+</span> <span class="s2">&quot; USING GIST (geog)&quot;</span><span class="p">)</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Repository created&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">,</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">DatabaseError</span><span class="p">)</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">conn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Repository connection closed.&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="delete"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.repository.delete">[docs]</a><span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="n">repositoryName</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Delete a repository from the database</span>
+
+<span class="sd">    :param repositoryName: name of the repository</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># read database configuration</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span>
+        <span class="c1"># connect to the PostgreSQL database</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+        <span class="c1"># create a new cursor</span>
+        <span class="n">curr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">curr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;drop table &quot;</span> <span class="o">+</span> <span class="n">repositoryName</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span><span class="p">)</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">repositoryName</span> <span class="o">+</span> <span class="s1">&#39; deleted successfully&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">,</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">DatabaseError</span><span class="p">)</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">conn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Repository connection closed.&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="clone"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.repository.clone">[docs]</a><span class="k">def</span> <span class="nf">clone</span><span class="p">(</span><span class="n">repositoryName</span><span class="p">,</span> <span class="n">cloneRepositoryName</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Clone a repository from the database</span>
+
+<span class="sd">    :param repositoryName: name of the repository</span>
+<span class="sd">    :param cloneRepositoryName: name of the cloned repository</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># read database configuration</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span>
+        <span class="c1"># connect to the PostgreSQL database</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+        <span class="c1"># create a new cursor</span>
+        <span class="n">curr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">curr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;create table &quot;</span> <span class="o">+</span> <span class="n">cloneRepositoryName</span> <span class="o">+</span>
+                     <span class="s2">&quot; as (select * from &quot;</span> <span class="o">+</span> <span class="n">repositoryName</span> <span class="o">+</span> <span class="s2">&quot;);&quot;</span><span class="p">)</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Repository cloned&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">,</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">DatabaseError</span><span class="p">)</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">conn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Repository connection closed.&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="rename"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.repository.rename">[docs]</a><span class="k">def</span> <span class="nf">rename</span><span class="p">(</span><span class="n">repositoryName</span><span class="p">,</span> <span class="n">newRepositoryName</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Change the name of a repository in the database</span>
+
+<span class="sd">    :param repositoryName: name of the repository</span>
+<span class="sd">    :param newRepositoryName: new name of the repository</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># read database configuration</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span>
+        <span class="c1"># connect to the PostgreSQL database</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+        <span class="c1"># create a new cursor</span>
+        <span class="n">curr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">curr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;ALTER TABLE IF EXISTS &quot;</span> <span class="o">+</span>
+                     <span class="n">repositoryName</span> <span class="o">+</span> <span class="s2">&quot; RENAME TO &quot;</span> <span class="o">+</span> <span class="n">newRepositoryName</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span><span class="p">)</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">repositoryName</span> <span class="o">+</span> <span class="s1">&#39; changed to &#39;</span> <span class="o">+</span> <span class="n">newRepositoryName</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">,</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">DatabaseError</span><span class="p">)</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">conn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Repository connection closed.&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="insertRaster"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.repository.insertRaster">[docs]</a><span class="k">def</span> <span class="nf">insertRaster</span><span class="p">(</span><span class="n">repositoryName</span><span class="p">,</span> <span class="n">fileName</span><span class="p">,</span> <span class="n">totalBands</span><span class="p">,</span> <span class="n">scalingFactor</span><span class="p">,</span> <span class="n">SRID</span><span class="o">=</span><span class="mi">4326</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Insert a TIFF file into the database</span>
+
+<span class="sd">    :param repositoryName: name of the Repository</span>
+<span class="sd">    :param fileName: name of the TIFF file</span>
+<span class="sd">    :param totalBands: number of bands</span>
+<span class="sd">    :param SRID: spatial reference ID</span>
+<span class="sd">    :param scalingFactor: scaling factor</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">tempFile</span> <span class="o">=</span> <span class="n">_r2tsv</span><span class="p">(</span><span class="n">totalBands</span><span class="p">,</span> <span class="n">fileName</span><span class="p">,</span> <span class="n">scalingFactor</span><span class="p">,</span> <span class="n">SRID</span><span class="p">)</span>
+    <span class="n">insertCSV</span><span class="p">(</span><span class="n">tempFile</span><span class="p">,</span> <span class="n">repositoryName</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">tempFile</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tempFile</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="insertRasterFolder"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.repository.insertRasterFolder">[docs]</a><span class="k">def</span> <span class="nf">insertRasterFolder</span><span class="p">(</span><span class="n">repositoryName</span><span class="p">,</span> <span class="n">folderName</span><span class="p">,</span> <span class="n">totalBands</span><span class="p">,</span> <span class="n">scalingFactor</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;.lbl&quot;</span><span class="p">,</span><span class="n">SRID</span><span class="o">=</span><span class="mi">4326</span><span class="p">,</span> <span class="n">threads</span> <span class="o">=</span> <span class="mi">16</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Insert a TIFF file into the database</span>
+
+<span class="sd">    :param repositoryName: name of the Repository</span>
+<span class="sd">    :param fileName: name of the TIFF file</span>
+<span class="sd">    :param totalBands: number of bands</span>
+<span class="sd">    :param SRID: spatial reference ID</span>
+<span class="sd">    :param scalingFactor: scaling factor</span>
+<span class="sd">    :param threads: number of threads to spawn</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">folderName</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">extension</span><span class="p">):</span>
+            <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+
+    <span class="c1"># single thread</span>
+    <span class="c1"># for i in tqdm(range(len(files))):</span>
+    <span class="c1">#     tempFile = _r2tsv(totalBands, folderName + &#39;/&#39; + files[i], scalingFactor, SRID)</span>
+    <span class="c1">#     insertCSV(tempFile, repositoryName)</span>
+    <span class="c1">#     if os.path.exists(tempFile):</span>
+    <span class="c1">#         os.remove(tempFile)</span>
+
+    <span class="c1"># multiprocessing </span>
+    
+    <span class="n">pbar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">))</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">threads</span><span class="p">)</span>
+<span class="c1">#     start_time = time.perf_counter()</span>
+    
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">):</span>
+        <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pbar</span><span class="o">.</span><span class="n">total</span><span class="p">):</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">insertRaster</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">repositoryName</span><span class="p">,</span> <span class="n">folderName</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">files</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">totalBands</span><span class="p">,</span> <span class="n">scalingFactor</span><span class="p">,</span> <span class="n">SRID</span><span class="p">),</span><span class="n">callback</span><span class="o">=</span><span class="n">update</span><span class="p">)</span>
+    <span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span></div>
+    <span class="c1"># processes = [pool.apply_async(insertRaster, args=(repositoryName, folderName + &#39;/&#39; + file, totalBands, scalingFactor, SRID)) for file in files]</span>
+    <span class="c1"># result = [p.get() for p in processes]</span>
+<span class="c1">#     finish_time = time.perf_counter()</span>
+<span class="c1">#     print(f&quot;Program finished in {finish_time-start_time} seconds&quot;)</span>
+
+<div class="viewcode-block" id="insertCSV"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.repository.insertCSV">[docs]</a><span class="k">def</span> <span class="nf">insertCSV</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">repositoryName</span><span class="p">,</span> <span class="n">seperator</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Insert a CSV file into the database</span>
+
+<span class="sd">    :param filename: name of the CSV file</span>
+<span class="sd">    :param repositoryName: name of the Repository</span>
+<span class="sd">    :param seperator: seperator</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># global metadata</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># read database configuration</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span>
+        <span class="c1"># connect to the PostgreSQL database</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+        <span class="c1"># create a new cursor</span>
+        <span class="n">curr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="s2">&quot;COPY &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">repositoryName</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; FROM &#39;&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="n">filename</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&#39; DELIMITER &#39;&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">seperator</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&#39; CSV;&quot;</span>
+        <span class="n">curr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+<span class="c1">#         print(&#39;File inserted&#39;)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">,</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">DatabaseError</span><span class="p">)</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">conn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+    <span class="c1"># return gdal.Open(filename).GetMetadata()</span>
+<span class="c1">#             print(&#39;Repository connection closed.&#39;)</span>
+
+
+
+<span class="k">def</span> <span class="nf">_r2tsv</span><span class="p">(</span><span class="n">endBand</span><span class="p">,</span> <span class="n">srcfile</span><span class="p">,</span> <span class="n">scalingFactor</span><span class="p">,</span> <span class="n">SRID</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a raster to a tsv file</span>
+
+<span class="sd">    :param startBand: start band</span>
+<span class="sd">    :param endBand: end band</span>
+<span class="sd">    :param srcfile: source file</span>
+<span class="sd">    :param dstfile: destination file</span>
+<span class="sd">    :param scalingFactor: scaling factor</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">tempFile</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100000</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;.txt&quot;</span>
+    <span class="n">band_nums</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">endBand</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">srcwin</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">band_nums</span> <span class="o">==</span> <span class="p">[]:</span>
+        <span class="n">band_nums</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Open source file.</span>
+    <span class="n">srcds</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">srcfile</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">srcds</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Could not open </span><span class="si">%s</span><span class="s1">.&#39;</span> <span class="o">%</span> <span class="n">srcfile</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">bands</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">band_num</span> <span class="ow">in</span> <span class="n">band_nums</span><span class="p">:</span>
+        <span class="n">band</span> <span class="o">=</span> <span class="n">srcds</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="n">band_num</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">band</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Could not get band </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">band_num</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">bands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">band</span><span class="p">)</span>
+    <span class="n">gt</span> <span class="o">=</span> <span class="n">srcds</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>
+
+    <span class="c1"># Collect information on all the source files.</span>
+    <span class="k">if</span> <span class="n">srcwin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">srcwin</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">srcds</span><span class="o">.</span><span class="n">RasterXSize</span><span class="p">,</span> <span class="n">srcds</span><span class="o">.</span><span class="n">RasterYSize</span><span class="p">)</span>
+
+    <span class="c1"># Open the output file.</span>
+    <span class="k">if</span> <span class="n">tempFile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">dst_fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">tempFile</span><span class="p">,</span> <span class="s1">&#39;wt&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">dst_fh</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+    <span class="n">band_format</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%g</span><span class="s2"> &quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">bands</span><span class="p">))</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+    <span class="c1"># Setup an appropriate print format.</span>
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">gt</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">180</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">gt</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">180</span> \
+            <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">srcds</span><span class="o">.</span><span class="n">RasterXSize</span> <span class="o">*</span> <span class="n">gt</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">180</span> \
+            <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">srcds</span><span class="o">.</span><span class="n">RasterYSize</span> <span class="o">*</span> <span class="n">gt</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">180</span><span class="p">:</span>
+        <span class="nb">format</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">format</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span>
+
+    <span class="c1"># Loop emitting data.</span>
+    <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">srcwin</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">srcwin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">srcwin</span><span class="p">[</span><span class="mi">3</span><span class="p">]):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">band</span> <span class="ow">in</span> <span class="n">bands</span><span class="p">:</span>
+            <span class="n">band_data</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">(</span><span class="n">srcwin</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="p">,</span> <span class="n">srcwin</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">band_data</span> <span class="o">=</span> <span class="n">Numeric</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">band_data</span><span class="p">,</span> <span class="p">(</span><span class="n">srcwin</span><span class="p">[</span><span class="mi">2</span><span class="p">],))</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">band_data</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">x_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">srcwin</span><span class="p">[</span><span class="mi">2</span><span class="p">]):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x_i</span> <span class="o">+</span> <span class="n">srcwin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">geo_x</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">gt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">gt</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">geo_y</span> <span class="o">=</span> <span class="n">gt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">gt</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">gt</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+            <span class="n">x_i_data</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bands</span><span class="p">)):</span>
+                <span class="n">x_i_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">x_i</span><span class="p">]</span><span class="o">*</span><span class="n">scalingFactor</span><span class="p">)</span>
+            <span class="n">band_str</span> <span class="o">=</span> <span class="n">band_format</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">x_i_data</span><span class="p">)</span>
+            <span class="c1"># line = format % (wkb.dumps(wkt.loads(&quot;POINT(&quot; + str(float(geo_x)) + &quot; &quot; + str(float(geo_y)) + &quot;)&quot;),</span>
+            <span class="c1">#                  hex=True, srid=SRID), band_str)  # Convert X and Y in hex, store the data, and upload</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="nb">format</span> <span class="o">%</span> <span class="p">(</span><span class="n">wkb</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">wkt</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="s2">&quot;POINT(&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">geo_x</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">geo_y</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">),</span>
+                             <span class="nb">hex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">srid</span><span class="o">=</span><span class="n">SRID</span><span class="p">),</span> <span class="n">band_str</span><span class="p">)</span>  <span class="c1"># Convert X and Y in hex, store the data, and upload</span>
+            <span class="n">dst_fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tempFile</span>
+
+
+<div class="viewcode-block" id="addBand"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.repository.addBand">[docs]</a><span class="k">def</span> <span class="nf">addBand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repositoryName</span><span class="p">,</span> <span class="n">bandFormula</span><span class="p">):</span>
+    <span class="c1"># Add a column to a table using alter Command</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># read database configuration</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span>
+        <span class="c1"># connect to the PostgreSQL database</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+        <span class="c1"># create a new cursor</span>
+        <span class="n">curr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="c1"># describe table command</span>
+
+        <span class="n">curr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;ALTER TABLE &quot;</span> <span class="o">+</span> <span class="n">repositoryName</span> <span class="o">+</span> <span class="s2">&quot; ADD COLUMN B&quot;</span> <span class="o">+</span>
+                     <span class="nb">str</span><span class="p">(</span><span class="n">bandFormula</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; float&quot;</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span><span class="p">)</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Band added to repository&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">,</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">DatabaseError</span><span class="p">)</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">conn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Repository connection closed.&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="deleteBand"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.repository.deleteBand">[docs]</a><span class="k">def</span> <span class="nf">deleteBand</span><span class="p">(</span><span class="n">repositoryName</span><span class="p">,</span> <span class="n">bandNumber</span><span class="p">):</span>
+    <span class="c1"># This function will delete the band number attribute from the table.</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># read database configuration</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span>
+        <span class="c1"># connect to the PostgreSQL database</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+        <span class="c1"># create a new cursor</span>
+        <span class="n">curr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">curr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;ALTER TABLE &quot;</span> <span class="o">+</span> <span class="n">repositoryName</span> <span class="o">+</span> <span class="s2">&quot; DROP COLUMN B&quot;</span> <span class="o">+</span>
+                     <span class="nb">str</span><span class="p">(</span><span class="n">bandNumber</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span><span class="p">)</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Band deleted from repository&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">,</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">DatabaseError</span><span class="p">)</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">conn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Repository connection closed.&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="getRaster"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.repository.getRaster">[docs]</a><span class="k">def</span> <span class="nf">getRaster</span><span class="p">(</span><span class="n">repositoryName</span><span class="p">,</span> <span class="n">rasterFileName</span><span class="p">,</span> <span class="n">Xmin</span><span class="p">,</span> <span class="n">Ymin</span><span class="p">,</span> <span class="n">Xmax</span><span class="p">,</span> <span class="n">Ymax</span><span class="p">,</span> <span class="n">Bands</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get a raster image from the database</span>
+
+<span class="sd">    :param repositoryName: name of the repository</span>
+<span class="sd">    :param rasterFileName: name of the raster file</span>
+<span class="sd">    :param Xmin: minimum X coordinate</span>
+<span class="sd">    :param Ymin: minimum Y coordinate</span>
+<span class="sd">    :param Xmax: maximum X coordinate</span>
+<span class="sd">    :param Ymax: maximum Y coordinate</span>
+<span class="sd">    :param Bands: bands to be extracted</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># connect to database</span>
+    <span class="c1"># create geoTIFF file</span>
+    <span class="c1"># gDal transform to geoTIFF</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Getting raster from database&#39;</span><span class="p">)</span>
+    <span class="n">dataFrame2Raster</span><span class="p">(</span><span class="n">getDataframeForEnvelope</span><span class="p">(</span>
+        <span class="n">repositoryName</span><span class="p">,</span> <span class="n">Xmin</span><span class="p">,</span> <span class="n">Ymin</span><span class="p">,</span> <span class="n">Xmax</span><span class="p">,</span> <span class="n">Ymax</span><span class="p">,</span> <span class="n">Bands</span><span class="p">),</span> <span class="n">rasterFileName</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="dataFrame2Raster"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.repository.dataFrame2Raster">[docs]</a><span class="k">def</span> <span class="nf">dataFrame2Raster</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">rasterFileName</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a raster image from a dataframe</span>
+
+<span class="sd">    :param dataframe: dataframe</span>
+<span class="sd">    :param rasterFileName: name of the raster file with no file extension.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Creating raster file&#39;</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">dataframe</span>
+    <span class="n">csv2raster</span><span class="o">.</span><span class="n">csv2raster</span><span class="p">(</span><span class="n">output_file</span><span class="o">=</span><span class="n">rasterFileName</span><span class="p">,</span> <span class="n">dataframe</span><span class="o">=</span><span class="n">df</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="getDataframe"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.repository.getDataframe">[docs]</a><span class="k">def</span> <span class="nf">getDataframe</span><span class="p">(</span><span class="n">repositoryName</span><span class="p">,</span> <span class="n">Bands</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">SRID</span><span class="o">=</span><span class="mi">4326</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get a dataframe from the database for a given envelope</span>
+
+<span class="sd">    :param repositoryName: name of the repository</span>
+<span class="sd">    :param Xmin: minimum X coordinate</span>
+<span class="sd">    :param Ymin: minimum Y coordinate</span>
+<span class="sd">    :param Xmax: maximum X coordinate</span>
+<span class="sd">    :param Ymax: maximum Y coordinate</span>
+<span class="sd">    :param Bands: bands to be extracted</span>
+<span class="sd">    :param SRID: spatial reference ID</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># connect to database</span>
+    <span class="c1"># create geoTIFF file</span>
+    <span class="c1"># gDal transform to geoTIFF</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Getting dataframe from database&#39;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># read database configuration</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span>
+        <span class="c1"># connect to the PostgreSQL database</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;SELECT ST_X(geog) as x, ST_Y(geog) as y, &quot;</span> <span class="o">+</span> \
+            <span class="n">Bands</span> <span class="o">+</span> <span class="s2">&quot; FROM &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">repositoryName</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span>
+        <span class="n">dataFrameEnvelope</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">conn</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Dataframe created&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Bands</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span><span class="p">:</span>
+            <span class="n">dataFrameEnvelope</span> <span class="o">=</span> <span class="n">dataFrameEnvelope</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;geog&quot;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">dataFrameEnvelope</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">,</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">DatabaseError</span><span class="p">)</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">conn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Repository connection closed.&#39;</span><span class="p">)</span></div>
+
+
+<span class="c1"># def getDataframe(repositoryName, Bands=&quot;*&quot;, SRID=4326):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Get a dataframe from the database for a given envelope</span>
+<span class="c1">#</span>
+<span class="c1">#     :param repositoryName: name of the repository</span>
+<span class="c1">#     :param Bands: bands to be extracted</span>
+<span class="c1">#     :param SRID: spatial reference ID</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1">#     # connect to database</span>
+<span class="c1">#     # create geoTIFF file</span>
+<span class="c1">#     # gDal transform to geoTIFF</span>
+<span class="c1">#     print(&#39;Getting dataframe from database&#39;)</span>
+<span class="c1">#</span>
+<span class="c1">#     try:</span>
+<span class="c1">#         conn = None</span>
+<span class="c1">#         # read database configuration</span>
+<span class="c1">#         params = config()</span>
+<span class="c1">#         # connect to the PostgreSQL database</span>
+<span class="c1">#         conn = psycopg2.connect(**params)</span>
+<span class="c1">#         query = &quot;SELECT ST_X(geog) as x, ST_Y(geog) as y, &quot; + \</span>
+<span class="c1">#             Bands + &quot; FROM &quot; + str(repositoryName) + &quot;;&quot;</span>
+<span class="c1">#         dataFrameEnvelope = pd.read_sql_query(query, conn)</span>
+<span class="c1">#         print(&#39;Dataframe created&#39;)</span>
+<span class="c1">#         if Bands == &quot;*&quot;:</span>
+<span class="c1">#             dataFrameEnvelope = dataFrameEnvelope.drop(columns=[&quot;geog&quot;])</span>
+<span class="c1">#         return dataFrameEnvelope</span>
+<span class="c1">#     except (Exception, psycopg2.DatabaseError) as error:</span>
+<span class="c1">#         print(error)</span>
+<span class="c1">#     finally:</span>
+<span class="c1">#         if conn is not None:</span>
+<span class="c1">#             conn.close()</span>
+<span class="c1">#             print(&#39;Repository connection closed.&#39;)</span>
+
+
+<div class="viewcode-block" id="getDataframeForEnvelope"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.repository.getDataframeForEnvelope">[docs]</a><span class="k">def</span> <span class="nf">getDataframeForEnvelope</span><span class="p">(</span><span class="n">repositoryName</span><span class="p">,</span> <span class="n">Xmin</span><span class="p">,</span> <span class="n">Ymin</span><span class="p">,</span> <span class="n">Xmax</span><span class="p">,</span> <span class="n">Ymax</span><span class="p">,</span> <span class="n">Bands</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">SRID</span><span class="o">=</span><span class="mi">4326</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get a dataframe from the database for a given envelope</span>
+
+<span class="sd">    :param repositoryName: name of the repository</span>
+<span class="sd">    :param Xmin: minimum X coordinate</span>
+<span class="sd">    :param Ymin: minimum Y coordinate</span>
+<span class="sd">    :param Xmax: maximum X coordinate</span>
+<span class="sd">    :param Ymax: maximum Y coordinate</span>
+<span class="sd">    :param Bands: bands to be extracted</span>
+<span class="sd">    :param SRID: spatial reference ID</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># connect to database</span>
+    <span class="c1"># create geoTIFF file</span>
+    <span class="c1"># gDal transform to geoTIFF</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Getting dataframe from database&#39;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># read database configuration</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span>
+        <span class="c1"># connect to the PostgreSQL database</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;SELECT ST_X(geog) as x, ST_Y(geog) as y, &quot;</span> <span class="o">+</span> <span class="n">Bands</span> <span class="o">+</span> <span class="s2">&quot; FROM &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">repositoryName</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; WHERE &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="n">repositoryName</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.geog &amp;&amp; ST_MakeEnvelope(&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">Xmin</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">Ymin</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">Xmax</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">Ymax</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;);&quot;</span>
+        <span class="n">dataFrameEnvelope</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">conn</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Dataframe created&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Bands</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span><span class="p">:</span>
+            <span class="n">dataFrameEnvelope</span> <span class="o">=</span> <span class="n">dataFrameEnvelope</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;geog&quot;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">dataFrameEnvelope</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">,</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">DatabaseError</span><span class="p">)</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">conn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Repository connection closed.&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="kNearestPixels"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.repository.kNearestPixels">[docs]</a><span class="k">def</span> <span class="nf">kNearestPixels</span><span class="p">(</span><span class="n">repositoryName</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">Bands</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">SRID</span><span class="o">=</span><span class="mi">4326</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get a dataframe from the database for a point and its neighbors</span>
+
+<span class="sd">    :param repositoryName: name of the repository</span>
+<span class="sd">    :param X: X coordinate</span>
+<span class="sd">    :param Y: Y coordinate</span>
+<span class="sd">    :param k: number of neighbours</span>
+<span class="sd">    :param Bands: bands to be extracted</span>
+<span class="sd">    :param SRID: spatial reference ID</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Getting dataframe from database&#39;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># read database configuration</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span>
+        <span class="c1"># connect to the PostgreSQL database</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;SELECT ST_X(geog) as x, ST_Y(geog) as y, &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">Bands</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; FROM &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="n">repositoryName</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; ORDER BY &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">repositoryName</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.geog &lt;-&gt; &#39;SRID=&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">SRID</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;;POINT(&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="n">X</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;)&#39; limit &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span>
+        <span class="n">dataFrameEnvelope</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">conn</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Dataframe created&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Bands</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span><span class="p">:</span>
+            <span class="n">dataFrameEnvelope</span> <span class="o">=</span> <span class="n">dataFrameEnvelope</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;geog&quot;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">dataFrameEnvelope</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">,</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">DatabaseError</span><span class="p">)</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">conn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Repository connection closed.&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="getRasterForkNearestPixels"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.repository.getRasterForkNearestPixels">[docs]</a><span class="k">def</span> <span class="nf">getRasterForkNearestPixels</span><span class="p">(</span><span class="n">repositoryName</span><span class="p">,</span> <span class="n">rasterFileName</span><span class="o">=</span><span class="s2">&quot;rasterFile.nc&quot;</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">Y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">Bands</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get a raster image from the database for a point and its neighbors</span>
+
+<span class="sd">    :param repositoryName: name of the repository</span>
+<span class="sd">    :param rasterFileName: name of the raster file</span>
+<span class="sd">    :param X: X coordinate</span>
+<span class="sd">    :param Y: Y coordinate</span>
+<span class="sd">    :param k: number of neighbours</span>
+<span class="sd">    :param Bands: bands to be extracted</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># connect to database</span>
+    <span class="c1"># create geoTIFF file</span>
+    <span class="c1"># gDal transform to geoTIFF</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">kNearestPixels</span><span class="p">(</span><span class="n">repositoryName</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">Bands</span><span class="p">)</span>
+    <span class="n">dataFrame2Raster</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">rasterFileName</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="getRepositorySize"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.repository.getRepositorySize">[docs]</a><span class="k">def</span> <span class="nf">getRepositorySize</span><span class="p">(</span><span class="n">tableName</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># read database configuration</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span>
+        <span class="c1"># connect to the PostgreSQL database</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;SELECT pg_size_pretty( pg_total_relation_size(&#39;&quot;</span> <span class="o">+</span> \
+            <span class="n">tableName</span> <span class="o">+</span> <span class="s2">&quot;&#39;) );&quot;</span>
+        <span class="n">dataFrameEnvelope</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">conn</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">dataFrameEnvelope</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;pg_size_pretty&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">dataFrameEnvelope</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;pg_size_pretty&#39;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">,</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">DatabaseError</span><span class="p">)</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">conn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Repository connection closed.&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="getSizeOfAllRepositories"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.repository.getSizeOfAllRepositories">[docs]</a><span class="k">def</span> <span class="nf">getSizeOfAllRepositories</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get return the size of the repository/database/table</span>
+
+<span class="sd">    :param repositoryName: name of the repository</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># read database configuration</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">config</span><span class="p">()</span>
+        <span class="c1"># connect to the PostgreSQL database</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+        <span class="n">q1</span> <span class="o">=</span> <span class="s2">&quot;select current_database();&quot;</span>
+        <span class="n">q2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="n">q1</span><span class="p">,</span> <span class="n">conn</span><span class="p">)</span>
+
+        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot; SELECT pg_size_pretty( pg_database_size(&#39;&quot;</span> <span class="o">+</span> \
+            <span class="n">q2</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;current_database&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;&#39;) );&quot;</span>
+        <span class="n">dataFrameEnvelope</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">conn</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">dataFrameEnvelope</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;pg_size_pretty&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">dataFrameEnvelope</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;pg_size_pretty&#39;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">,</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">DatabaseError</span><span class="p">)</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">conn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Repository connection closed.&#39;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, RAGE UDAY KIRAN.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

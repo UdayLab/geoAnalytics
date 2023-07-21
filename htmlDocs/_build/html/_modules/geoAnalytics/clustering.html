@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>geoAnalytics.clustering &mdash; geoAnalytics 2023.07.21 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            geoAnalytics
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">geoAnalytics</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">geoAnalytics</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">geoAnalytics.clustering</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for geoAnalytics.clustering</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">KMeans</span> <span class="k">as</span> <span class="n">kmeansAlg</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">DBSCAN</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">Birch</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">AgglomerativeClustering</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">MeanShift</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">OPTICS</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">SpectralClustering</span>
+<span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">AffinityPropagation</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.mixture</span> <span class="kn">import</span> <span class="n">GaussianMixture</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">unique</span>
+<span class="kn">import</span> <span class="nn">psycopg2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+
+<div class="viewcode-block" id="kMeans"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.clustering.kMeans">[docs]</a><span class="k">def</span> <span class="nf">kMeans</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Description:</span>
+<span class="sd">           Kmeans algorithm is an iterative algorithm that tries to partition the dataset into K pre-defined distinct</span>
+<span class="sd">           non-overlapping subgroups (clusters) where each data point belongs to only one group.</span>
+
+<span class="sd">    :param dataframe: Input data frame containing numerical data to be clustered.</span>
+<span class="sd">    :param k: number of clusters</span>
+<span class="sd">    :param max_iter: maximum number of iterations</span>
+
+<span class="sd">    :return: Index of the cluster each sample belongs to and cluster centers</span>
+<span class="sd">    :rtype: ndarray of shape (n_samples,)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># initialize k-means algorithm</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">kmeans</span> <span class="o">=</span> <span class="n">kmeansAlg</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="c1"># return the clusters</span>
+    <span class="c1"># combine x ,y and labels as dataframe</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">dataframe</span><span class="p">[[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">]]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">kmeans</span><span class="o">.</span><span class="n">labels_</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">labels</span><span class="p">,</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">cluster_centers_</span></div>
+
+
+<div class="viewcode-block" id="kMeansPP"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.clustering.kMeansPP">[docs]</a><span class="k">def</span> <span class="nf">kMeansPP</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Description:</span>
+<span class="sd">           To overcome the  drawbacks of standard k-means algorithm we use K-means++. This algorithm ensures a smarter</span>
+<span class="sd">           initialization of the centroids and improves the quality of the clustering.</span>
+
+<span class="sd">    :param dataframe: Input data frame containing numerical data to be clustered.</span>
+<span class="sd">    :param k: number of clusters</span>
+<span class="sd">    :param max_iter: maximum number of iterations</span>
+
+<span class="sd">    :return: Index of the cluster each sample belongs to and cluster centers</span>
+<span class="sd">    :rtype: ndarray of shape (n_samples,)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># initialize k-means++ algorithm</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">kmeans</span> <span class="o">=</span> <span class="n">kmeansAlg</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="s1">&#39;k-means++&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="c1"># return the clusters</span>
+    <span class="c1"># combine x ,y and labels as dataframe</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">dataframe</span><span class="p">[[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">]]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">kmeans</span><span class="o">.</span><span class="n">labels_</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">labels</span><span class="p">,</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">cluster_centers_</span></div>
+
+
+<div class="viewcode-block" id="DBScan"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.clustering.DBScan">[docs]</a><span class="k">def</span> <span class="nf">DBScan</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">ep</span><span class="p">,</span> <span class="n">min_sample</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Description:</span>
+<span class="sd">        DBSCAN is a density-based clustering algorithm that groups together data points that are close to each other</span>
+<span class="sd">        based on the specified parameters &#39;eps&#39; and &#39;min_samples&#39;. The algorithm does not require the number of clusters</span>
+<span class="sd">        to be specified in advance and can discover clusters of arbitrary shapes.</span>
+
+<span class="sd">    :param dataframe: Input data frame containing numerical data to be clustered.</span>
+
+<span class="sd">    :param ep (float): The maximum distance between two samples for them to be considered as in the same neighborhood.</span>
+
+<span class="sd">    :param min_sample (int): The number of samples (data points) in a neighborhood for a point to be considered as a core point.</span>
+
+<span class="sd">    :return: Index of the cluster each sample belongs to.</span>
+<span class="sd">    :rtype: ndarray of shape (n_samples,)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+    <span class="c1"># initialize k-means++ algorithm</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">dbs</span> <span class="o">=</span> <span class="n">DBSCAN</span><span class="p">(</span><span class="n">eps</span><span class="o">=</span><span class="n">ep</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="n">min_sample</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="c1"># return the clusters</span>
+    <span class="c1"># combine x ,y and labels as dataframe</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">dataframe</span><span class="p">[[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">]]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">dbs</span><span class="o">.</span><span class="n">labels_</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">labels</span></div>
+
+
+<div class="viewcode-block" id="affinityPropagation"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.clustering.affinityPropagation">[docs]</a><span class="k">def</span> <span class="nf">affinityPropagation</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">damping_factor</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">convergence_iter</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">affinity</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">,</span>
+                        <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">preference</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Description:</span>
+<span class="sd">       Affinity Propagation is a clustering algorithm used to group data points into clusters without requiring</span>
+<span class="sd">       the number of clusters as an input. It uses a message-passing approach to determine the exemplars (representative points) for each cluster. The exemplars are data points that best represent the cluster.</span>
+
+<span class="sd">    :param dataframe: data to be clustered</span>
+<span class="sd">    :param damping factor: In the range [0.5, 1.0) -o avoid numerical oscillations when updating values</span>
+<span class="sd">    :param max_iter: maximum number of iterations</span>
+<span class="sd">    :param convergence_iter: default = 15</span>
+<span class="sd">    :param affinity: {‘euclidean’, ‘precomputed’}</span>
+<span class="sd">    :param random_state: int, RandomState instance or None, default=None</span>
+<span class="sd">    :param preference: default = None :points with larger values of preferences are more likely to be chosen as exemplars</span>
+
+<span class="sd">    :return: Index of the cluster each sample belongs to and cluster centers</span>
+<span class="sd">    :rtype: ndarray of shape (n_samples,)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># initialize affinity propagation algorithm</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">affinityProp</span> <span class="o">=</span> <span class="n">AffinityPropagation</span><span class="p">(</span><span class="n">damping</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">damping_factor</span><span class="p">),</span> <span class="n">max_iter</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">max_iter</span><span class="p">),</span>
+                                       <span class="n">convergence_iter</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">convergence_iter</span><span class="p">),</span> <span class="n">affinity</span><span class="o">=</span><span class="n">affinity</span><span class="p">,</span> <span class="n">preference</span><span class="o">=</span><span class="n">preference</span><span class="p">,</span>
+                                       <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="c1"># return the clusters</span>
+    <span class="c1"># combine x ,y and labels as dataframe</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">dataframe</span><span class="p">[[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">]]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">affinityProp</span><span class="o">.</span><span class="n">labels_</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">labels</span><span class="p">,</span> <span class="n">affinityProp</span><span class="o">.</span><span class="n">cluster_centers_</span></div>
+
+
+<div class="viewcode-block" id="BIRCH"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.clustering.BIRCH">[docs]</a><span class="k">def</span> <span class="nf">BIRCH</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">branch_factor</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">compute_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Description: BIRCH - (Balanced Iterative Reducing and Clustering using Hierarchies) involves constructing a tree structure from which cluster centroids are extracted</span>
+<span class="sd">    :param dataframe: data to be clustered</span>
+<span class="sd">    :param threshold: (default = 0.5) The radius of the subcluster obtained by merging a new sample and the closest subcluster should be lesser than the threshold.</span>
+<span class="sd">    :param branching_factor: (default = 50) Maximum number of CF subclusters in each node.</span>
+<span class="sd">    :param n_clusters: n_clustersint, instance of sklearn.cluster model, default=3</span>
+<span class="sd">    :param compute_labels: True .Whether or not to compute labels for each fit</span>
+<span class="sd">    :return: Index of the cluster each sample belongs to and cluster centers</span>
+<span class="sd">    :rtype: ndarray of shape (n_samples,)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># initialize affinity propagation algorithm</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
+
+    <span class="n">birch</span> <span class="o">=</span> <span class="n">Birch</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">n_clusters</span><span class="p">),</span> <span class="n">threshold</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">threshold</span><span class="p">),</span> <span class="n">branching_factor</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">branch_factor</span><span class="p">),</span>
+                  <span class="n">compute_labels</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="n">branch_factor</span><span class="p">))</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="c1"># return the clusters</span>
+    <span class="c1"># combine x ,y and labels as dataframe</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">dataframe</span><span class="p">[[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">]]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">birch</span><span class="o">.</span><span class="n">labels_</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">labels</span><span class="p">,</span> <span class="n">birch</span><span class="o">.</span><span class="n">subcluster_centers_</span></div>
+
+
+<div class="viewcode-block" id="agglomerativeClustering"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.clustering.agglomerativeClustering">[docs]</a><span class="k">def</span> <span class="nf">agglomerativeClustering</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Description: Agglomerative Clustering - Recursively merges pair of clusters of sample data; uses linkage distance</span>
+
+<span class="sd">    :param dataframe: data to be clustered</span>
+<span class="sd">    :param n_clusters: The number of clusters to find.</span>
+
+<span class="sd">    :return: Index of the cluster each sample belongs to.</span>
+<span class="sd">    :rtype: ndarray of shape (n_samples,)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># initialize affinity propagation algorithm</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="c1"># X = StandardScaler().fit_transform(data)</span>
+
+    <span class="n">agglomerativeClustering</span> <span class="o">=</span> <span class="n">AgglomerativeClustering</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="c1"># return the clusters</span>
+    <span class="c1"># combine x ,y and labels as dataframe</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">dataframe</span><span class="p">[[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">]]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">agglomerativeClustering</span><span class="o">.</span><span class="n">labels_</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">labels</span></div>
+
+
+<div class="viewcode-block" id="meanShift"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.clustering.meanShift">[docs]</a><span class="k">def</span> <span class="nf">meanShift</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_iters</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Description: Mean shift clustering aims to discover “blobs” in a smooth density of samples.</span>
+<span class="sd">    :param dataframe: input data frame containing data to be clustered</span>
+<span class="sd">    :param bandwidth: float, default=None</span>
+<span class="sd">    :param max_iters: maximum number of iterations, default=300</span>
+<span class="sd">    :return: Index of the cluster each sample belongs to and cluster centers</span>
+<span class="sd">    :rtype: ndarray of shape (n_samples,)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># initialize affinity propagation algorithm</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="c1"># X = StandardScaler().fit_transform(data)</span>
+
+    <span class="n">meanShift</span> <span class="o">=</span> <span class="n">MeanShift</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="n">max_iters</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="c1"># combine x ,y and labels as dataframe</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">dataframe</span><span class="p">[[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">]]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">meanShift</span><span class="o">.</span><span class="n">labels_</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">labels</span><span class="p">,</span> <span class="n">meanShift</span><span class="o">.</span><span class="n">cluster_centers_</span></div>
+
+
+<div class="viewcode-block" id="opticsClustering"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.clustering.opticsClustering">[docs]</a><span class="k">def</span> <span class="nf">opticsClustering</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Description: OPTICS, closely related to DBSCAN, finds core sample of high density and expands clusters from them</span>
+<span class="sd">    :param dataframe: data to be clustered</span>
+<span class="sd">    :param min_samples: number of samples in a neighborhood for a point to be considered as a core point.</span>
+<span class="sd">    :param eps: maximum distance between two samples for one to be considered as in the neighborhood of the other</span>
+<span class="sd">    :return: Index of the cluster each sample belongs to.</span>
+<span class="sd">    :rtype: ndarray of shape (n_samples,)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># initialize affinity propagation algorithm</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dataframe</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)))</span>
+
+    <span class="n">OPTICS_Clustering</span> <span class="o">=</span> <span class="n">OPTICS</span><span class="p">(</span><span class="n">min_samples</span><span class="o">=</span><span class="n">min_samples</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="n">eps</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="c1"># combine x ,y and labels as dataframe</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">dataframe</span><span class="p">[[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">]]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">OPTICS_Clustering</span><span class="o">.</span><span class="n">labels_</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">labels</span></div>
+
+
+<div class="viewcode-block" id="spectralClustering"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.clustering.spectralClustering">[docs]</a><span class="k">def</span> <span class="nf">spectralClustering</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">assign_labels</span><span class="o">=</span><span class="s1">&#39;discretize&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Description: Spectral Clustering is useful when the structure of the individual clusters is highly non-convex</span>
+<span class="sd">    :param dataframe: data to be clustered</span>
+<span class="sd">    :param n_clusters: The dimension of the projection subspace</span>
+<span class="sd">    :param assign_labels: {‘kmeans’, ‘discretize’, ‘cluster_qr’}, default=’kmeans’</span>
+<span class="sd">    :return: Index of the cluster each sample belongs to</span>
+<span class="sd">    :rtype: ndarray of shape (n_samples,)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># initialize affinity propagation algorithm</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dataframe</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)))</span>
+
+    <span class="n">spectralClustering</span> <span class="o">=</span> <span class="n">SpectralClustering</span><span class="p">(</span><span class="n">assign_labels</span><span class="o">=</span><span class="n">assign_labels</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="n">n_clusters</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+        <span class="n">data</span><span class="p">)</span>
+    <span class="c1"># combine x ,y and labels as dataframe</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">dataframe</span><span class="p">[[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">]]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">spectralClustering</span><span class="o">.</span><span class="n">labels_</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">labels</span></div>
+
+
+<div class="viewcode-block" id="gaussianMixture"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.clustering.gaussianMixture">[docs]</a><span class="k">def</span> <span class="nf">gaussianMixture</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_iters</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">covariance_type</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">,</span> <span class="n">init_params</span><span class="o">=</span><span class="s1">&#39;kmeans&#39;</span><span class="p">,</span>
+                    <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :Description: To estimate the parameters of a Gaussian mixture distribution</span>
+<span class="sd">    :param dataframe: data to be clustered</span>
+<span class="sd">    :param max_iter: int, default=100</span>
+<span class="sd">    :param random_state: int, RandomState instance or None, default=None</span>
+<span class="sd">    :param covariance_type: {‘full’, ‘tied’, ‘diag’, ‘spherical’}, default=’full’</span>
+<span class="sd">    :param init_params: {‘kmeans’, ‘k-means++’, ‘random’, ‘random_from_data’}</span>
+<span class="sd">    :return: clusters,weights(weight of each mixture components, means (mean of each component)),</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># initialize affinity propagation algorithm</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dataframe</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">gaussianMixture</span> <span class="o">=</span> <span class="n">GaussianMixture</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="n">n_components</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iters</span><span class="p">,</span> <span class="n">covariance_type</span><span class="o">=</span><span class="n">covariance_type</span><span class="p">,</span>
+                                      <span class="n">init_params</span><span class="o">=</span><span class="n">init_params</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="c1"># assign each data point to a cluster</span>
+    <span class="n">gaussianResult</span> <span class="o">=</span> <span class="n">gaussianMixture</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">dataframe</span><span class="p">[[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">]]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="n">gaussianResult</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">labels</span><span class="p">,</span> <span class="n">gaussianMixture</span><span class="o">.</span><span class="n">weights_</span><span class="p">,</span> <span class="n">gaussianMixture</span><span class="o">.</span><span class="n">means_</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, RAGE UDAY KIRAN.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

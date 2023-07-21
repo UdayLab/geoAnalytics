@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>geoAnalytics package &mdash; geoAnalytics 2023.07.21 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="geoAnalytics" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            geoAnalytics
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">geoAnalytics</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">geoAnalytics package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-geoAnalytics.analytics">geoAnalytics.analytics module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.analytics.cosineSimilarity"><code class="docutils literal notranslate"><span class="pre">cosineSimilarity()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-geoAnalytics.clustering">geoAnalytics.clustering module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.clustering.BIRCH"><code class="docutils literal notranslate"><span class="pre">BIRCH()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.clustering.DBScan"><code class="docutils literal notranslate"><span class="pre">DBScan()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.clustering.affinityPropagation"><code class="docutils literal notranslate"><span class="pre">affinityPropagation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.clustering.agglomerativeClustering"><code class="docutils literal notranslate"><span class="pre">agglomerativeClustering()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.clustering.gaussianMixture"><code class="docutils literal notranslate"><span class="pre">gaussianMixture()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.clustering.kMeans"><code class="docutils literal notranslate"><span class="pre">kMeans()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.clustering.kMeansPP"><code class="docutils literal notranslate"><span class="pre">kMeansPP()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.clustering.meanShift"><code class="docutils literal notranslate"><span class="pre">meanShift()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.clustering.opticsClustering"><code class="docutils literal notranslate"><span class="pre">opticsClustering()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.clustering.spectralClustering"><code class="docutils literal notranslate"><span class="pre">spectralClustering()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-geoAnalytics.config">geoAnalytics.config module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.config.config"><code class="docutils literal notranslate"><span class="pre">config()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-geoAnalytics.csv2raster">geoAnalytics.csv2raster module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.csv2raster.csv2raster"><code class="docutils literal notranslate"><span class="pre">csv2raster()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-geoAnalytics.oneclassClassifiers">geoAnalytics.oneclassClassifiers module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.oneclassClassifiers.dtw"><code class="docutils literal notranslate"><span class="pre">dtw()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.oneclassClassifiers.getStatistics"><code class="docutils literal notranslate"><span class="pre">getStatistics()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.oneclassClassifiers.hausdorff"><code class="docutils literal notranslate"><span class="pre">hausdorff()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.oneclassClassifiers.rasterFuzzyTSC"><code class="docutils literal notranslate"><span class="pre">rasterFuzzyTSC()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.oneclassClassifiers.rasterOneNNDTW"><code class="docutils literal notranslate"><span class="pre">rasterOneNNDTW()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.oneclassClassifiers.rasterOneNNED"><code class="docutils literal notranslate"><span class="pre">rasterOneNNED()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.oneclassClassifiers.rasterOneNNHausdorff"><code class="docutils literal notranslate"><span class="pre">rasterOneNNHausdorff()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.oneclassClassifiers.rasterOneNNMaxNorm"><code class="docutils literal notranslate"><span class="pre">rasterOneNNMaxNorm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.oneclassClassifiers.saveFinalTestSamples"><code class="docutils literal notranslate"><span class="pre">saveFinalTestSamples()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.oneclassClassifiers.saveFinalTopNSamples"><code class="docutils literal notranslate"><span class="pre">saveFinalTopNSamples()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.oneclassClassifiers.showFinalTestSamples"><code class="docutils literal notranslate"><span class="pre">showFinalTestSamples()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.oneclassClassifiers.showFinalTopNSamples"><code class="docutils literal notranslate"><span class="pre">showFinalTopNSamples()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-geoAnalytics.plotGUI">geoAnalytics.plotGUI module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.plotGUI.plotGUI"><code class="docutils literal notranslate"><span class="pre">plotGUI</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-geoAnalytics.repository">geoAnalytics.repository module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.repository.addBand"><code class="docutils literal notranslate"><span class="pre">addBand()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.repository.clone"><code class="docutils literal notranslate"><span class="pre">clone()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.repository.connect"><code class="docutils literal notranslate"><span class="pre">connect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.repository.create"><code class="docutils literal notranslate"><span class="pre">create()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.repository.dataFrame2Raster"><code class="docutils literal notranslate"><span class="pre">dataFrame2Raster()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.repository.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.repository.deleteBand"><code class="docutils literal notranslate"><span class="pre">deleteBand()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.repository.disconnect"><code class="docutils literal notranslate"><span class="pre">disconnect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.repository.getDataframe"><code class="docutils literal notranslate"><span class="pre">getDataframe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.repository.getDataframeForEnvelope"><code class="docutils literal notranslate"><span class="pre">getDataframeForEnvelope()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.repository.getRaster"><code class="docutils literal notranslate"><span class="pre">getRaster()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.repository.getRasterForkNearestPixels"><code class="docutils literal notranslate"><span class="pre">getRasterForkNearestPixels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.repository.getRepositorySize"><code class="docutils literal notranslate"><span class="pre">getRepositorySize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.repository.getSizeOfAllRepositories"><code class="docutils literal notranslate"><span class="pre">getSizeOfAllRepositories()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.repository.insertCSV"><code class="docutils literal notranslate"><span class="pre">insertCSV()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.repository.insertRaster"><code class="docutils literal notranslate"><span class="pre">insertRaster()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.repository.insertRasterFolder"><code class="docutils literal notranslate"><span class="pre">insertRasterFolder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.repository.kNearestPixels"><code class="docutils literal notranslate"><span class="pre">kNearestPixels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.repository.rename"><code class="docutils literal notranslate"><span class="pre">rename()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#geoAnalytics.repository.testConnection"><code class="docutils literal notranslate"><span class="pre">testConnection()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-geoAnalytics">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">geoAnalytics</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">geoAnalytics</a></li>
+      <li class="breadcrumb-item active">geoAnalytics package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/geoAnalytics.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="geoanalytics-package">
+<h1>geoAnalytics package<a class="headerlink" href="#geoanalytics-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-geoAnalytics.analytics">
+<span id="geoanalytics-analytics-module"></span><h2>geoAnalytics.analytics module<a class="headerlink" href="#module-geoAnalytics.analytics" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.analytics.cosineSimilarity">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.analytics.</span></span><span class="sig-name descname"><span class="pre">cosineSimilarity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tableName1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tableName2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/analytics.html#cosineSimilarity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.analytics.cosineSimilarity" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Description<span class="colon">:</span></dt>
+<dd class="field-odd"><p>This function calculates the cosine similarity between two dataframes using the provided formula.</p>
+</dd>
+</dl>
+<p>Cosine Similarity = Dot product of df1 and df2 / (Magnitude of df1 * Magnitude of df2)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tableName1</strong> – The first data frame containing ‘x’ and ‘y’ columns (point co-ordinates)</p></li>
+<li><p><strong>tableName2</strong> – The second data frame containing ‘x’ and ‘y’ columns (point co-ordinates)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A new DataFrame with ‘x’ , ‘y’ and ‘cosine similarity’ columns</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-geoAnalytics.clustering">
+<span id="geoanalytics-clustering-module"></span><h2>geoAnalytics.clustering module<a class="headerlink" href="#module-geoAnalytics.clustering" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.clustering.BIRCH">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.clustering.</span></span><span class="sig-name descname"><span class="pre">BIRCH</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">branch_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_clusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/clustering.html#BIRCH"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.clustering.BIRCH" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Description<span class="colon">:</span></dt>
+<dd class="field-odd"><p>BIRCH - (Balanced Iterative Reducing and Clustering using Hierarchies) involves constructing a tree structure from which cluster centroids are extracted</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>dataframe</strong> – data to be clustered</p></li>
+<li><p><strong>threshold</strong> – (default = 0.5) The radius of the subcluster obtained by merging a new sample and the closest subcluster should be lesser than the threshold.</p></li>
+<li><p><strong>branching_factor</strong> – (default = 50) Maximum number of CF subclusters in each node.</p></li>
+<li><p><strong>n_clusters</strong> – n_clustersint, instance of sklearn.cluster model, default=3</p></li>
+<li><p><strong>compute_labels</strong> – True .Whether or not to compute labels for each fit</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Index of the cluster each sample belongs to and cluster centers</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>ndarray of shape (n_samples,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.clustering.DBScan">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.clustering.</span></span><span class="sig-name descname"><span class="pre">DBScan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ep</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_sample</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/clustering.html#DBScan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.clustering.DBScan" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Description<span class="colon">:</span></dt>
+<dd class="field-odd"><p>DBSCAN is a density-based clustering algorithm that groups together data points that are close to each other
+based on the specified parameters ‘eps’ and ‘min_samples’. The algorithm does not require the number of clusters
+to be specified in advance and can discover clusters of arbitrary shapes.</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>dataframe</strong> – Input data frame containing numerical data to be clustered.</p></li>
+<li><p><strong>(</strong><strong>float</strong><strong>)</strong> (<em>ep</em>) – The maximum distance between two samples for them to be considered as in the same neighborhood.</p></li>
+<li><p><strong>(</strong><strong>int</strong><strong>)</strong> (<em>min_sample</em>) – The number of samples (data points) in a neighborhood for a point to be considered as a core point.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Index of the cluster each sample belongs to.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>ndarray of shape (n_samples,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.clustering.affinityPropagation">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.clustering.</span></span><span class="sig-name descname"><span class="pre">affinityPropagation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">damping_factor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convergence_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">affinity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/clustering.html#affinityPropagation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.clustering.affinityPropagation" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Description<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Affinity Propagation is a clustering algorithm used to group data points into clusters without requiring
+the number of clusters as an input. It uses a message-passing approach to determine the exemplars (representative points) for each cluster. The exemplars are data points that best represent the cluster.</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>dataframe</strong> – data to be clustered</p></li>
+<li><p><strong>factor</strong> (<em>damping</em>) – In the range [0.5, 1.0) -o avoid numerical oscillations when updating values</p></li>
+<li><p><strong>max_iter</strong> – maximum number of iterations</p></li>
+<li><p><strong>convergence_iter</strong> – default = 15</p></li>
+<li><p><strong>affinity</strong> – {‘euclidean’, ‘precomputed’}</p></li>
+<li><p><strong>random_state</strong> – int, RandomState instance or None, default=None</p></li>
+<li><p><strong>preference</strong> – default = None :points with larger values of preferences are more likely to be chosen as exemplars</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Index of the cluster each sample belongs to and cluster centers</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>ndarray of shape (n_samples,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.clustering.agglomerativeClustering">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.clustering.</span></span><span class="sig-name descname"><span class="pre">agglomerativeClustering</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_clusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/clustering.html#agglomerativeClustering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.clustering.agglomerativeClustering" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Description<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Agglomerative Clustering - Recursively merges pair of clusters of sample data; uses linkage distance</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>dataframe</strong> – data to be clustered</p></li>
+<li><p><strong>n_clusters</strong> – The number of clusters to find.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Index of the cluster each sample belongs to.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>ndarray of shape (n_samples,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.clustering.gaussianMixture">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.clustering.</span></span><span class="sig-name descname"><span class="pre">gaussianMixture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">covariance_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'full'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'kmeans'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/clustering.html#gaussianMixture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.clustering.gaussianMixture" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Description<span class="colon">:</span></dt>
+<dd class="field-odd"><p>To estimate the parameters of a Gaussian mixture distribution</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>dataframe</strong> – data to be clustered</p></li>
+<li><p><strong>max_iter</strong> – int, default=100</p></li>
+<li><p><strong>random_state</strong> – int, RandomState instance or None, default=None</p></li>
+<li><p><strong>covariance_type</strong> – {‘full’, ‘tied’, ‘diag’, ‘spherical’}, default=’full’</p></li>
+<li><p><strong>init_params</strong> – {‘kmeans’, ‘k-means++’, ‘random’, ‘random_from_data’}</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>clusters,weights(weight of each mixture components, means (mean of each component)),</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.clustering.kMeans">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.clustering.</span></span><span class="sig-name descname"><span class="pre">kMeans</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/clustering.html#kMeans"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.clustering.kMeans" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Description<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Kmeans algorithm is an iterative algorithm that tries to partition the dataset into K pre-defined distinct
+non-overlapping subgroups (clusters) where each data point belongs to only one group.</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>dataframe</strong> – Input data frame containing numerical data to be clustered.</p></li>
+<li><p><strong>k</strong> – number of clusters</p></li>
+<li><p><strong>max_iter</strong> – maximum number of iterations</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Index of the cluster each sample belongs to and cluster centers</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>ndarray of shape (n_samples,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.clustering.kMeansPP">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.clustering.</span></span><span class="sig-name descname"><span class="pre">kMeansPP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/clustering.html#kMeansPP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.clustering.kMeansPP" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Description<span class="colon">:</span></dt>
+<dd class="field-odd"><p>To overcome the  drawbacks of standard k-means algorithm we use K-means++. This algorithm ensures a smarter
+initialization of the centroids and improves the quality of the clustering.</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>dataframe</strong> – Input data frame containing numerical data to be clustered.</p></li>
+<li><p><strong>k</strong> – number of clusters</p></li>
+<li><p><strong>max_iter</strong> – maximum number of iterations</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Index of the cluster each sample belongs to and cluster centers</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>ndarray of shape (n_samples,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.clustering.meanShift">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.clustering.</span></span><span class="sig-name descname"><span class="pre">meanShift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bandwidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/clustering.html#meanShift"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.clustering.meanShift" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Description<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Mean shift clustering aims to discover “blobs” in a smooth density of samples.</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>dataframe</strong> – input data frame containing data to be clustered</p></li>
+<li><p><strong>bandwidth</strong> – float, default=None</p></li>
+<li><p><strong>max_iters</strong> – maximum number of iterations, default=300</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Index of the cluster each sample belongs to and cluster centers</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>ndarray of shape (n_samples,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.clustering.opticsClustering">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.clustering.</span></span><span class="sig-name descname"><span class="pre">opticsClustering</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/clustering.html#opticsClustering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.clustering.opticsClustering" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Description<span class="colon">:</span></dt>
+<dd class="field-odd"><p>OPTICS, closely related to DBSCAN, finds core sample of high density and expands clusters from them</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>dataframe</strong> – data to be clustered</p></li>
+<li><p><strong>min_samples</strong> – number of samples in a neighborhood for a point to be considered as a core point.</p></li>
+<li><p><strong>eps</strong> – maximum distance between two samples for one to be considered as in the neighborhood of the other</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Index of the cluster each sample belongs to.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>ndarray of shape (n_samples,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.clustering.spectralClustering">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.clustering.</span></span><span class="sig-name descname"><span class="pre">spectralClustering</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_clusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">assign_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'discretize'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/clustering.html#spectralClustering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.clustering.spectralClustering" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Description<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Spectral Clustering is useful when the structure of the individual clusters is highly non-convex</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>dataframe</strong> – data to be clustered</p></li>
+<li><p><strong>n_clusters</strong> – The dimension of the projection subspace</p></li>
+<li><p><strong>assign_labels</strong> – {‘kmeans’, ‘discretize’, ‘cluster_qr’}, default=’kmeans’</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Index of the cluster each sample belongs to</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>ndarray of shape (n_samples,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-geoAnalytics.config">
+<span id="geoanalytics-config-module"></span><h2>geoAnalytics.config module<a class="headerlink" href="#module-geoAnalytics.config" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.config.config">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.config.</span></span><span class="sig-name descname"><span class="pre">config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'database.ini'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">section</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'postgresql'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/config.html#config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.config.config" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-geoAnalytics.csv2raster">
+<span id="geoanalytics-csv2raster-module"></span><h2>geoAnalytics.csv2raster module<a class="headerlink" href="#module-geoAnalytics.csv2raster" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.csv2raster.csv2raster">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.csv2raster.</span></span><span class="sig-name descname"><span class="pre">csv2raster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'output.nc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataframe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/csv2raster.html#csv2raster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.csv2raster.csv2raster" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-geoAnalytics.oneclassClassifiers">
+<span id="geoanalytics-oneclassclassifiers-module"></span><h2>geoAnalytics.oneclassClassifiers module<a class="headerlink" href="#module-geoAnalytics.oneclassClassifiers" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.oneclassClassifiers.dtw">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.oneclassClassifiers.</span></span><span class="sig-name descname"><span class="pre">dtw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/oneclassClassifiers.html#dtw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.oneclassClassifiers.dtw" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.oneclassClassifiers.getStatistics">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.oneclassClassifiers.</span></span><span class="sig-name descname"><span class="pre">getStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">startTime</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/oneclassClassifiers.html#getStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.oneclassClassifiers.getStatistics" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.oneclassClassifiers.hausdorff">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.oneclassClassifiers.</span></span><span class="sig-name descname"><span class="pre">hausdorff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/oneclassClassifiers.html#hausdorff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.oneclassClassifiers.hausdorff" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.oneclassClassifiers.rasterFuzzyTSC">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.oneclassClassifiers.</span></span><span class="sig-name descname"><span class="pre">rasterFuzzyTSC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">training</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">testing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topElements</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/oneclassClassifiers.html#rasterFuzzyTSC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.oneclassClassifiers.rasterFuzzyTSC" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.oneclassClassifiers.rasterOneNNDTW">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.oneclassClassifiers.</span></span><span class="sig-name descname"><span class="pre">rasterOneNNDTW</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">training</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">testing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topElements</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/oneclassClassifiers.html#rasterOneNNDTW"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.oneclassClassifiers.rasterOneNNDTW" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.oneclassClassifiers.rasterOneNNED">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.oneclassClassifiers.</span></span><span class="sig-name descname"><span class="pre">rasterOneNNED</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">training</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">testing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topElements</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/oneclassClassifiers.html#rasterOneNNED"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.oneclassClassifiers.rasterOneNNED" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.oneclassClassifiers.rasterOneNNHausdorff">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.oneclassClassifiers.</span></span><span class="sig-name descname"><span class="pre">rasterOneNNHausdorff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">training</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">testing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topElements</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/oneclassClassifiers.html#rasterOneNNHausdorff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.oneclassClassifiers.rasterOneNNHausdorff" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.oneclassClassifiers.rasterOneNNMaxNorm">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.oneclassClassifiers.</span></span><span class="sig-name descname"><span class="pre">rasterOneNNMaxNorm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">training</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">testing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topElements</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/oneclassClassifiers.html#rasterOneNNMaxNorm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.oneclassClassifiers.rasterOneNNMaxNorm" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.oneclassClassifiers.saveFinalTestSamples">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.oneclassClassifiers.</span></span><span class="sig-name descname"><span class="pre">saveFinalTestSamples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputFile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/oneclassClassifiers.html#saveFinalTestSamples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.oneclassClassifiers.saveFinalTestSamples" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.oneclassClassifiers.saveFinalTopNSamples">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.oneclassClassifiers.</span></span><span class="sig-name descname"><span class="pre">saveFinalTopNSamples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputFile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/oneclassClassifiers.html#saveFinalTopNSamples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.oneclassClassifiers.saveFinalTopNSamples" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.oneclassClassifiers.showFinalTestSamples">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.oneclassClassifiers.</span></span><span class="sig-name descname"><span class="pre">showFinalTestSamples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/oneclassClassifiers.html#showFinalTestSamples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.oneclassClassifiers.showFinalTestSamples" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.oneclassClassifiers.showFinalTopNSamples">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.oneclassClassifiers.</span></span><span class="sig-name descname"><span class="pre">showFinalTopNSamples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/oneclassClassifiers.html#showFinalTopNSamples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.oneclassClassifiers.showFinalTopNSamples" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-geoAnalytics.plotGUI">
+<span id="geoanalytics-plotgui-module"></span><h2>geoAnalytics.plotGUI module<a class="headerlink" href="#module-geoAnalytics.plotGUI" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="geoAnalytics.plotGUI.plotGUI">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoAnalytics.plotGUI.</span></span><span class="sig-name descname"><span class="pre">plotGUI</span></span><a class="reference internal" href="_modules/geoAnalytics/plotGUI.html#plotGUI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.plotGUI.plotGUI" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geoAnalytics.plotGUI.plotGUI.colorOptions">
+<span class="sig-name descname"><span class="pre">colorOptions</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['#a3a7e4',</span> <span class="pre">'#000000']</span></em><a class="headerlink" href="#geoAnalytics.plotGUI.plotGUI.colorOptions" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geoAnalytics.plotGUI.plotGUI.drawEnvelope">
+<span class="sig-name descname"><span class="pre">drawEnvelope</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/plotGUI.html#plotGUI.drawEnvelope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.plotGUI.plotGUI.drawEnvelope" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geoAnalytics.plotGUI.plotGUI.drawNearestPoint">
+<span class="sig-name descname"><span class="pre">drawNearestPoint</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/plotGUI.html#plotGUI.drawNearestPoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.plotGUI.plotGUI.drawNearestPoint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geoAnalytics.plotGUI.plotGUI.exportReady">
+<span class="sig-name descname"><span class="pre">exportReady</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Empty</span> <span class="pre">DataFrame</span> <span class="pre">Columns:</span> <span class="pre">[]</span> <span class="pre">Index:</span> <span class="pre">[]</span></em><a class="headerlink" href="#geoAnalytics.plotGUI.plotGUI.exportReady" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geoAnalytics.plotGUI.plotGUI.sizeOptions">
+<span class="sig-name descname"><span class="pre">sizeOptions</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[10,</span> <span class="pre">15]</span></em><a class="headerlink" href="#geoAnalytics.plotGUI.plotGUI.sizeOptions" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-geoAnalytics.repository">
+<span id="geoanalytics-repository-module"></span><h2>geoAnalytics.repository module<a class="headerlink" href="#module-geoAnalytics.repository" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.repository.addBand">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.repository.</span></span><span class="sig-name descname"><span class="pre">addBand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repositoryName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bandFormula</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/repository.html#addBand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.repository.addBand" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.repository.clone">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.repository.</span></span><span class="sig-name descname"><span class="pre">clone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repositoryName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cloneRepositoryName</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/repository.html#clone"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.repository.clone" title="Permalink to this definition"></a></dt>
+<dd><p>Clone a repository from the database</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repositoryName</strong> – name of the repository</p></li>
+<li><p><strong>cloneRepositoryName</strong> – name of the cloned repository</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.repository.connect">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.repository.</span></span><span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dbName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hostIP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5432</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/repository.html#connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.repository.connect" title="Permalink to this definition"></a></dt>
+<dd><p>Connect to the database using the parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dbName</strong> – name of the database</p></li>
+<li><p><strong>hostIP</strong> – host IP</p></li>
+<li><p><strong>user</strong> – user name</p></li>
+<li><p><strong>password</strong> – password</p></li>
+<li><p><strong>port</strong> – port</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.repository.create">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.repository.</span></span><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repositoryName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totalBands</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SRID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4326</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/repository.html#create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.repository.create" title="Permalink to this definition"></a></dt>
+<dd><p>Create a repository in the database</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repositoryName</strong> – name of the repository</p></li>
+<li><p><strong>totalBands</strong> – total number of bands</p></li>
+<li><p><strong>SRID</strong> – spatial reference ID</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.repository.dataFrame2Raster">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.repository.</span></span><span class="sig-name descname"><span class="pre">dataFrame2Raster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rasterFileName</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/repository.html#dataFrame2Raster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.repository.dataFrame2Raster" title="Permalink to this definition"></a></dt>
+<dd><p>Create a raster image from a dataframe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataframe</strong> – dataframe</p></li>
+<li><p><strong>rasterFileName</strong> – name of the raster file with no file extension.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.repository.delete">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.repository.</span></span><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repositoryName</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/repository.html#delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.repository.delete" title="Permalink to this definition"></a></dt>
+<dd><p>Delete a repository from the database</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>repositoryName</strong> – name of the repository</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.repository.deleteBand">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.repository.</span></span><span class="sig-name descname"><span class="pre">deleteBand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repositoryName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bandNumber</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/repository.html#deleteBand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.repository.deleteBand" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.repository.disconnect">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.repository.</span></span><span class="sig-name descname"><span class="pre">disconnect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/repository.html#disconnect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.repository.disconnect" title="Permalink to this definition"></a></dt>
+<dd><p>Disconnect from the database</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.repository.getDataframe">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.repository.</span></span><span class="sig-name descname"><span class="pre">getDataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repositoryName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Bands</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SRID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4326</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/repository.html#getDataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.repository.getDataframe" title="Permalink to this definition"></a></dt>
+<dd><p>Get a dataframe from the database for a given envelope</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repositoryName</strong> – name of the repository</p></li>
+<li><p><strong>Xmin</strong> – minimum X coordinate</p></li>
+<li><p><strong>Ymin</strong> – minimum Y coordinate</p></li>
+<li><p><strong>Xmax</strong> – maximum X coordinate</p></li>
+<li><p><strong>Ymax</strong> – maximum Y coordinate</p></li>
+<li><p><strong>Bands</strong> – bands to be extracted</p></li>
+<li><p><strong>SRID</strong> – spatial reference ID</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.repository.getDataframeForEnvelope">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.repository.</span></span><span class="sig-name descname"><span class="pre">getDataframeForEnvelope</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repositoryName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Xmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ymin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Xmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ymax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Bands</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SRID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4326</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/repository.html#getDataframeForEnvelope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.repository.getDataframeForEnvelope" title="Permalink to this definition"></a></dt>
+<dd><p>Get a dataframe from the database for a given envelope</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repositoryName</strong> – name of the repository</p></li>
+<li><p><strong>Xmin</strong> – minimum X coordinate</p></li>
+<li><p><strong>Ymin</strong> – minimum Y coordinate</p></li>
+<li><p><strong>Xmax</strong> – maximum X coordinate</p></li>
+<li><p><strong>Ymax</strong> – maximum Y coordinate</p></li>
+<li><p><strong>Bands</strong> – bands to be extracted</p></li>
+<li><p><strong>SRID</strong> – spatial reference ID</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.repository.getRaster">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.repository.</span></span><span class="sig-name descname"><span class="pre">getRaster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repositoryName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rasterFileName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Xmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ymin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Xmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ymax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Bands</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/repository.html#getRaster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.repository.getRaster" title="Permalink to this definition"></a></dt>
+<dd><p>Get a raster image from the database</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repositoryName</strong> – name of the repository</p></li>
+<li><p><strong>rasterFileName</strong> – name of the raster file</p></li>
+<li><p><strong>Xmin</strong> – minimum X coordinate</p></li>
+<li><p><strong>Ymin</strong> – minimum Y coordinate</p></li>
+<li><p><strong>Xmax</strong> – maximum X coordinate</p></li>
+<li><p><strong>Ymax</strong> – maximum Y coordinate</p></li>
+<li><p><strong>Bands</strong> – bands to be extracted</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.repository.getRasterForkNearestPixels">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.repository.</span></span><span class="sig-name descname"><span class="pre">getRasterForkNearestPixels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repositoryName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rasterFileName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rasterFile.nc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Bands</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/repository.html#getRasterForkNearestPixels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.repository.getRasterForkNearestPixels" title="Permalink to this definition"></a></dt>
+<dd><p>Get a raster image from the database for a point and its neighbors</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repositoryName</strong> – name of the repository</p></li>
+<li><p><strong>rasterFileName</strong> – name of the raster file</p></li>
+<li><p><strong>X</strong> – X coordinate</p></li>
+<li><p><strong>Y</strong> – Y coordinate</p></li>
+<li><p><strong>k</strong> – number of neighbours</p></li>
+<li><p><strong>Bands</strong> – bands to be extracted</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.repository.getRepositorySize">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.repository.</span></span><span class="sig-name descname"><span class="pre">getRepositorySize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tableName</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/repository.html#getRepositorySize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.repository.getRepositorySize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.repository.getSizeOfAllRepositories">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.repository.</span></span><span class="sig-name descname"><span class="pre">getSizeOfAllRepositories</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/repository.html#getSizeOfAllRepositories"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.repository.getSizeOfAllRepositories" title="Permalink to this definition"></a></dt>
+<dd><p>Get return the size of the repository/database/table</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>repositoryName</strong> – name of the repository</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.repository.insertCSV">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.repository.</span></span><span class="sig-name descname"><span class="pre">insertCSV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repositoryName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seperator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/repository.html#insertCSV"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.repository.insertCSV" title="Permalink to this definition"></a></dt>
+<dd><p>Insert a CSV file into the database</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – name of the CSV file</p></li>
+<li><p><strong>repositoryName</strong> – name of the Repository</p></li>
+<li><p><strong>seperator</strong> – seperator</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.repository.insertRaster">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.repository.</span></span><span class="sig-name descname"><span class="pre">insertRaster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repositoryName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fileName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totalBands</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scalingFactor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SRID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4326</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/repository.html#insertRaster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.repository.insertRaster" title="Permalink to this definition"></a></dt>
+<dd><p>Insert a TIFF file into the database</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repositoryName</strong> – name of the Repository</p></li>
+<li><p><strong>fileName</strong> – name of the TIFF file</p></li>
+<li><p><strong>totalBands</strong> – number of bands</p></li>
+<li><p><strong>SRID</strong> – spatial reference ID</p></li>
+<li><p><strong>scalingFactor</strong> – scaling factor</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.repository.insertRasterFolder">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.repository.</span></span><span class="sig-name descname"><span class="pre">insertRasterFolder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repositoryName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folderName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">totalBands</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scalingFactor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.lbl'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SRID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4326</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/repository.html#insertRasterFolder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.repository.insertRasterFolder" title="Permalink to this definition"></a></dt>
+<dd><p>Insert a TIFF file into the database</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repositoryName</strong> – name of the Repository</p></li>
+<li><p><strong>fileName</strong> – name of the TIFF file</p></li>
+<li><p><strong>totalBands</strong> – number of bands</p></li>
+<li><p><strong>SRID</strong> – spatial reference ID</p></li>
+<li><p><strong>scalingFactor</strong> – scaling factor</p></li>
+<li><p><strong>threads</strong> – number of threads to spawn</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.repository.kNearestPixels">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.repository.</span></span><span class="sig-name descname"><span class="pre">kNearestPixels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repositoryName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Bands</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SRID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4326</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/repository.html#kNearestPixels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.repository.kNearestPixels" title="Permalink to this definition"></a></dt>
+<dd><p>Get a dataframe from the database for a point and its neighbors</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repositoryName</strong> – name of the repository</p></li>
+<li><p><strong>X</strong> – X coordinate</p></li>
+<li><p><strong>Y</strong> – Y coordinate</p></li>
+<li><p><strong>k</strong> – number of neighbours</p></li>
+<li><p><strong>Bands</strong> – bands to be extracted</p></li>
+<li><p><strong>SRID</strong> – spatial reference ID</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.repository.rename">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.repository.</span></span><span class="sig-name descname"><span class="pre">rename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repositoryName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newRepositoryName</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/repository.html#rename"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.repository.rename" title="Permalink to this definition"></a></dt>
+<dd><p>Change the name of a repository in the database</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repositoryName</strong> – name of the repository</p></li>
+<li><p><strong>newRepositoryName</strong> – new name of the repository</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geoAnalytics.repository.testConnection">
+<span class="sig-prename descclassname"><span class="pre">geoAnalytics.repository.</span></span><span class="sig-name descname"><span class="pre">testConnection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoAnalytics/repository.html#testConnection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoAnalytics.repository.testConnection" title="Permalink to this definition"></a></dt>
+<dd><p>Test the connection to the database</p>
+</dd></dl>
+
+</section>
+<section id="module-geoAnalytics">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-geoAnalytics" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="geoAnalytics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, RAGE UDAY KIRAN.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

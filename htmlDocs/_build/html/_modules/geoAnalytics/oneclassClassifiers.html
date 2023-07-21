@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>geoAnalytics.oneclassClassifiers &mdash; geoAnalytics 2023.07.21 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            geoAnalytics
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">geoAnalytics</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">geoAnalytics</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">geoAnalytics.oneclassClassifiers</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for geoAnalytics.oneclassClassifiers</h1><div class="highlight"><pre>
+<span></span><span class="c1"># import required libraries</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">psutil</span>
+<span class="kn">import</span> <span class="nn">gc</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+
+<div class="viewcode-block" id="rasterFuzzyTSC"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.oneclassClassifiers.rasterFuzzyTSC">[docs]</a><span class="k">def</span> <span class="nf">rasterFuzzyTSC</span><span class="p">(</span><span class="n">training</span><span class="p">,</span> <span class="n">testing</span><span class="p">,</span><span class="n">topElements</span><span class="p">):</span>
+    <span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="c1"># To drop the first column which is a class label of each sample</span>
+    <span class="c1"># training.drop(0, axis=&#39;columns&#39;, inplace=True)</span>
+
+    <span class="c1"># separating classes into different dictionary variables and creating mean, min and max curves</span>
+    <span class="n">maxData</span> <span class="o">=</span> <span class="n">training</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">meanData</span> <span class="o">=</span> <span class="n">training</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">minData</span> <span class="o">=</span> <span class="n">training</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">del</span> <span class="n">training</span>
+    <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+
+    <span class="c1"># Classification Phase</span>
+
+    <span class="n">counter</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">num_rows</span><span class="p">,</span> <span class="n">num_columns</span> <span class="o">=</span> <span class="n">testing</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="c1"># print(num_rows, num_columns)</span>
+    <span class="n">newColumn</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="c1"># print(num_columns)</span>
+    <span class="n">correct</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_rows</span><span class="p">):</span>
+        <span class="n">counter</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_columns</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">testing</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">meanData</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">testing</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">maxData</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                    <span class="n">counter</span> <span class="o">=</span> <span class="n">counter</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">testing</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">meanData</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">maxData</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">meanData</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">counter</span> <span class="o">=</span> <span class="n">counter</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">testing</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">minData</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                    <span class="n">counter</span> <span class="o">=</span> <span class="n">counter</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">meanData</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">testing</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">meanData</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">minData</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">counter</span> <span class="o">=</span> <span class="n">counter</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="n">counter</span> <span class="o">=</span> <span class="n">counter</span> <span class="o">/</span> <span class="n">num_columns</span>
+
+        <span class="n">newColumn</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">counter</span><span class="p">)</span>
+
+    <span class="n">testing</span><span class="p">[</span><span class="s1">&#39;RD&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">newColumn</span>
+
+    <span class="c1"># N = int(input(&quot;Enter the how many number of top elements to be retrieved between: 1 to &quot; + str(num_rows) + &quot;:&quot;))</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">topElements</span>
+    <span class="n">sortedDF</span> <span class="o">=</span> <span class="n">testing</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;RD&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">getStatistics</span><span class="p">(</span><span class="n">startTime</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">testing</span><span class="p">,</span> <span class="n">sortedDF</span></div>
+
+
+<div class="viewcode-block" id="rasterOneNNDTW"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.oneclassClassifiers.rasterOneNNDTW">[docs]</a><span class="k">def</span> <span class="nf">rasterOneNNDTW</span><span class="p">(</span><span class="n">training</span><span class="p">,</span> <span class="n">testing</span><span class="p">,</span><span class="n">topElements</span><span class="p">):</span>
+    <span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="c1"># training.drop(0, axis=&#39;columns&#39;, inplace=True)</span>
+    <span class="n">num_rows_test</span><span class="p">,</span> <span class="n">num_columns_test</span> <span class="o">=</span> <span class="n">testing</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">num_rows_train</span><span class="p">,</span> <span class="n">num_columns_train</span> <span class="o">=</span> <span class="n">training</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">training_noclass</span> <span class="o">=</span> <span class="n">training</span>  <span class="c1"># self.training[:, 1:]</span>
+    <span class="n">testing_noclass</span> <span class="o">=</span> <span class="n">testing</span>  <span class="c1"># self.testing[:, 1:]</span>
+
+    <span class="n">newColumn</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="c1"># predicted_label = None</span>
+    <span class="n">correct</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_rows_test</span><span class="p">):</span>
+        <span class="c1"># print(i)</span>
+        <span class="n">least_distance</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_rows_train</span><span class="p">):</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">dtw</span><span class="p">(</span><span class="n">testing_noclass</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">training_noclass</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">dist</span> <span class="o">&lt;</span> <span class="n">least_distance</span><span class="p">:</span>
+                <span class="c1"># predicted_label = self.training[j][0]</span>
+                <span class="n">least_distance</span> <span class="o">=</span> <span class="n">dist</span>
+
+        <span class="n">newColumn</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">least_distance</span><span class="p">)</span>
+        <span class="c1"># if predicted_label == self.testing[i][0]:</span>
+        <span class="c1">#    correct = correct + 1</span>
+    <span class="n">testing</span><span class="p">[</span><span class="s1">&#39;1NNmaxNorm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">newColumn</span>   <span class="c1"># print final test</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">topElements</span>
+    <span class="n">sortedDF</span> <span class="o">=</span> <span class="n">testing</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;1NNmaxNorm&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="c1"># top k</span>
+    <span class="n">getStatistics</span><span class="p">(</span><span class="n">startTime</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">testing</span><span class="p">,</span><span class="n">sortedDF</span></div>
+
+
+<div class="viewcode-block" id="rasterOneNNED"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.oneclassClassifiers.rasterOneNNED">[docs]</a><span class="k">def</span> <span class="nf">rasterOneNNED</span><span class="p">(</span><span class="n">training</span><span class="p">,</span> <span class="n">testing</span><span class="p">,</span><span class="n">topElements</span><span class="p">):</span>
+    <span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="c1"># training.drop(0, axis=&#39;columns&#39;, inplace=True)</span>
+    <span class="n">num_rows_test</span><span class="p">,</span> <span class="n">num_columns_test</span> <span class="o">=</span> <span class="n">testing</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">num_rows_train</span><span class="p">,</span> <span class="n">num_columns_train</span> <span class="o">=</span> <span class="n">training</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">predicted_label</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">correct</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">newColumn</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_rows_test</span><span class="p">):</span>
+        <span class="n">least_distance</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_rows_train</span><span class="p">):</span>
+            <span class="n">squaring</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_columns_train</span><span class="p">):</span>
+                <span class="n">squaring</span> <span class="o">=</span> <span class="n">squaring</span> <span class="o">+</span> <span class="p">(</span><span class="n">testing</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">training</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">squaring</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">dist</span> <span class="o">&lt;</span> <span class="n">least_distance</span><span class="p">:</span>
+                <span class="c1"># predicted_label = self.training[j][0]</span>
+                <span class="n">least_distance</span> <span class="o">=</span> <span class="n">dist</span>
+        <span class="n">newColumn</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">least_distance</span><span class="p">)</span>
+
+    <span class="n">testing</span><span class="p">[</span><span class="s1">&#39;1NNED&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">newColumn</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">topElements</span>
+    <span class="n">sortedDF</span> <span class="o">=</span> <span class="n">testing</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;1NNED&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">getStatistics</span><span class="p">(</span><span class="n">startTime</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">testing</span><span class="p">,</span><span class="n">sortedDF</span></div>
+
+
+
+<div class="viewcode-block" id="rasterOneNNHausdorff"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.oneclassClassifiers.rasterOneNNHausdorff">[docs]</a><span class="k">def</span> <span class="nf">rasterOneNNHausdorff</span><span class="p">(</span><span class="n">training</span><span class="p">,</span> <span class="n">testing</span><span class="p">,</span><span class="n">topElements</span><span class="p">):</span>
+    <span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="c1"># training.drop(0, axis=&#39;columns&#39;, inplace=True)</span>
+    <span class="n">num_rows_test</span><span class="p">,</span> <span class="n">num_columns_test</span> <span class="o">=</span> <span class="n">testing</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">num_rows_train</span><span class="p">,</span> <span class="n">num_columns_train</span> <span class="o">=</span> <span class="n">training</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">training_noclass</span> <span class="o">=</span> <span class="n">training</span>  <span class="c1"># self.training[:, 1:]</span>
+    <span class="n">testing_noclass</span> <span class="o">=</span> <span class="n">testing</span>  <span class="c1"># self.testing[:, 1:]</span>
+    <span class="c1"># predicted_label = None</span>
+    <span class="c1"># correct = 0</span>
+    <span class="n">newColumn</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_rows_test</span><span class="p">):</span>
+        <span class="n">least_distance</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_rows_train</span><span class="p">):</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">hausdorff</span><span class="p">(</span><span class="n">testing_noclass</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">training_noclass</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()),</span>
+                       <span class="n">hausdorff</span><span class="p">(</span><span class="n">training_noclass</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
+                                      <span class="n">testing_noclass</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()))</span>  <span class="c1"># math.sqrt(squaring)</span>
+            <span class="k">if</span> <span class="n">dist</span> <span class="o">&lt;</span> <span class="n">least_distance</span><span class="p">:</span>
+                <span class="c1"># predicted_label = self.training[j][0]</span>
+                <span class="n">least_distance</span> <span class="o">=</span> <span class="n">dist</span>
+        <span class="c1"># if predicted_label == self.testing[i][0]:</span>
+        <span class="c1">#    correct = correct + 1</span>
+        <span class="n">newColumn</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">least_distance</span><span class="p">)</span>
+
+    <span class="n">testing</span><span class="p">[</span><span class="s1">&#39;1NNHausdorff&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">newColumn</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">topElements</span>
+    <span class="n">sortedDF</span> <span class="o">=</span> <span class="n">testing</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;1NNHausdorff&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">getStatistics</span><span class="p">(</span><span class="n">startTime</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">testing</span><span class="p">,</span><span class="n">sortedDF</span></div>
+
+<div class="viewcode-block" id="rasterOneNNMaxNorm"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.oneclassClassifiers.rasterOneNNMaxNorm">[docs]</a><span class="k">def</span> <span class="nf">rasterOneNNMaxNorm</span><span class="p">(</span><span class="n">training</span><span class="p">,</span> <span class="n">testing</span><span class="p">,</span><span class="n">topElements</span><span class="p">):</span>
+    <span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="c1"># training.drop(0, axis=&#39;columns&#39;, inplace=True)</span>
+    <span class="n">num_rows_test</span><span class="p">,</span> <span class="n">num_columns_test</span> <span class="o">=</span> <span class="n">testing</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">num_rows_train</span><span class="p">,</span> <span class="n">num_columns_train</span> <span class="o">=</span>     <span class="n">training</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">newColumn</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_rows_test</span><span class="p">):</span>
+        <span class="n">least_distance</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_rows_train</span><span class="p">):</span>
+            <span class="n">maximum</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;-inf&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_columns_train</span><span class="p">):</span>
+                <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">testing</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">training</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">temp</span> <span class="o">&gt;</span> <span class="n">maximum</span><span class="p">:</span>
+                    <span class="n">maximum</span> <span class="o">=</span> <span class="n">temp</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">maximum</span>  <span class="c1"># math.sqrt(squaring)</span>
+            <span class="k">if</span> <span class="n">dist</span> <span class="o">&lt;</span> <span class="n">least_distance</span><span class="p">:</span>
+                <span class="c1"># predicted_label = self.training[j][0]</span>
+                <span class="n">least_distance</span> <span class="o">=</span> <span class="n">dist</span>
+        <span class="n">newColumn</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">least_distance</span><span class="p">)</span>
+        <span class="c1"># if predicted_label == self.testing[i][0]:</span>
+        <span class="c1">#    correct = correct + 1</span>
+
+    <span class="n">testing</span><span class="p">[</span><span class="s1">&#39;1NNmaxNorm&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">newColumn</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">topElements</span>
+    <span class="n">sortedDF</span> <span class="o">=</span> <span class="n">testing</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;1NNmaxNorm&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">getStatistics</span><span class="p">(</span><span class="n">startTime</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">testing</span><span class="p">,</span><span class="n">sortedDF</span></div>
+
+<div class="viewcode-block" id="hausdorff"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.oneclassClassifiers.hausdorff">[docs]</a><span class="k">def</span> <span class="nf">hausdorff</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+    <span class="n">row</span><span class="p">,</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">lea_distance</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+        <span class="n">distance1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">v</span><span class="p">))))</span>
+        <span class="k">if</span> <span class="n">distance1</span> <span class="o">&gt;</span> <span class="n">lea_distance</span><span class="p">:</span>
+            <span class="n">lea_distance</span> <span class="o">=</span> <span class="n">distance1</span>
+    <span class="k">return</span> <span class="n">lea_distance</span></div>
+
+
+<div class="viewcode-block" id="dtw"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.oneclassClassifiers.dtw">[docs]</a><span class="k">def</span> <span class="nf">dtw</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">):</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
+                <span class="n">d</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">-</span> <span class="n">B</span><span class="p">[</span><span class="n">m</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">D</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="n">D</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">D</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">M</span><span class="p">):</span>
+            <span class="n">D</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">m</span><span class="p">]</span> <span class="o">+</span> <span class="n">D</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">M</span><span class="p">):</span>
+                <span class="n">D</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">m</span><span class="p">]</span> <span class="o">+</span> <span class="nb">min</span><span class="p">(</span><span class="n">D</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">m</span><span class="p">],</span> <span class="n">D</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">D</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">D</span><span class="p">[</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">M</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="showFinalTestSamples"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.oneclassClassifiers.showFinalTestSamples">[docs]</a><span class="k">def</span> <span class="nf">showFinalTestSamples</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final test samples after calculating the Ravi Distance (RD):&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="showFinalTopNSamples"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.oneclassClassifiers.showFinalTopNSamples">[docs]</a><span class="k">def</span> <span class="nf">showFinalTopNSamples</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final top- N  testing samples retrieved based on the Ravi Distance:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="saveFinalTestSamples"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.oneclassClassifiers.saveFinalTestSamples">[docs]</a><span class="k">def</span> <span class="nf">saveFinalTestSamples</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">outputFile</span><span class="p">):</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">outputFile</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="saveFinalTopNSamples"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.oneclassClassifiers.saveFinalTopNSamples">[docs]</a><span class="k">def</span> <span class="nf">saveFinalTopNSamples</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">outputFile</span><span class="p">):</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">outputFile</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="getStatistics"><a class="viewcode-back" href="../../geoAnalytics.html#geoAnalytics.oneclassClassifiers.getStatistics">[docs]</a><span class="k">def</span> <span class="nf">getStatistics</span><span class="p">(</span><span class="n">startTime</span><span class="p">):</span>
+    <span class="c1"># Statistics of the Algorithm after execution</span>
+    <span class="c1"># print(&quot;Dataset name:&quot;, &quot;SampleRunTrainFile.txt&quot;)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Total Execution time of proposedAlgo&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">startTime</span><span class="p">)</span>
+    <span class="n">process</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
+    <span class="n">memory</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">memory_full_info</span><span class="p">()</span><span class="o">.</span><span class="n">uss</span>
+    <span class="n">memory_in_KB</span> <span class="o">=</span> <span class="n">memory</span> <span class="o">/</span> <span class="mi">1024</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Memory of proposedAlgo in KB:&quot;</span><span class="p">,</span> <span class="n">memory_in_KB</span><span class="p">)</span>  <span class="c1"># in bytes</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, RAGE UDAY KIRAN.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
