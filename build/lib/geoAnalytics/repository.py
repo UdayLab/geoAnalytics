@@ -2,20 +2,22 @@ from geoAnalytics import csv2raster
 from geoAnalytics.config import config
 from shapely import wkb, wkt
 from osgeo import gdal
-import numpy as np
+import numpy as Numeric
 import pandas as pd
+import subprocess
 import psycopg2
 import random
 import os
 import sys
+import threading
 from tqdm import tqdm
 import multiprocessing
-from scoreCalculator import ScoreCalculator
+import time
+
 
 class GeoDatabaseManager:
     def __init__(self):
         self.conn = None
-        self.scores = None
 
     def connect(self, dbName = None, hostIP = None, user = None, password = None, port=5432):
         """
@@ -146,10 +148,11 @@ class GeoDatabaseManager:
             self.disconnect()
             
     def read_raster(self, fileName, totalBands, scalingFactor, SRID=4326):
-        file = f"/tmp/{random.randint(0, 100000)}.txt"
+        file = "{random.randint(0, 100000)}.txt"
         tempFile = self._r2tsv(totalBands, fileName, scalingFactor, SRID, file)
         df = pd.read_csv(tempFile, header = None, delimiter = " ")
         df.columns = ["WKB Position"] + ["B" + str(x) for x in range(totalBands)]
+        os.remove(file)
         return df
     
     def convertWKB(self, df):
@@ -170,6 +173,8 @@ class GeoDatabaseManager:
         """
         tempFile = self._r2tsv(totalBands, fileName, scalingFactor, SRID)
         self.insert_csv(tempFile, repositoryName)
+        if os.path.exists(tempFile):
+            os.remove(tempFile)
 
     def insert_raster_folder(self, repositoryName, folderName, totalBands, scalingFactor, extension=".lbl", SRID=4326, threads=16):
         """
@@ -198,12 +203,9 @@ class GeoDatabaseManager:
             params = config()
             self.conn = psycopg2.connect(**params)
             curr = self.conn.cursor()
-            # buffer = f"COPY {repositoryName} FROM '{filename}' DELIMITER '{separator}' CSV;"
+            buffer = f"COPY {repositoryName} FROM '{filename}' DELIMITER '{separator}' CSV;"
             # buffer = f"\copy {repositoryName} FROM '{os.getcwd()}/{filename}' DELIMITER '{separator}' CSV;"
-            with open(filename, 'r') as f:
-                curr.copy_expert(f"COPY {repositoryName} FROM STDIN DELIMITER '{separator}' CSV", f)
-
-            # curr.execute(buffer)
+            curr.execute(buffer)
             self.conn.commit()
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
@@ -317,33 +319,3 @@ class GeoDatabaseManager:
         if Bands == "*":
             df.drop(columns=['geog'], inplace=True)
         return df
-    
-    def filter(self, filterFile):
-        """
-        Filter the dataframe.
-        """
-        if self.scores is None:
-            df = pd.read_csv(filterFile, header=None, delimiter=" ", dtype=float)
-            self.scores = [ScoreCalculator(df[col].min(), df[col].max(), df[col].mean()) for col in df.columns]
-
-    def calculate_scores_for_row(self, row):
-    # Apply scoring only on relevant columns (from 3rd column onward)
-        return [self.scores[j - 2].calculate_score(row[j]) for j in range(2, len(row))]
-
-
-    def filtering(self, dataframe, filterFile):
-        """
-        Filter the dataframe and calculate scores for each row.
-        """
-        self.filter(filterFile)  # No need to store the result since it initializes self.scores
-
-        # Apply score calculation to each row in the dataframe and expand results into new columns
-        score_columns = dataframe.apply(self.calculate_scores_for_row, axis=1, result_type='expand')
-
-        # Assign score columns to the dataframe
-        dataframe[[f'score_{i}' for i in range(score_columns.shape[1])]] = score_columns
-
-        return dataframe
-
-
-
