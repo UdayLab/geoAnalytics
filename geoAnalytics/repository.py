@@ -328,6 +328,8 @@ class GeoDatabaseManager:
 
     def calculate_scores_for_row(self, row):
     # Apply scoring only on relevant columns (from 3rd column onward)
+        # range(2, len(row)) is used to skip the first two columns (x and y)
+        # [j-2] is used to get the correct score object for the column because the first two columns are skipped aka x, y
         return [self.scores[j - 2].calculate_score(row[j]) for j in range(2, len(row))]
 
 
@@ -344,6 +346,14 @@ class GeoDatabaseManager:
         dataframe[[f'score_{i}' for i in range(score_columns.shape[1])]] = score_columns
 
         return dataframe
+    
+    def total_score(self, dataframe):
+        """
+        Calculate the total score for the dataframe.
+        """
+        # add a new column to the dataframe that contains the sum of all score columns divided by the number of score columns
+        num_score_cols = sum('score_' in col for col in dataframe.columns)
+        
+        dataframe['total_score'] = dataframe[[f'score_{i}' for i in range(1, num_score_cols)]].sum(axis=1) / num_score_cols
 
-
-
+        return dataframe

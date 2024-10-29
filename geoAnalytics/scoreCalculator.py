@@ -3,14 +3,18 @@ class ScoreCalculator:
         self.min_val = min_val
         self.max_val = max_val
         self.avg_val = avg_val
-        # Precompute the maximum possible distance from the average
-        self.max_distance = max(max_val - avg_val, avg_val - min_val)
-    
+
     def calculate_score(self, value):
-        if value < self.min_val or value > self.max_val:
+        if value == self.avg_val:
+            return 0
+        elif value == self.min_val or value == self.max_val:
+            return 0.5
+        elif value > self.max_val or value < self.min_val:
             return 1
+        elif value < self.avg_val:
+            # Linear interpolation between min_val and avg_val
+            return 0.5 * (1 - (value - self.min_val) / (self.avg_val - self.min_val))
         else:
-            # Use the precomputed max distance
-            distance_from_avg = abs(value - self.avg_val)
-            score = distance_from_avg / self.max_distance
-            return score
+            # Linear interpolation between avg_val and max_val
+            return 0.5 * (1 - (self.max_val - value) / (self.max_val - self.avg_val))
+        
