@@ -40,6 +40,41 @@ def compute_dtw_parallel(testing_data, training_data):
         distances[i] = min_dist
     return distances
 
+
+@njit
+def dtw_manual(A, B):
+    """Manually computes DTW distance using explicit formula."""
+    N, M = len(A), len(B)
+    d = np.zeros((N, M))
+    for n in range(N):
+        for m in range(M):
+            d[n, m] = (A[n] - B[m]) ** 2
+    D = np.zeros((N, M))
+    D[0, 0] = d[0, 0]
+    for n in range(1, N):
+        D[n, 0] = d[n, 0] + D[n - 1, 0]
+    for m in range(1, M):
+        D[0, m] = d[0, m] + D[0, m - 1]
+    for n in range(1, N):
+        for m in range(1, M):
+            D[n, m] = d[n, m] + min(D[n - 1, m], D[n - 1, m - 1], D[n, m - 1])
+    return D[N - 1, M - 1]
+
+@njit(parallel=True)
+def compute_dtw_single_numba(testing_np, training_np):
+    """Optimized single-threaded DTW computation using explicit formula."""
+    num_test = testing_np.shape[0]
+    num_train = training_np.shape[0]
+    distances = np.full(num_test, np.inf)  # Preallocate with large values
+
+    for i in prange(num_test):  # Parallel loop with Numba
+        for j in range(num_train):
+            dist = dtw_manual(testing_np[i], training_np[j])  # Using optimized DTW
+            if dist < distances[i]:
+                distances[i] = dist
+
+    return distances
+
 # =================== Main Class ===================
 
 class RasterOneNNDTW:
@@ -49,24 +84,6 @@ class RasterOneNNDTW:
         process = psutil.Process(os.getpid())
         memory_kb = process.memory_full_info().uss / 1024
         print("Memory Usage (KB):", memory_kb)
-
-    @staticmethod
-    def dtw(A, B):
-        N, M = len(A), len(B)
-        d = np.zeros((N, M))
-        for n in range(N):
-            for m in range(M):
-                d[n][m] = (A[n] - B[m]) ** 2
-        D = np.zeros((N, M))
-        D[0][0] = d[0][0]
-        for n in range(1, N):
-            D[n][0] = d[n][0] + D[n - 1][0]
-        for m in range(1, M):
-            D[0][m] = d[0][m] + D[0][m - 1]
-        for n in range(1, N):
-            for m in range(1, M):
-                D[n][m] = d[n][m] + min(D[n - 1][m], D[n - 1][m - 1], D[n][m - 1])
-        return D[N - 1][M - 1]
 
     @staticmethod
     @cuda.jit
@@ -94,17 +111,11 @@ class RasterOneNNDTW:
         return result.copy_to_host()
 
     def compute_dtw_single(self, testing, training):
+        """Wrapper to convert DataFrame to NumPy and apply optimized function."""
         testing_np = testing.to_numpy()
         training_np = training.to_numpy()
-        distances = []
-        for i in tqdm(range(len(testing_np)), desc="DTW Single"):
-            min_dist = float('inf')
-            for j in range(len(training_np)):
-                dist = self.dtw(testing_np[i], training_np[j])
-                if dist < min_dist:
-                    min_dist = dist
-            distances.append(min_dist)
-        return distances
+        distances = compute_dtw_single_numba(testing_np, training_np)
+        return distances.tolist()
 
     def run(self, training, testing, top_elements=-1, mode="single", algorithm="DTW"):
         start_time = time.time()
@@ -122,7 +133,7 @@ class RasterOneNNDTW:
         else:
             raise ValueError("Invalid mode. Choose 'single', 'parallel', or 'cuda'")
 
-        testing['1NNED'] = distances
-        sorted_df = testing.sort_values('1NNED').head(top_elements)
+        testing['1NNDTW'] = distances
+        sorted_df = testing.sort_values('1NNDTW').head(top_elements)
         self.get_statistics(start_time)
         return testing, sorted_df
