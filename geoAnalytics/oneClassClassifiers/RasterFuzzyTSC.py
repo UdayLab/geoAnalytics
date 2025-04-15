@@ -9,7 +9,7 @@ import psutil
 import sys
 
 
-class RasterFuzzyOneClassClassifier:
+class RasterFuzzyTSC:
     def __init__(self):
         pass
 
@@ -20,46 +20,6 @@ class RasterFuzzyOneClassClassifier:
         memory = process.memory_full_info().uss
         memory_in_KB = memory / 1024
         print("Memory of proposedAlgo in KB:", memory_in_KB)
-
-    def rasterFuzzyTSC(self, training, testing, top_elements=-1, mode="single", algorithm="rasterMiner"):
-        start_time = time.time()
-
-        if algorithm == "difRasterMiner":
-            training = training.diff(axis=1).iloc[:, 1:]
-            testing = testing.diff(axis=1).iloc[:, 1:]
-
-        # Calculate max, mean, and min values for each feature in the training dataset
-        max_data = training.max(axis=0).values
-        mean_data = training.mean(axis=0).values
-        min_data = training.min(axis=0).values
-
-        # Clean up training data
-        del training
-        gc.collect()
-
-        # Convert testing dataset to numpy array for compatibility with Numba and CUDA
-        testing_array = testing.to_numpy()
-        num_rows, num_columns = testing_array.shape
-
-        if mode == "single":
-            rd_scores = self.compute_rd_single(testing_array, mean_data, min_data, max_data, num_columns)
-        elif mode == "parallel":
-            rd_scores = self.compute_rd_parallel(testing_array, mean_data, min_data, max_data, num_columns)
-        elif mode == "cuda":
-            rd_scores = self.compute_rd_cuda(testing_array, mean_data, min_data, max_data, num_columns)
-        else:
-            raise ValueError("Invalid mode. Choose 'single', 'parallel', or 'cuda'.")
-
-        # Add RD scores to the testing DataFrame
-        testing['RD'] = rd_scores
-
-        # Retrieve top elements based on RD scores
-        sorted_df = testing.sort_values('RD').head(top_elements)
-
-        # Log statistics
-        self.getStatistics(start_time)
-
-        return testing, sorted_df
 
     @staticmethod
     def compute_rd_single(testing_array, mean_data, min_data, max_data, num_columns):
@@ -153,3 +113,44 @@ class RasterFuzzyOneClassClassifier:
 
         # Copy RD scores back to host
         return d_rd_scores.copy_to_host()
+
+
+    def run(self, training, testing, top_elements=-1, mode="single", algorithm="FuzzyTSC"):
+        start_time = time.time()
+
+        if algorithm == "difFuzzyTSC":
+            training = training.diff(axis=1).iloc[:, 1:]
+            testing = testing.diff(axis=1).iloc[:, 1:]
+
+        # Calculate max, mean, and min values for each feature in the training dataset
+        max_data = training.max(axis=0).values
+        mean_data = training.mean(axis=0).values
+        min_data = training.min(axis=0).values
+
+        # Clean up training data
+        del training
+        gc.collect()
+
+        # Convert testing dataset to numpy array for compatibility with Numba and CUDA
+        testing_array = testing.to_numpy()
+        num_rows, num_columns = testing_array.shape
+
+        if mode == "single":
+            rd_scores = self.compute_rd_single(testing_array, mean_data, min_data, max_data, num_columns)
+        elif mode == "parallel":
+            rd_scores = self.compute_rd_parallel(testing_array, mean_data, min_data, max_data, num_columns)
+        elif mode == "cuda":
+            rd_scores = self.compute_rd_cuda(testing_array, mean_data, min_data, max_data, num_columns)
+        else:
+            raise ValueError("Invalid mode. Choose 'single', 'parallel', or 'cuda'.")
+
+        # Add RD scores to the testing DataFrame
+        testing['RD'] = rd_scores
+
+        # Retrieve top elements based on RD scores
+        sorted_df = testing.sort_values('RD').head(top_elements)
+
+        # Log statistics
+        self.getStatistics(start_time)
+
+        return testing, sorted_df
