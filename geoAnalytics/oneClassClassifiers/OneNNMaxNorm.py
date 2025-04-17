@@ -5,7 +5,7 @@ import psutil
 from tqdm import tqdm
 from numba import njit, prange, cuda
 
-class RasterOneNNMaxNorm:
+class OneNNMaxNorm:
     def __init__(self):
         pass
 
@@ -15,8 +15,8 @@ class RasterOneNNMaxNorm:
         memory_kb = process.memory_full_info().uss / 1024
         print("Memory Usage (KB):", memory_kb)
 
-    # ----------- Single Mode (Optimized) -----------
-    def compute_maxnorm_single(self, testing, training):
+    # ----------- Sequential Mode (Optimized) -----------
+    def compute_maxnorm_sequential(self, testing, training):
         test_np = testing.to_numpy()
         train_np = training.to_numpy()
 
@@ -93,15 +93,15 @@ class RasterOneNNMaxNorm:
         return result.copy_to_host()
 
     # ----------- Entry Point -----------
-    def run(self, training, testing, top_elements=-1, mode="single", algorithm="MaxNorm"):
+    def run(self, training, testing, topK=-1, mode="sequential", algorithm="MaxNorm"):
         start_time = time.time()
 
         if algorithm == "difMaxNorm":
             training = training.diff(axis=1).iloc[:, 1:]
             testing = testing.diff(axis=1).iloc[:, 1:]
 
-        if mode == "single":
-            distances = self.compute_maxnorm_single(testing, training)
+        if mode == "sequential":
+            distances = self.compute_maxnorm_sequential(testing, training)
         elif mode == "parallel":
             distances = self.compute_maxnorm_parallel(testing.to_numpy(), training.to_numpy())
         elif mode == "cuda":
@@ -109,10 +109,10 @@ class RasterOneNNMaxNorm:
                 raise RuntimeError("CUDA is not available on this machine.")
             distances = self.compute_maxnorm_cuda(testing, training)
         else:
-            raise ValueError("Invalid mode. Choose 'single', 'parallel', or 'cuda'")
+            raise ValueError("Invalid mode. Choose 'sequential', 'parallel', or 'cuda'")
 
         testing = testing.copy()
         testing["1NNmaxNorm"] = distances
-        sorted_df = testing.sort_values("1NNmaxNorm").head(top_elements)
+        sorted_df = testing.sort_values("1NNmaxNorm").head(topK)
         self.getStatistics(start_time)
         return testing, sorted_df

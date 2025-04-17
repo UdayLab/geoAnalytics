@@ -9,7 +9,7 @@ import psutil
 import sys
 
 
-class RasterFuzzyTSC:
+class FuzzyTSC:
     def __init__(self):
         pass
 
@@ -22,8 +22,8 @@ class RasterFuzzyTSC:
         print("Memory of proposedAlgo in KB:", memory_in_KB)
 
     @staticmethod
-    def compute_rd_single(testing_array, mean_data, min_data, max_data, num_columns):
-        """Compute RD scores for single-threaded execution."""
+    def compute_rd_sequential(testing_array, mean_data, min_data, max_data, num_columns):
+        """Compute RD scores for sequential-threaded execution."""
         num_rows = testing_array.shape[0]
         rd_scores = np.zeros(num_rows)
 
@@ -115,7 +115,7 @@ class RasterFuzzyTSC:
         return d_rd_scores.copy_to_host()
 
 
-    def run(self, training, testing, top_elements=-1, mode="single", algorithm="FuzzyTSC"):
+    def run(self, training, testing, topK=-1, mode="sequential", algorithm="FuzzyTSC"):
         start_time = time.time()
 
         if algorithm == "difFuzzyTSC":
@@ -135,20 +135,22 @@ class RasterFuzzyTSC:
         testing_array = testing.to_numpy()
         num_rows, num_columns = testing_array.shape
 
-        if mode == "single":
-            rd_scores = self.compute_rd_single(testing_array, mean_data, min_data, max_data, num_columns)
+        if mode == "sequential":
+            rd_scores = self.compute_rd_sequential(testing_array, mean_data, min_data, max_data, num_columns)
         elif mode == "parallel":
             rd_scores = self.compute_rd_parallel(testing_array, mean_data, min_data, max_data, num_columns)
         elif mode == "cuda":
+            if not cuda.is_available():
+                raise RuntimeError("CUDA is not available on this machine.")
             rd_scores = self.compute_rd_cuda(testing_array, mean_data, min_data, max_data, num_columns)
         else:
-            raise ValueError("Invalid mode. Choose 'single', 'parallel', or 'cuda'.")
+            raise ValueError("Invalid mode. Choose 'sequential', 'parallel', or 'cuda'.")
 
         # Add RD scores to the testing DataFrame
         testing['RD'] = rd_scores
 
         # Retrieve top elements based on RD scores
-        sorted_df = testing.sort_values('RD').head(top_elements)
+        sorted_df = testing.sort_values('RD').head(topK)
 
         # Log statistics
         self.getStatistics(start_time)

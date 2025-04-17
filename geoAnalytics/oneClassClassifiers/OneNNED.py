@@ -8,7 +8,7 @@ from tqdm import tqdm
 from numba import njit, prange, cuda
 
 
-class RasterOneNNED:
+class OneNNED:
     def __init__(self):
         pass
 
@@ -19,9 +19,9 @@ class RasterOneNNED:
         memory_kb = process.memory_full_info().uss / 1024
         print("Memory Usage (KB):", memory_kb)
 
-    # ---------------------- Optimized Single Thread (NumPy Vectorization) ----------------------
+    # ---------------------- Optimized sequential Thread (NumPy Vectorization) ----------------------
     @staticmethod
-    def compute_ed_single(testing, training):
+    def compute_ed_sequential(testing, training):
         test_np = testing.to_numpy()
         train_np = training.to_numpy()
 
@@ -86,28 +86,30 @@ class RasterOneNNED:
         threads_per_block = 128
         blocks_per_grid = (test_np.shape[0] + threads_per_block - 1) // threads_per_block
 
-        RasterOneNNED.compute_ed_cuda_kernel[blocks_per_grid, threads_per_block](test_np, train_np, result)
+        OneNNED.compute_ed_cuda_kernel[blocks_per_grid, threads_per_block](test_np, train_np, result)
         return result.copy_to_host()
 
     # ---------------------- Main Function ----------------------
-    def run(self, training, testing, top_elements=-1, mode="single", algorithm='ED'):
+    def run(self, training, testing, topK=-1, mode="sequential", algorithm='ED'):
         start_time = time.time()
 
         if algorithm == "difED":
             training = training.diff(axis=1).iloc[:, 1:]
             testing = testing.diff(axis=1).iloc[:, 1:]
 
-        if mode == "single":
-            distances = self.compute_ed_single(testing, training)
+        if mode == "sequential":
+            distances = self.compute_ed_sequential(testing, training)
         elif mode == "parallel":
             distances = self.compute_ed_parallel(testing.to_numpy(), training.to_numpy())
         elif mode == "cuda":
+            if not cuda.is_available():
+                raise RuntimeError("CUDA is not available on this machine.")
             distances = self.compute_ed_cuda(testing, training)
         else:
-            raise ValueError("Invalid mode. Choose 'single', 'parallel', or 'cuda'")
+            raise ValueError("Invalid mode. Choose 'sequential', 'parallel', or 'cuda'")
 
         testing['1NNED'] = distances
-        sorted_df = testing.sort_values('1NNED').head(top_elements)
+        sorted_df = testing.sort_values('1NNED').head(topK)
         self.get_statistics(start_time)
 
         return testing, sorted_df

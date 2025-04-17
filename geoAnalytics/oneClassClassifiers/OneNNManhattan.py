@@ -6,7 +6,7 @@ from tqdm import tqdm
 from numba import njit, prange, cuda
 
 
-class RasterOneNNManhattan:
+class OneNNManhattan:
     def __init__(self):
         pass
 
@@ -18,7 +18,7 @@ class RasterOneNNManhattan:
         print("Memory Usage (KB):", memory_kb)
 
     @staticmethod
-    def compute_manhattan_single(testing, training):
+    def compute_manhattan_sequential(testing, training):
         test_np = testing.to_numpy()
         train_np = training.to_numpy()
 
@@ -78,27 +78,29 @@ class RasterOneNNManhattan:
         result = cuda.device_array(test_np.shape[0], dtype=np.float32)
         threads_per_block = 128
         blocks_per_grid = (test_np.shape[0] + threads_per_block - 1) // threads_per_block
-        RasterOneNNManhattan.compute_manhattan_cuda_kernel[blocks_per_grid, threads_per_block](test_np, train_np,
+        OneNNManhattan.compute_manhattan_cuda_kernel[blocks_per_grid, threads_per_block](test_np, train_np,
                                                                                                result)
         return result.copy_to_host()
 
-    def run(self, training, testing, top_elements=-1, mode="single", algorithm="Manhattan"):
+    def run(self, training, testing, topK=-1, mode="sequential", algorithm="Manhattan"):
         start_time = time.time()
 
         if algorithm == "difManhattan":
             training = training.diff(axis=1).iloc[:, 1:]
             testing = testing.diff(axis=1).iloc[:, 1:]
 
-        if mode == "single":
-            distances = self.compute_manhattan_single(testing, training)
+        if mode == "sequential":
+            distances = self.compute_manhattan_sequential(testing, training)
         elif mode == "parallel":
             distances = self.compute_manhattan_parallel(testing.to_numpy(), training.to_numpy())
         elif mode == "cuda":
+            if not cuda.is_available():
+                raise RuntimeError("CUDA is not available on this machine.")
             distances = self.compute_manhattan_cuda(testing, training)
         else:
-            raise ValueError("Invalid mode. Choose 'single', 'parallel', or 'cuda'")
+            raise ValueError("Invalid mode. Choose 'sequential', 'parallel', or 'cuda'")
 
         testing['1NNManhattan'] = distances
-        sorted_df = testing.sort_values('1NNManhattan').head(top_elements)
+        sorted_df = testing.sort_values('1NNManhattan').head(topK)
         self.get_statistics(start_time)
         return testing, sorted_df
