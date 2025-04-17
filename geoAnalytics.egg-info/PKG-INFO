@@ -1,4 +1,4 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: geoAnalytics
 Version: 2022.8.4
 Summary: This software is being developed at the University of Aizu, Aizu-Wakamatsu, Fukushima, Japan
@@ -22,6 +22,17 @@ Requires-Dist: urllib3
 Requires-Dist: psycopg2-binary
 Requires-Dist: shapely
 Requires-Dist: tqdm
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license
+Dynamic: license-file
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
 
 # geoAnalytics
 
@@ -36,5 +47,5 @@ Requires-Dist: tqdm
 7. In the pycharm, add geoAnalytics as the interpreter
 8. Open the terminal in pycharm, and execute the following command
 
-          pip install mplcursors matplotlib sklearn pandas
+          pip install mplcursors matplotlib scikit-learn pandas numpy tqdm numba hdbscan fuzzy-c-means
           

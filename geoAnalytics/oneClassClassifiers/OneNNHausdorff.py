@@ -24,7 +24,7 @@ def hausdorff_distance(u, v):
     return max(hausdorff_numba(u, v), hausdorff_numba(v, u))
 
 @njit
-def compute_hausdorff_single(test_np, train_np):
+def compute_hausdorff_sequential(test_np, train_np):
     num_test = test_np.shape[0]
     num_train = train_np.shape[0]
     distances = np.empty(num_test)
@@ -52,7 +52,7 @@ def compute_hausdorff_parallel(test_np, train_np):
     return distances
 
 # ---------------------- Class Wrapper ----------------------
-class RasterOneNNHausdorff:
+class OneNNHausdorff:
     def get_statistics(self, start_time):
         print("Total Execution Time:", time.time() - start_time)
         process = psutil.Process()
@@ -109,7 +109,7 @@ class RasterOneNNHausdorff:
 
         return result.copy_to_host()
 
-    def run(self, training, testing, top_elements=-1, mode="single", algorithm='Hausdorff'):
+    def run(self, training, testing, topK=-1, mode="sequential", algorithm='Hausdorff'):
         start_time = time.time()
 
         if algorithm == "difHausdorff":
@@ -119,8 +119,8 @@ class RasterOneNNHausdorff:
         test_np = testing.to_numpy()
         train_np = training.to_numpy()
 
-        if mode == "single":
-            distances = compute_hausdorff_single(test_np, train_np)
+        if mode == "sequential":
+            distances = compute_hausdorff_sequential(test_np, train_np)
         elif mode == "parallel":
             distances = compute_hausdorff_parallel(test_np, train_np)
         elif mode == "cuda":
@@ -128,9 +128,9 @@ class RasterOneNNHausdorff:
                 raise RuntimeError("CUDA is not available on this machine.")
             distances = self.compute_hausdorff_cuda(testing, training)
         else:
-            raise ValueError("Invalid mode. Choose 'single', 'parallel', or 'cuda'")
+            raise ValueError("Invalid mode. Choose 'sequential', 'parallel', or 'cuda'")
 
         testing['1NNHausdorff'] = distances
-        sorted_df = testing.sort_values('1NNHausdorff').head(top_elements)
+        sorted_df = testing.sort_values('1NNHausdorff').head(topK)
         self.get_statistics(start_time)
         return testing, sorted_df

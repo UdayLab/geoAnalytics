@@ -61,8 +61,8 @@ def dtw_manual(A, B):
     return D[N - 1, M - 1]
 
 @njit(parallel=True)
-def compute_dtw_single_numba(testing_np, training_np):
-    """Optimized single-threaded DTW computation using explicit formula."""
+def compute_dtw_sequential_numba(testing_np, training_np):
+    """Optimized sequential-threaded DTW computation using explicit formula."""
     num_test = testing_np.shape[0]
     num_train = training_np.shape[0]
     distances = np.full(num_test, np.inf)  # Preallocate with large values
@@ -77,7 +77,7 @@ def compute_dtw_single_numba(testing_np, training_np):
 
 # =================== Main Class ===================
 
-class RasterOneNNDTW:
+class OneNNDTW:
     @staticmethod
     def get_statistics(start_time):
         print("Total Execution Time:", time.time() - start_time)
@@ -107,33 +107,35 @@ class RasterOneNNDTW:
         result = cuda.device_array(test_np.shape[0], dtype=np.float32)
         threads_per_block = 128
         blocks_per_grid = (test_np.shape[0] + threads_per_block - 1) // threads_per_block
-        RasterOneNNDTW.dtw_cuda_kernel[blocks_per_grid, threads_per_block](test_np, train_np, result)
+        OneNNDTW.dtw_cuda_kernel[blocks_per_grid, threads_per_block](test_np, train_np, result)
         return result.copy_to_host()
 
-    def compute_dtw_single(self, testing, training):
+    def compute_dtw_sequential(self, testing, training):
         """Wrapper to convert DataFrame to NumPy and apply optimized function."""
         testing_np = testing.to_numpy()
         training_np = training.to_numpy()
-        distances = compute_dtw_single_numba(testing_np, training_np)
+        distances = compute_dtw_sequential_numba(testing_np, training_np)
         return distances.tolist()
 
-    def run(self, training, testing, top_elements=-1, mode="single", algorithm="DTW"):
+    def run(self, training, testing, topK=-1, mode="sequential", algorithm="DTW"):
         start_time = time.time()
 
         if algorithm == "difDTW":
             training = training.diff(axis=1).iloc[:, 1:]
             testing = testing.diff(axis=1).iloc[:, 1:]
 
-        if mode == "single":
-            distances = self.compute_dtw_single(testing, training)
+        if mode == "sequential":
+            distances = self.compute_dtw_sequential(testing, training)
         elif mode == "parallel":
             distances = compute_dtw_parallel(testing.to_numpy(), training.to_numpy())
         elif mode == "cuda":
+            if not cuda.is_available():
+                raise RuntimeError("CUDA is not available on this machine.")
             distances = self.compute_dtw_cuda(testing, training)
         else:
-            raise ValueError("Invalid mode. Choose 'single', 'parallel', or 'cuda'")
+            raise ValueError("Invalid mode. Choose 'sequential', 'parallel', or 'cuda'")
 
         testing['1NNDTW'] = distances
-        sorted_df = testing.sort_values('1NNDTW').head(top_elements)
+        sorted_df = testing.sort_values('1NNDTW').head(topK)
         self.get_statistics(start_time)
         return testing, sorted_df
