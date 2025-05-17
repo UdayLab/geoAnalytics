@@ -1,3 +1,18 @@
+![PyPI](https://img.shields.io/pypi/v/geoAnalytics)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/geoAnalytics)
+[![GitHub license](https://img.shields.io/github/license/UdayLab/geoAnalytics)](https://github.com/UdayLab/geoAnalytics/blob/main/LICENSE)
+![PyPI - Implementation](https://img.shields.io/pypi/implementation/geoAnalytics)
+![PyPI - Wheel](https://img.shields.io/pypi/wheel/geoAnalytics)
+![PyPI - Status](https://img.shields.io/pypi/status/geoAnalytics)
+[![GitHub issues](https://img.shields.io/github/issues/UdayLab/geoAnalytics)](https://github.com/UdayLab/geoAnalytics/issues)
+[![GitHub forks](https://img.shields.io/github/forks/UdayLab/geoAnalytics)](https://github.com/UdayLab/geoAnalytics/network)
+[![GitHub stars](https://img.shields.io/github/stars/UdayLab/geoAnalytics)](https://github.com/UdayLab/geoAnalytics/stargazers)
+[![PyPI Downloads](https://static.pepy.tech/badge/geoanalytics)](https://pepy.tech/projects/geoanalytics)
+[![PyPI Downloads](https://static.pepy.tech/badge/geoanalytics/month)](https://pepy.tech/projects/geoanalytics)
+[![PyPI Downloads](https://static.pepy.tech/badge/geoanalytics/week)](https://pepy.tech/projects/geoanalytics)
+[![pages-build-deployment](https://github.com/UdayLab/geoAnalytics/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/UdayLab/geoAnalytics/actions/workflows/pages/pages-build-deployment)
+
+
 # geoAnalytics
 
 ## Installation using Anaconda.
