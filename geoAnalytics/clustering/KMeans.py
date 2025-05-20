@@ -1,3 +1,39 @@
+# K-means is a popular and efficient clustering algorithm that partitions data into K distinct groups by iteratively minimizing the distance between data points and their assigned cluster centroids.
+#
+# **Importing this algorithm into a python program**
+#
+#             import geoAnalytics.clustering.kMeans as alg
+#
+#             dataframe = df # read the dataframe with pandas
+#
+#             obj = alg.kMeans(dataframe)
+#
+#             obj.elbowMethod()
+#
+#             obj.run(6, max_iter=100) # here 6 represents number of clusters
+#
+
+
+
+__copyright__ = """
+Copyright (C)  2022 Rage Uday Kiran
+
+     This program is free software: you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation, either version 3 of the License, or
+     (at your option) any later version.
+
+     This program is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     GNU General Public License for more details.
+
+     You should have received a copy of the GNU General Public License
+     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""
+
+
+
 import time
 import psutil
 import numpy as np
