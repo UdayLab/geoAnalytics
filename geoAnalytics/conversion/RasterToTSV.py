@@ -2,7 +2,7 @@ import os
 import pandas as pd
 from geoAnalytics.conversion import raster2tsv
 
-class RasterToTSVConverter:
+class RasterToTSV:
     def __init__(self, input_file, output_file, start_band, end_band):
         self.input_file = input_file
         self.output_file = output_file
