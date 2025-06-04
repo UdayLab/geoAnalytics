@@ -12,7 +12,11 @@
 #
 #             obj.elbowMethod()
 #
-#             obj.clustering(k=3)
+#             output = obj.clustering(k=3)
+#
+#             labelsDF = output[0]
+#
+#             clusterCenters = output[1]
 #
 #             obj.save(outputFile='KMeansPPLabels.csv')
 #
@@ -55,7 +59,8 @@ class KMeansPP:
 
         :**Attributes**:    - **df** (*pd.DataFrame*) -- Stores the copy of the input dataset, renaming first two columns to 'x' and 'y'.
                             - **start_time** (*float*) -- Records the clustering start time for runtime analysis.
-                            - **memory_kb** (*float*) -- Measures memory usage in kilobytes after execution.
+                            - **memory_uss_kb** (*float*) -- Measures USS memory usage in kilobytes after execution.
+                            - **memory_rss_kb** (*float*) -- Measures RSS memory usage in kilobytes after execution.
                             - **labels** (*pd.DataFrame*) -- Final dataframe containing 'x', 'y', and cluster label for each instance.
                             - **cluster_centers_** (*np.ndarray*) -- Coordinates of the final cluster centroids after fitting.
 
@@ -75,7 +80,11 @@ class KMeansPP:
 
                 obj.elbowMethod()
 
-                obj.clustering(k=3)
+                output = obj.clustering(k=3)
+
+                labelsDF = output[0]
+
+                clusterCenters = output[1]
 
                 obj.save(outputFile='KMeansPPLabels.csv')
 
