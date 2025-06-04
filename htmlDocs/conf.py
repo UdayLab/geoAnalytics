@@ -9,7 +9,7 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
 
-project = 'geoAnalytics'
+project = 'geoanalytics'
 copyright = '2023, RAGE UDAY KIRAN'
 author = 'RAGE UDAY KIRAN'
 release = '2023.07.21'

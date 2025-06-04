@@ -4,7 +4,7 @@
 #
 #             import pandas as pd
 #
-#             from geoAnalytics.clustering import Gaussianmixture
+#             from geoanalytics.clustering import Gaussianmixture
 #
 #             df = pd.read_csv('input.csv')
 #
@@ -68,7 +68,7 @@ class Gaussianmixture:
 
             import pandas as pd
 
-            from geoAnalytics.clustering import Gaussianmixture
+            from geoanalytics.clustering import Gaussianmixture
 
             df = pd.read_csv("input.csv")
 

@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from geoAnalytics.conversion import raster2tsv
+from geoanalytics.conversion import raster2tsv
 
 class RasterToTSV:
     def __init__(self, input_file, output_file, start_band, end_band):

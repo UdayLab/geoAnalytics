@@ -1,5 +1,5 @@
-from geoAnalytics import csv2raster
-from geoAnalytics.config import config
+from geoanalytics import csv2raster
+from geoanalytics.config import config
 from shapely import geos, wkb, wkt
 from osgeo import gdal
 import numpy as Numeric

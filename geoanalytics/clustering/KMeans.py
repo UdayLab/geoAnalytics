@@ -2,7 +2,7 @@
 #
 # **Importing this algorithm into a python program**
 #
-#             import geoAnalytics.clustering.kMeans as alg
+#             import geoanalytics.clustering.kMeans as alg
 #
 #             dataframe = df # read the dataframe with pandas
 #

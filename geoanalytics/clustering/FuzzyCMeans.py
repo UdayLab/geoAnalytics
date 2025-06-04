@@ -2,7 +2,7 @@
 #
 # **Importing this algorithm into a Python program**
 #
-#             from geoAnalytics.clustering import FuzzyCMeans
+#             from geoanalytics.clustering import FuzzyCMeans
 #
 #             import pandas as pd
 #
@@ -66,7 +66,7 @@ class FuzzyCMeans:
 
     .. code-block:: python
 
-            from geoAnalytics.clustering import FuzzyCMeans
+            from geoanalytics.clustering import FuzzyCMeans
 
             import pandas as pd
 
