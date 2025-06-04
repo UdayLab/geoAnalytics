@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "geoanalytics"
+version = "2025.6.4.6"
+description = "This software is being developed at the University of Aizu, Aizu-Wakamatsu, Fukushima, Japan"
+readme = "README.md"
+requires-python = ">=3.5"
+license = {text = "GPLv3"}
+authors = [
+  {name = "Rage Uday Kiran", email = "uday.rage@gmail.com"}
+]
+maintainers = [
+  {name = "Rage Uday Kiran", email = "uday.rage@gmail.com"}
+]
+keywords = ["geo", "analytics", "spatial", "postgis", "data mining"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+  "Operating System :: OS Independent"
+]
+dependencies = [
+  "psutil",
+  "pandas",
+  "matplotlib",
+  "resource",
+  "validators",
+  "urllib3",
+  "psycopg2-binary",
+  "shapely",
+  "tqdm",
+  "mplcursors",
+  "scikit-learn"
+]
+
+[project.urls]
+Homepage = "https://github.com/UdayLab/geoanalytics"
+Repository = "https://github.com/UdayLab/geoanalytics"
+"Bug Tracker" = "https://github.com/UdayLab/geoanalytics/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
