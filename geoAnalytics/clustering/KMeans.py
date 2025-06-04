@@ -32,8 +32,6 @@ Copyright (C)  2022 Rage Uday Kiran
      along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-
-
 import time
 import psutil
 import numpy as np
@@ -47,12 +45,15 @@ class KMeans:
     def __init__(self, dataframe):
         self.df = dataframe.copy()
         self.df.columns = ['x', 'y'] + list(self.df.columns[2:])
+        self.labelsDF = None
 
     def getStatistics(self, start_time):
-        print("Total Execution Time:", time.time() - start_time)
+        print("Total Execution time of proposed Algorithm:", time.time() - start_time)
         process = psutil.Process()
-        memory_kb = process.memory_full_info().uss / 1024
-        print("Memory Usage (KB):", memory_kb)
+        memory_uss_kb = process.memory_full_info().uss / 1024
+        print("Memory (USS) of proposed Algorithm in KB:", memory_uss_kb)
+        memory_rss_kb = process.memory_full_info().rss / 1024
+        print("Memory (RSS) of proposed Algorithm in KB:", memory_rss_kb)
 
     def elbowMethod(self):
         wcss = []
@@ -69,12 +70,22 @@ class KMeans:
         plt.title('Elbow Method for Optimal k (Ignoring Location Columns)')
         plt.show()
 
-    def clustering(self, k, max_iter=100):
+    def clustering(self, k = 4, max_iter=100):
         start_time = time.time()
         data = self.df.drop(['x', 'y'], axis=1)
         data = data.to_numpy()
         kmeans = kmeansAlg(n_clusters=k, max_iter=max_iter).fit(data)
         label = self.df[['x', 'y']]
-        labels = label.assign(labels=kmeans.labels_)
+        self.labelsDF = label.assign(labels=kmeans.labels_)
         self.getStatistics(start_time)
-        return labels, kmeans.cluster_centers_
+        return self.labelsDF, kmeans.cluster_centers_
+
+    def save(self, outputFile='KMeansLabels.csv'):
+        if self.labelsDF is not None:
+            try:
+                self.labelsDF.to_csv(outputFile, index=False)
+                print(f"Labels saved to: {outputFile}")
+            except Exception as e:
+                print(f"Failed to save labels: {e}")
+        else:
+            print("No labels to save. Please run clustering first.")

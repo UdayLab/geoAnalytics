@@ -1,3 +1,20 @@
+__copyright__ = """
+Copyright (C)  2022 Rage Uday Kiran
+
+     This program is free software: you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation, either version 3 of the License, or
+     (at your option) any later version.
+
+     This program is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     GNU General Public License for more details.
+
+     You should have received a copy of the GNU General Public License
+     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""
+
 import time
 import psutil
 import numpy as np
@@ -11,12 +28,15 @@ class FuzzyCMeans:
     def __init__(self, dataframe):
         self.df = dataframe.copy()
         self.df.columns = ['x', 'y'] + list(self.df.columns[2:])
+        self.labelsDF = None
 
     def getStatistics(self, start_time):
-        print("Total Execution Time:", time.time() - start_time)
+        print("Total Execution time of proposed Algorithm:", time.time() - start_time)
         process = psutil.Process()
-        memory_kb = process.memory_full_info().uss / 1024
-        print("Memory Usage (KB):", memory_kb)
+        memory_uss_kb = process.memory_full_info().uss / 1024
+        print("Memory (USS) of proposed Algorithm in KB:", memory_uss_kb)
+        memory_rss_kb = process.memory_full_info().rss / 1024
+        print("Memory (RSS) of proposed Algorithm in KB:", memory_rss_kb)
 
     def clustering(self, n_clusters=3):
         start_time = time.time()
@@ -26,6 +46,16 @@ class FuzzyCMeans:
         fcm.fit(data)
         fcmResult = fcm.predict(data)
         label = self.df[['x', 'y']]
-        labels = label.assign(labels=fcmResult)
+        self.labelsDF = label.assign(labels=fcmResult)
         self.getStatistics(start_time)
-        return labels, fcm.centers
+        return self.labelsDF, fcm.centers
+
+    def save(self, outputFile='FuzzyCMeansLabels.csv'):
+        if self.labelsDF is not None:
+            try:
+                self.labelsDF.to_csv(outputFile, index=False)
+                print(f"Labels saved to: {outputFile}")
+            except Exception as e:
+                print(f"Failed to save labels: {e}")
+        else:
+            print("No labels to save. Please run clustering first.")
