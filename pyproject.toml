@@ -33,7 +33,17 @@ dependencies = [
   "shapely",
   "tqdm",
   "mplcursors",
-  "scikit-learn"
+  "scikit-learn",
+  'plotly',
+  'Pillow',
+  'numpy',
+  'sphinx',
+  'sphinx-rtd-theme',
+  'validators',
+  'discord.py',
+  'networkx',
+  'deprecated',
+  'fastparquet'
 ]
 
 [project.urls]

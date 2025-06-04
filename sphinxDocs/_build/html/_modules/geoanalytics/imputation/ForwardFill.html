@@ -1,22 +1,20 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>geoanalytics.imputation.ForwardFill &mdash; geoanalytics 2025.6.4.6 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../../_static/doctools.js"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=dead9408"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -88,18 +86,22 @@
 <span class="s2">     along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
 <span class="s2">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">psutil</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">psutil</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<div class="viewcode-block" id="ForwardFill"><a class="viewcode-back" href="../../../geoanalytics.imputation.html#geoanalytics.imputation.ForwardFill.ForwardFill">[docs]</a><span class="k">class</span> <span class="nc">ForwardFill</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataframe</span><span class="p">):</span>
+<div class="viewcode-block" id="ForwardFill">
+<a class="viewcode-back" href="../../../geoanalytics.imputation.html#geoanalytics.imputation.ForwardFill.ForwardFill">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ForwardFill</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataframe</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">imputedDF</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="ForwardFill.getStatistics"><a class="viewcode-back" href="../../../geoanalytics.imputation.html#geoanalytics.imputation.ForwardFill.ForwardFill.getStatistics">[docs]</a>    <span class="k">def</span> <span class="nf">getStatistics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_time</span><span class="p">):</span>
+<div class="viewcode-block" id="ForwardFill.getStatistics">
+<a class="viewcode-back" href="../../../geoanalytics.imputation.html#geoanalytics.imputation.ForwardFill.ForwardFill.getStatistics">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getStatistics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_time</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Total Execution time of proposed Algorithm:&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span>
         <span class="n">process</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">Process</span><span class="p">()</span>
         <span class="n">memory_uss_kb</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">memory_full_info</span><span class="p">()</span><span class="o">.</span><span class="n">uss</span> <span class="o">/</span> <span class="mi">1024</span>
@@ -107,7 +109,10 @@
         <span class="n">memory_rss_kb</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">memory_full_info</span><span class="p">()</span><span class="o">.</span><span class="n">rss</span> <span class="o">/</span> <span class="mi">1024</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Memory (RSS) of proposed Algorithm in KB:&quot;</span><span class="p">,</span> <span class="n">memory_rss_kb</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ForwardFill.impute"><a class="viewcode-back" href="../../../geoanalytics.imputation.html#geoanalytics.imputation.ForwardFill.ForwardFill.impute">[docs]</a>    <span class="k">def</span> <span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ForwardFill.impute">
+<a class="viewcode-back" href="../../../geoanalytics.imputation.html#geoanalytics.imputation.ForwardFill.ForwardFill.impute">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">impute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="n">xy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -117,7 +122,10 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">imputedDF</span></div>
 
 
-<div class="viewcode-block" id="ForwardFill.save"><a class="viewcode-back" href="../../../geoanalytics.imputation.html#geoanalytics.imputation.ForwardFill.ForwardFill.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outputFile</span><span class="o">=</span><span class="s1">&#39;ForwardFilled.csv&#39;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ForwardFill.save">
+<a class="viewcode-back" href="../../../geoanalytics.imputation.html#geoanalytics.imputation.ForwardFill.ForwardFill.save">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outputFile</span><span class="o">=</span><span class="s1">&#39;ForwardFilled.csv&#39;</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">imputedDF</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">imputedDF</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">outputFile</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -125,7 +133,9 @@
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to save labels: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No imputed data to save. Run impute() first&quot;</span><span class="p">)</span></div></div>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No imputed data to save. Run impute() first&quot;</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
            </div>
@@ -135,7 +145,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, Uday Kiran RAGE.</p>
+    <p>&#169; Copyright 2025, rage uday kiran.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

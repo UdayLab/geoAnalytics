@@ -1,23 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>geoanalytics.imputation package &mdash; geoanalytics 2025.6.4.6 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=dead9408"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -61,7 +59,7 @@
 <li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#module-geoanalytics.config">geoanalytics.config module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#geoanalytics-csv2raster-module">geoanalytics.csv2raster module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#module-geoanalytics.oneclassClassifiers">geoanalytics.oneclassClassifiers module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#module-geoanalytics.plotGUI">geoanalytics.plotGUI module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#geoanalytics-plotgui-module">geoanalytics.plotGUI module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#geoanalytics-raster2csv-module">geoanalytics.raster2CSV module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#geoanalytics-repository-module">geoanalytics.repository module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#module-geoanalytics.scoreCalculator">geoanalytics.scoreCalculator module</a></li>
@@ -99,240 +97,324 @@
            <div itemprop="articleBody">
              
   <section id="geoanalytics-imputation-package">
-<h1>geoanalytics.imputation package<a class="headerlink" href="#geoanalytics-imputation-package" title="Permalink to this heading"></a></h1>
+<h1>geoanalytics.imputation package<a class="headerlink" href="#geoanalytics-imputation-package" title="Link to this heading"></a></h1>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
 <section id="module-geoanalytics.imputation.BackwardFill">
-<span id="geoanalytics-imputation-backwardfill-module"></span><h2>geoanalytics.imputation.BackwardFill module<a class="headerlink" href="#module-geoanalytics.imputation.BackwardFill" title="Permalink to this heading"></a></h2>
+<span id="geoanalytics-imputation-backwardfill-module"></span><h2>geoanalytics.imputation.BackwardFill module<a class="headerlink" href="#module-geoanalytics.imputation.BackwardFill" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="geoanalytics.imputation.BackwardFill.BackwardFill">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.imputation.BackwardFill.</span></span><span class="sig-name descname"><span class="pre">BackwardFill</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/BackwardFill.html#BackwardFill"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.BackwardFill.BackwardFill" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.imputation.BackwardFill.</span></span><span class="sig-name descname"><span class="pre">BackwardFill</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/BackwardFill.html#BackwardFill"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.BackwardFill.BackwardFill" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.BackwardFill.BackwardFill.getStatistics">
-<span class="sig-name descname"><span class="pre">getStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/BackwardFill.html#BackwardFill.getStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.BackwardFill.BackwardFill.getStatistics" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/BackwardFill.html#BackwardFill.getStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.BackwardFill.BackwardFill.getStatistics" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.BackwardFill.BackwardFill.impute">
-<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/BackwardFill.html#BackwardFill.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.BackwardFill.BackwardFill.impute" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/BackwardFill.html#BackwardFill.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.BackwardFill.BackwardFill.impute" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.BackwardFill.BackwardFill.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'BackwardFilled.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/BackwardFill.html#BackwardFill.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.BackwardFill.BackwardFill.save" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'BackwardFilled.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/BackwardFill.html#BackwardFill.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.BackwardFill.BackwardFill.save" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 </section>
 <section id="module-geoanalytics.imputation.ForwardFill">
-<span id="geoanalytics-imputation-forwardfill-module"></span><h2>geoanalytics.imputation.ForwardFill module<a class="headerlink" href="#module-geoanalytics.imputation.ForwardFill" title="Permalink to this heading"></a></h2>
+<span id="geoanalytics-imputation-forwardfill-module"></span><h2>geoanalytics.imputation.ForwardFill module<a class="headerlink" href="#module-geoanalytics.imputation.ForwardFill" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="geoanalytics.imputation.ForwardFill.ForwardFill">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.imputation.ForwardFill.</span></span><span class="sig-name descname"><span class="pre">ForwardFill</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/ForwardFill.html#ForwardFill"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.ForwardFill.ForwardFill" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.imputation.ForwardFill.</span></span><span class="sig-name descname"><span class="pre">ForwardFill</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/ForwardFill.html#ForwardFill"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.ForwardFill.ForwardFill" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.ForwardFill.ForwardFill.getStatistics">
-<span class="sig-name descname"><span class="pre">getStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/ForwardFill.html#ForwardFill.getStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.ForwardFill.ForwardFill.getStatistics" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/ForwardFill.html#ForwardFill.getStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.ForwardFill.ForwardFill.getStatistics" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.ForwardFill.ForwardFill.impute">
-<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/ForwardFill.html#ForwardFill.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.ForwardFill.ForwardFill.impute" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/ForwardFill.html#ForwardFill.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.ForwardFill.ForwardFill.impute" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.ForwardFill.ForwardFill.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ForwardFilled.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/ForwardFill.html#ForwardFill.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.ForwardFill.ForwardFill.save" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ForwardFilled.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/ForwardFill.html#ForwardFill.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.ForwardFill.ForwardFill.save" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 </section>
 <section id="module-geoanalytics.imputation.HotDeck">
-<span id="geoanalytics-imputation-hotdeck-module"></span><h2>geoanalytics.imputation.HotDeck module<a class="headerlink" href="#module-geoanalytics.imputation.HotDeck" title="Permalink to this heading"></a></h2>
+<span id="geoanalytics-imputation-hotdeck-module"></span><h2>geoanalytics.imputation.HotDeck module<a class="headerlink" href="#module-geoanalytics.imputation.HotDeck" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="geoanalytics.imputation.HotDeck.HotDeck">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.imputation.HotDeck.</span></span><span class="sig-name descname"><span class="pre">HotDeck</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/HotDeck.html#HotDeck"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.HotDeck.HotDeck" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.imputation.HotDeck.</span></span><span class="sig-name descname"><span class="pre">HotDeck</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/HotDeck.html#HotDeck"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.HotDeck.HotDeck" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.HotDeck.HotDeck.getStatistics">
-<span class="sig-name descname"><span class="pre">getStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/HotDeck.html#HotDeck.getStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.HotDeck.HotDeck.getStatistics" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/HotDeck.html#HotDeck.getStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.HotDeck.HotDeck.getStatistics" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.HotDeck.HotDeck.impute">
-<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/HotDeck.html#HotDeck.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.HotDeck.HotDeck.impute" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/HotDeck.html#HotDeck.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.HotDeck.HotDeck.impute" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.HotDeck.HotDeck.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'HotDeck.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/HotDeck.html#HotDeck.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.HotDeck.HotDeck.save" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'HotDeck.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/HotDeck.html#HotDeck.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.HotDeck.HotDeck.save" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 </section>
 <section id="module-geoanalytics.imputation.Interpolation">
-<span id="geoanalytics-imputation-interpolation-module"></span><h2>geoanalytics.imputation.Interpolation module<a class="headerlink" href="#module-geoanalytics.imputation.Interpolation" title="Permalink to this heading"></a></h2>
+<span id="geoanalytics-imputation-interpolation-module"></span><h2>geoanalytics.imputation.Interpolation module<a class="headerlink" href="#module-geoanalytics.imputation.Interpolation" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="geoanalytics.imputation.Interpolation.Interpolation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.imputation.Interpolation.</span></span><span class="sig-name descname"><span class="pre">Interpolation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/Interpolation.html#Interpolation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.Interpolation.Interpolation" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.imputation.Interpolation.</span></span><span class="sig-name descname"><span class="pre">Interpolation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/Interpolation.html#Interpolation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.Interpolation.Interpolation" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.Interpolation.Interpolation.getStatistics">
-<span class="sig-name descname"><span class="pre">getStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/Interpolation.html#Interpolation.getStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.Interpolation.Interpolation.getStatistics" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/Interpolation.html#Interpolation.getStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.Interpolation.Interpolation.getStatistics" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.Interpolation.Interpolation.impute">
-<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/Interpolation.html#Interpolation.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.Interpolation.Interpolation.impute" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/Interpolation.html#Interpolation.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.Interpolation.Interpolation.impute" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.Interpolation.Interpolation.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Interpolation.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/Interpolation.html#Interpolation.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.Interpolation.Interpolation.save" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Interpolation.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/Interpolation.html#Interpolation.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.Interpolation.Interpolation.save" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 </section>
 <section id="module-geoanalytics.imputation.KNNImputation">
-<span id="geoanalytics-imputation-knnimputation-module"></span><h2>geoanalytics.imputation.KNNImputation module<a class="headerlink" href="#module-geoanalytics.imputation.KNNImputation" title="Permalink to this heading"></a></h2>
+<span id="geoanalytics-imputation-knnimputation-module"></span><h2>geoanalytics.imputation.KNNImputation module<a class="headerlink" href="#module-geoanalytics.imputation.KNNImputation" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="geoanalytics.imputation.KNNImputation.KNNImputation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.imputation.KNNImputation.</span></span><span class="sig-name descname"><span class="pre">KNNImputation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/KNNImputation.html#KNNImputation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.KNNImputation.KNNImputation" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.imputation.KNNImputation.</span></span><span class="sig-name descname"><span class="pre">KNNImputation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/KNNImputation.html#KNNImputation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.KNNImputation.KNNImputation" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.KNNImputation.KNNImputation.getStatistics">
-<span class="sig-name descname"><span class="pre">getStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/KNNImputation.html#KNNImputation.getStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.KNNImputation.KNNImputation.getStatistics" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/KNNImputation.html#KNNImputation.getStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.KNNImputation.KNNImputation.getStatistics" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.KNNImputation.KNNImputation.impute">
-<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/KNNImputation.html#KNNImputation.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.KNNImputation.KNNImputation.impute" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/KNNImputation.html#KNNImputation.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.KNNImputation.KNNImputation.impute" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.KNNImputation.KNNImputation.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'KNN.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/KNNImputation.html#KNNImputation.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.KNNImputation.KNNImputation.save" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'KNN.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/KNNImputation.html#KNNImputation.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.KNNImputation.KNNImputation.save" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 </section>
-<section id="geoanalytics-imputation-miceimputation-module">
-<h2>geoanalytics.imputation.MICEImputation module<a class="headerlink" href="#geoanalytics-imputation-miceimputation-module" title="Permalink to this heading"></a></h2>
+<section id="module-geoanalytics.imputation.MICEImputation">
+<span id="geoanalytics-imputation-miceimputation-module"></span><h2>geoanalytics.imputation.MICEImputation module<a class="headerlink" href="#module-geoanalytics.imputation.MICEImputation" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="geoanalytics.imputation.MICEImputation.MICEImputation">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.imputation.MICEImputation.</span></span><span class="sig-name descname"><span class="pre">MICEImputation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MICEImputation.html#MICEImputation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MICEImputation.MICEImputation" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="geoanalytics.imputation.MICEImputation.MICEImputation.getStatistics">
+<span class="sig-name descname"><span class="pre">getStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MICEImputation.html#MICEImputation.getStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MICEImputation.MICEImputation.getStatistics" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geoanalytics.imputation.MICEImputation.MICEImputation.impute">
+<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MICEImputation.html#MICEImputation.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MICEImputation.MICEImputation.impute" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geoanalytics.imputation.MICEImputation.MICEImputation.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MICE.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MICEImputation.html#MICEImputation.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MICEImputation.MICEImputation.save" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
-<section id="geoanalytics-imputation-matrixfactorizationknn-module">
-<h2>geoanalytics.imputation.MatrixFactorizationKNN module<a class="headerlink" href="#geoanalytics-imputation-matrixfactorizationknn-module" title="Permalink to this heading"></a></h2>
+<section id="module-geoanalytics.imputation.MatrixFactorizationKNN">
+<span id="geoanalytics-imputation-matrixfactorizationknn-module"></span><h2>geoanalytics.imputation.MatrixFactorizationKNN module<a class="headerlink" href="#module-geoanalytics.imputation.MatrixFactorizationKNN" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="geoanalytics.imputation.MatrixFactorizationKNN.MatrixFactorizationKNN">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.imputation.MatrixFactorizationKNN.</span></span><span class="sig-name descname"><span class="pre">MatrixFactorizationKNN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MatrixFactorizationKNN.html#MatrixFactorizationKNN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MatrixFactorizationKNN.MatrixFactorizationKNN" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="geoanalytics.imputation.MatrixFactorizationKNN.MatrixFactorizationKNN.getStatistics">
+<span class="sig-name descname"><span class="pre">getStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MatrixFactorizationKNN.html#MatrixFactorizationKNN.getStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MatrixFactorizationKNN.MatrixFactorizationKNN.getStatistics" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geoanalytics.imputation.MatrixFactorizationKNN.MatrixFactorizationKNN.impute">
+<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MatrixFactorizationKNN.html#MatrixFactorizationKNN.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MatrixFactorizationKNN.MatrixFactorizationKNN.impute" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geoanalytics.imputation.MatrixFactorizationKNN.MatrixFactorizationKNN.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MatrixFactorizationKNN.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MatrixFactorizationKNN.html#MatrixFactorizationKNN.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MatrixFactorizationKNN.MatrixFactorizationKNN.save" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="module-geoanalytics.imputation.MeanImputation">
-<span id="geoanalytics-imputation-meanimputation-module"></span><h2>geoanalytics.imputation.MeanImputation module<a class="headerlink" href="#module-geoanalytics.imputation.MeanImputation" title="Permalink to this heading"></a></h2>
+<span id="geoanalytics-imputation-meanimputation-module"></span><h2>geoanalytics.imputation.MeanImputation module<a class="headerlink" href="#module-geoanalytics.imputation.MeanImputation" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="geoanalytics.imputation.MeanImputation.MeanImputation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.imputation.MeanImputation.</span></span><span class="sig-name descname"><span class="pre">MeanImputation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MeanImputation.html#MeanImputation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MeanImputation.MeanImputation" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.imputation.MeanImputation.</span></span><span class="sig-name descname"><span class="pre">MeanImputation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MeanImputation.html#MeanImputation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MeanImputation.MeanImputation" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.MeanImputation.MeanImputation.getStatistics">
-<span class="sig-name descname"><span class="pre">getStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MeanImputation.html#MeanImputation.getStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MeanImputation.MeanImputation.getStatistics" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MeanImputation.html#MeanImputation.getStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MeanImputation.MeanImputation.getStatistics" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.MeanImputation.MeanImputation.impute">
-<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MeanImputation.html#MeanImputation.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MeanImputation.MeanImputation.impute" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MeanImputation.html#MeanImputation.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MeanImputation.MeanImputation.impute" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.MeanImputation.MeanImputation.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MeanImputation.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MeanImputation.html#MeanImputation.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MeanImputation.MeanImputation.save" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MeanImputation.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MeanImputation.html#MeanImputation.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MeanImputation.MeanImputation.save" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 </section>
 <section id="module-geoanalytics.imputation.MedianImputation">
-<span id="geoanalytics-imputation-medianimputation-module"></span><h2>geoanalytics.imputation.MedianImputation module<a class="headerlink" href="#module-geoanalytics.imputation.MedianImputation" title="Permalink to this heading"></a></h2>
+<span id="geoanalytics-imputation-medianimputation-module"></span><h2>geoanalytics.imputation.MedianImputation module<a class="headerlink" href="#module-geoanalytics.imputation.MedianImputation" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="geoanalytics.imputation.MedianImputation.MedianImputation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.imputation.MedianImputation.</span></span><span class="sig-name descname"><span class="pre">MedianImputation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MedianImputation.html#MedianImputation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MedianImputation.MedianImputation" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.imputation.MedianImputation.</span></span><span class="sig-name descname"><span class="pre">MedianImputation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MedianImputation.html#MedianImputation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MedianImputation.MedianImputation" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.MedianImputation.MedianImputation.getStatistics">
-<span class="sig-name descname"><span class="pre">getStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MedianImputation.html#MedianImputation.getStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MedianImputation.MedianImputation.getStatistics" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MedianImputation.html#MedianImputation.getStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MedianImputation.MedianImputation.getStatistics" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.MedianImputation.MedianImputation.impute">
-<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MedianImputation.html#MedianImputation.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MedianImputation.MedianImputation.impute" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MedianImputation.html#MedianImputation.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MedianImputation.MedianImputation.impute" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.MedianImputation.MedianImputation.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MedianImputation.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MedianImputation.html#MedianImputation.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MedianImputation.MedianImputation.save" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MedianImputation.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MedianImputation.html#MedianImputation.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MedianImputation.MedianImputation.save" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 </section>
 <section id="module-geoanalytics.imputation.ModeImputation">
-<span id="geoanalytics-imputation-modeimputation-module"></span><h2>geoanalytics.imputation.ModeImputation module<a class="headerlink" href="#module-geoanalytics.imputation.ModeImputation" title="Permalink to this heading"></a></h2>
+<span id="geoanalytics-imputation-modeimputation-module"></span><h2>geoanalytics.imputation.ModeImputation module<a class="headerlink" href="#module-geoanalytics.imputation.ModeImputation" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="geoanalytics.imputation.ModeImputation.ModeImputation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.imputation.ModeImputation.</span></span><span class="sig-name descname"><span class="pre">ModeImputation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/ModeImputation.html#ModeImputation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.ModeImputation.ModeImputation" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.imputation.ModeImputation.</span></span><span class="sig-name descname"><span class="pre">ModeImputation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/ModeImputation.html#ModeImputation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.ModeImputation.ModeImputation" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.ModeImputation.ModeImputation.getStatistics">
-<span class="sig-name descname"><span class="pre">getStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/ModeImputation.html#ModeImputation.getStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.ModeImputation.ModeImputation.getStatistics" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/ModeImputation.html#ModeImputation.getStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.ModeImputation.ModeImputation.getStatistics" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.ModeImputation.ModeImputation.impute">
-<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/ModeImputation.html#ModeImputation.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.ModeImputation.ModeImputation.impute" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/ModeImputation.html#ModeImputation.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.ModeImputation.ModeImputation.impute" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.ModeImputation.ModeImputation.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ModeImputation.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/ModeImputation.html#ModeImputation.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.ModeImputation.ModeImputation.save" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ModeImputation.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/ModeImputation.html#ModeImputation.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.ModeImputation.ModeImputation.save" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 </section>
-<section id="geoanalytics-imputation-multipleimputation-module">
-<h2>geoanalytics.imputation.MultipleImputation module<a class="headerlink" href="#geoanalytics-imputation-multipleimputation-module" title="Permalink to this heading"></a></h2>
+<section id="module-geoanalytics.imputation.MultipleImputation">
+<span id="geoanalytics-imputation-multipleimputation-module"></span><h2>geoanalytics.imputation.MultipleImputation module<a class="headerlink" href="#module-geoanalytics.imputation.MultipleImputation" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="geoanalytics.imputation.MultipleImputation.MultipleImputation">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.imputation.MultipleImputation.</span></span><span class="sig-name descname"><span class="pre">MultipleImputation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MultipleImputation.html#MultipleImputation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MultipleImputation.MultipleImputation" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="geoanalytics.imputation.MultipleImputation.MultipleImputation.getStatistics">
+<span class="sig-name descname"><span class="pre">getStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MultipleImputation.html#MultipleImputation.getStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MultipleImputation.MultipleImputation.getStatistics" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geoanalytics.imputation.MultipleImputation.MultipleImputation.impute">
+<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_nearest_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MultipleImputation.html#MultipleImputation.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MultipleImputation.MultipleImputation.impute" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geoanalytics.imputation.MultipleImputation.MultipleImputation.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MultipleImputation.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/MultipleImputation.html#MultipleImputation.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.MultipleImputation.MultipleImputation.save" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="module-geoanalytics.imputation.NumberImputation">
-<span id="geoanalytics-imputation-numberimputation-module"></span><h2>geoanalytics.imputation.NumberImputation module<a class="headerlink" href="#module-geoanalytics.imputation.NumberImputation" title="Permalink to this heading"></a></h2>
+<span id="geoanalytics-imputation-numberimputation-module"></span><h2>geoanalytics.imputation.NumberImputation module<a class="headerlink" href="#module-geoanalytics.imputation.NumberImputation" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="geoanalytics.imputation.NumberImputation.NumberImputation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.imputation.NumberImputation.</span></span><span class="sig-name descname"><span class="pre">NumberImputation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/NumberImputation.html#NumberImputation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.NumberImputation.NumberImputation" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.imputation.NumberImputation.</span></span><span class="sig-name descname"><span class="pre">NumberImputation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/NumberImputation.html#NumberImputation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.NumberImputation.NumberImputation" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.NumberImputation.NumberImputation.getStatistics">
-<span class="sig-name descname"><span class="pre">getStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/NumberImputation.html#NumberImputation.getStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.NumberImputation.NumberImputation.getStatistics" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/NumberImputation.html#NumberImputation.getStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.NumberImputation.NumberImputation.getStatistics" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.NumberImputation.NumberImputation.impute">
-<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/NumberImputation.html#NumberImputation.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.NumberImputation.NumberImputation.impute" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/NumberImputation.html#NumberImputation.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.NumberImputation.NumberImputation.impute" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geoanalytics.imputation.NumberImputation.NumberImputation.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'NumberImputation.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/NumberImputation.html#NumberImputation.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.NumberImputation.NumberImputation.save" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'NumberImputation.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/NumberImputation.html#NumberImputation.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.NumberImputation.NumberImputation.save" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 </section>
-<section id="geoanalytics-imputation-softimputation-module">
-<h2>geoanalytics.imputation.SoftImputation module<a class="headerlink" href="#geoanalytics-imputation-softimputation-module" title="Permalink to this heading"></a></h2>
+<section id="module-geoanalytics.imputation.SoftImputation">
+<span id="geoanalytics-imputation-softimputation-module"></span><h2>geoanalytics.imputation.SoftImputation module<a class="headerlink" href="#module-geoanalytics.imputation.SoftImputation" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="geoanalytics.imputation.SoftImputation.SoftImputation">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.imputation.SoftImputation.</span></span><span class="sig-name descname"><span class="pre">SoftImputation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/SoftImputation.html#SoftImputation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.SoftImputation.SoftImputation" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="geoanalytics.imputation.SoftImputation.SoftImputation.getStatistics">
+<span class="sig-name descname"><span class="pre">getStatistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/SoftImputation.html#SoftImputation.getStatistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.SoftImputation.SoftImputation.getStatistics" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geoanalytics.imputation.SoftImputation.SoftImputation.impute">
+<span class="sig-name descname"><span class="pre">impute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/SoftImputation.html#SoftImputation.impute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.SoftImputation.SoftImputation.impute" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geoanalytics.imputation.SoftImputation.SoftImputation.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outputFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SoftImputation.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/imputation/SoftImputation.html#SoftImputation.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.imputation.SoftImputation.SoftImputation.save" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="module-geoanalytics.imputation">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-geoanalytics.imputation" title="Permalink to this heading"></a></h2>
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-geoanalytics.imputation" title="Link to this heading"></a></h2>
 </section>
 </section>
 
@@ -347,7 +429,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, Uday Kiran RAGE.</p>
+    <p>&#169; Copyright 2025, rage uday kiran.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
