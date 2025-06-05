@@ -99,7 +99,7 @@ Total number of algorithms: 30+
 - ✅ Tested to the best of our possibility
 - 🔋 Highly optimized to our best effort, light-weight, and energy-efficient
 - 👀 Proper code documentation
-- 🍼 Sample examples of using various algorithms at [./notebooks](https://github.com/UdayLab/PAMI/tree/main/notebooks) folder
+- 🍼 Sample examples of using various algorithms at [./tests](https://github.com/UdayLab/geoanalytics/tree/main/tests) folder
 - 🤖 Works with AI libraries such as TensorFlow, PyTorch, and sklearn. 
 - ⚡️ Supports Cuda 
 - 🖥️ Operating System Independence
