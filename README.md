@@ -221,9 +221,9 @@ Labels saved to: KMeansLabels.csv
 
 # Documentation
 
-The official documentation is hosted on [geoAnalytics](https://geoanalytics.readthedocs.io/en/stable/).
+The official documentation is hosted on [geoAnalytics](https://geoanalytics.readthedocs.io/en/latest/).
 ***
-# Getting Help
+# Getting Help    
 
 For any queries, the best place to go to is Github Issues [Github Issues](https://github.com/orgs/UdayLab/discussions/categories/q-a).
 
@@ -246,11 +246,7 @@ We invite and encourage all community members to contribute, report bugs, fix bu
 
 [Go to Top](#table-of-contents)
 
-
-
-# geoAnalytics
-
-## Installation using Anaconda.
+## Installation using Anaconda (geoanalytics package).
 
 1. Install and set up Anaconda. URL:   https://linuxize.com/post/how-to-install-anaconda-on-centos-7
 2. Create a virtual environment using conda. E.g., coda create --name geoAnalytics
