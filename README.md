@@ -171,28 +171,49 @@ $ python
 ```
 
 ```python
-# first import pami 
-from PAMI.frequentPattern.basic import FPGrowth as alg
-fileURL = "https://u-aizu.ac.jp/~udayrage/datasets/transactionalDatabases/Transactional_T10I4D100K.csv"
-minSup=300
-obj = alg.FPGrowth(iFile=fileURL, minSup=minSup, sep='\t')
-#obj.mine()  #deprecated
-obj.mine()
-obj.save('frequentPatternsAtMinSupCount300.txt')
-frequentPatternsDF= obj.getPatternsAsDataFrame()
-print('Total No of patterns: ' + str(len(frequentPatternsDF))) #print the total number of patterns
-print('Runtime: ' + str(obj.getRuntime())) #measure the runtime
-print('Memory (RSS): ' + str(obj.getMemoryRSS()))
-print('Memory (USS): ' + str(obj.getMemoryUSS()))
+# first import geoanalytics 
+from geoanalytics.clustering import KMeans as alg
+import pandas as pd
+df = pd.read_csv('Moon.csv',header=None,sep=',')
+obj = alg.KMeans(dataframe=df)
+obj.elbowMethod()
+obj.clustering(k=4,max_iter=100)
+obj.save('KMeansLabels.csv')
 ```
 
 ```
 Output:
-Frequent patterns were generated successfully using frequentPatternGrowth algorithm
-Total No of patterns: 4540
-Runtime: 8.749667644500732
-Memory (RSS): 522911744
-Memory (USS): 475353088
+Total Execution time of proposed Algorithm: 7.29867959022522
+Memory (USS) of proposed Algorithm in KB: 3005180.0
+Memory (RSS) of proposed Algorithm in KB: 3025648.0
+
+              x	             y	      labels
+0	1061317.265	-485173.607	2
+1	1061332.071	-485173.607	2
+2	1061346.877	-485173.607	2
+3	1061361.684	-485173.607	1
+4	1061376.490	-485173.607	1
+...	    ...	             ...	...
+4194299	1091566.583	-515482.151	2
+4194300	1091581.390	-515482.151	2
+4194301	1091596.196	-515482.151	2
+4194302	1091611.002	-515482.151	2
+4194303	1091625.809	-515482.151	2
+
+array([[2145.99705143, 3838.28679175, 4174.26050222, 4214.72552938,
+        4362.65581646, 4291.2789215 , 4508.31819976, 5545.56035569,
+        6874.39746827],
+       [1904.93217264, 3435.9266567 , 3754.57334822, 3814.21158   ,
+        3957.99354212, 3906.56010996, 4104.85927441, 5081.01403926,
+        6344.78487709],
+       [2007.81883172, 3616.11456616, 3945.08473418, 3996.36984105,
+        4144.25548759, 4082.02786188, 4290.37009057, 5300.17673097,
+        6597.33840088],
+       [2426.77124575, 4271.09574647, 4574.37251878, 4570.90689388,
+        4707.65309669, 4610.27659044, 4838.39224733, 5938.90730475,
+        7321.7573098 ]])
+        
+Labels saved to: KMeansLabels.csv
 ```
 ***
 # License
