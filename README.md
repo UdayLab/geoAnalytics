@@ -57,9 +57,9 @@ of machine learning tasks, such as imputation, image fusion, clustering, classif
 classification, and pattern mining. This library being platform independent can run any operating system. 
 Useful links to utilize the services of this library were provided below:
 
-1. Youtube tutorial  
+1. Youtube tutorial
 
-2. Tutorials (Notebooks)  
+2. Tutorials
    
 3. User manual 
 
@@ -69,32 +69,30 @@ Useful links to utilize the services of this library were provided below:
 
 6. Datasets  
 
-7. [Discussions](https://github.com/UdayLab/geoAnalytics/discussions)
+7. [Discussions](https://github.com/UdayLab/geoanalytics/discussions)
 
-8. [Report issues](https://github.com/UdayLab/geoAnalytics/issues)
+8. [Report issues](https://github.com/UdayLab/geoanalytics/issues)
 
 ***
 # Flow Chart of Developing Algorithms in geoAnalytics
 
-![geoAnalytics production process](./images/geoAnlaytics.png?raw=true)
+![geoAnalytics production process](https://github.com/UdayLab/geoanalytics/blob/main/images/geoAnalyticsLibrary.png?raw=true)
+
 
 <!--- ![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true) ---> 
 ***
 # Inputs and Outputs of an Algorithm in geoAnalytics
 
-![Inputs and Outputs](./images/inputsOutputsOfAnAlgorithm?raw=true)
+![Inputs and Outputs](https://github.com/UdayLab/geoanalytics/blob/main/images/inputsOutputsOfAnAlgorithm.png?raw=true)
+
 ***
 # Recent Updates
 
 - **Version 2025.04.29:** 
 In this latest version, the following updates have been made:
-  - Included one new algorithms, **PrefixSpan**, for Sequential Pattern.
-  - Optimized the following pattern mining algorithms: **PFPGrowth, PFECLAT, GPFgrowth and PPF_DFS**.
-  - Test cases are implemented for the following algorithms, **Contiguous Frequent patterns, Correlated Frequent Patterns, Coverage Frequent Patterns, Fuzzy Correlated Frequent Patterns, Fuzzy Frequent Patterns, Fuzzy Georeferenced Patterns, Georeferenced Frequent Patterns, Periodic Frequent Patterns, Partial Periodic Frequent Patterns, HighUtility Frequent Patterns, HighUtility Patterns, HighUtility Georeferenced Frequent Patterns, Frequent Patterns, Multiple Minimum Frequent Patterns, Periodic Frequent Patterns, Recurring Patterns, Sequential Patterns, Uncertain Frequent Patterns, Weighted Uncertain Frequent Patterns**.
-  - The algorithms mentioned below are automatically tested, **Frequent Patterns, Correlated Frequent Patterns, Contiguous Frequent patterns, Coverage Frequent Patterns, Recurring Patterns, Sequential Patterns**.
-
-Total number of algorithms: 89
-
+  - Included thirteen new algorithms in imputation, **BackwardFill**, **ForwardFill**, **HotDeck**, **Interpolation**, **KNNImputation**, **MatrixFactorization**, **MeanImputation**, **MedianImputation**, **MICEImputation**, **ModeImputation**, **MultipleImputation**, **NumberImputation**, and **SoftImputation** for filling nan values.
+  - Test cases are implemented using geoanalytics package.
+Total number of algorithms: 30+
 ***
 # Features
 
@@ -243,7 +241,7 @@ We invite and encourage all community members to contribute, report bugs, fix bu
 
 # Real World Case Studies
 
-1. Air pollution analytics <a target="_blank" href="https://colab.research.google.com/github/udayLab/PAMI/blob/main/notebooks/airPollutionAnalytics.ipynb"> <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+1. Lunar data analytics <a target="_blank" href="https://colab.research.google.com/github/udayLab/PAMI/blob/main/notebooks/airPollutionAnalytics.ipynb"> <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
 
 
 [Go to Top](#table-of-contents)
