@@ -1,0 +1,152 @@
+PDS_VERSION_ID                       = "PDS3"
+
+/*** FILE FORMAT ***/
+RECORD_TYPE                          = "UNDEFINED"
+FILE_NAME                            = "MI_MAP_03_S16E035S17E036SC.img"
+
+/*** POINTERS TO START BYTE OFFSET OF OBJECTS IN FILE ***/
+^GEOMETRIC_DATA_ALTITUDE             = ("MI_MAP_03_S16E035S17E036SC.img", 1 <BYTES>)
+^IMAGE                               = ("MI_MAP_03_S16E035S17E036SC.img", 16777217 <BYTES>)
+
+/*** BASIC INFORMATION ***/
+MISSION_NAME                         = "SELENE"
+DATA_SET_ID                          = "SLN-L-MI-5-MAP-V3.0"
+DATA_SET_NAME                        = "SELENE MOON MI 5 MAP V3.0"
+L2DB_ORIGINAL_ID                     = "MI_MAP"
+PRODUCT_ID                           = "MI_MAP_03_S16E035S17E036SC"
+INSTRUMENT_TYPE                      = "IMAGER"
+INSTRUMENT_ID                        = "MI"
+INSTRUMENT_NAME                      = "MULTIBAND IMAGER"
+INSTRUMENT_HOST_NAME                 = "SELENE MAIN ORBITER"
+TARGET_TYPE                          = "SATELLITE"
+TARGET_NAME                          = "MOON"
+START_TIME                           = UNK
+STOP_TIME                            = UNK
+
+/*** GENERAL DATA DESCRIPTION PARAMETERS ***/
+SOFTWARE_NAME                        = "RGC_TC_MI_PLUS"
+SOFTWARE_VERSION                     = "4.0.0"
+PROCESS_VERSION_ID                   = "MAP"
+PRODUCT_CREATION_TIME                = 2014-12-29T05:35:43
+PROGRAM_START_TIME                   = 2014-12-29T05:31:51
+PRODUCER_ID                          = "LISM"
+PRODUCT_SET_ID                       = "MI_MAP"
+PRODUCT_VERSION_ID                   = "03"
+REGISTERED_PRODUCT                   = "Y"
+SPICE_METAKERNEL_FILE_NAME           = "RGC_INF_TCv401IK_MIv200IK_SPv105IK_RISE100i_05_100h_02_LongCK_DS_V02_de421_131210.mk"
+
+/*** SCENE RELATED PARAMETERS ***/
+REV_STRIP                            = ("04156_003", "04157_003", "02324_003")
+OBSERVATION_MODE_ID                  = "NORMAL"
+SENSOR_DESCRIPTION                   = "MI is a multiband push-broom imaging camera consisting of VIS(V) and NIR(N) sensors (each has nadir-directed optics of f number 65 mm and F ratio 3.7). Detector pixel sizes in micron are 13(V) and 40(N)."
+SENSOR_DESCRIPTION2                  = "Physical band arrangement [from satellite -x to +x] are VIS1>VIS2>VIS5>VIS4>VIS3 and NIR3>NIR4>NIR1>NIR2. Parallax between nearest band sets [degree] are 2.7 for VIS and 2.6 for NIR. Sampling time [msec] are 13 for VIS and 39 for NIR."
+
+/*** CAMERA RELATED PARAMETERS ***/
+FILTER_NAME                          = ("MV1", "MV2", "MV3", "MV4", "MV5", "MN1", "MN2", "MN3", "MN4")
+CENTER_FILTER_WAVELENGTH             = (414.0 <nm>, 749.0 <nm>, 901.0 <nm>, 950.0 <nm>, 1001.0 <nm>, 1000.0 <nm>, 1049.0 <nm>, 1248.0 <nm>, 1548.0 <nm>)
+BANDWIDTH                            = (20.0 <nm>, 12.0 <nm>, 21.0 <nm>, 30.0 <nm>, 42.0 <nm>, 27.0 <nm>, 28.0 <nm>, 33.0 <nm>, 48.0 <nm>)
+BASE_BAND                            = "MV5"
+
+/*** DESCRIPTION OF OBJECTS CONTAINED IN THE FILE ***/
+
+OBJECT                               = GEOMETRIC_DATA_ALTITUDE
+    BINNING_START_PIXEL_POSITION     = (1,1)
+    BINNING_INTERVAL                 = 1
+    LINES                            = 2048
+    LINE_SAMPLES                     = 2048
+    SAMPLE_TYPE                      = IEEE_REAL
+    SAMPLE_BITS                      = 32
+    UNIT                             = "km"
+END_OBJECT                           = GEOMETRIC_DATA_ALTITUDE
+
+OBJECT                               = IMAGE
+    BANDS                            = 9
+    BAND_STORAGE_TYPE                = "BAND_SEQUENTIAL"
+    LINES                            = 2048
+    LINE_SAMPLES                     = 2048
+    SAMPLE_TYPE                      = MSB_INTEGER
+    SAMPLE_BITS                      = 16
+    IMAGE_VALUE_TYPE                 = "REFLECTANCE"
+    UNIT                             = "ND"
+    SCALING_FACTOR                   = 2.00000e-05
+    OFFSET                           = 0.00000e+00
+    MIN_FOR_STATISTICAL_EVALUATION   = (0, 0, 0, 0, 0, 0, 0, 0, 0)
+    MAX_FOR_STATISTICAL_EVALUATION   = (32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767)
+    SCENE_MAXIMUM_DN                 = (4832, 7630, 7727, 7410, 7420, 7155, 7511, 8912, 10493)
+    SCENE_MINIMUM_DN                 = (1557, 2880, 3113, 3188, 3293, 3274, 3464, 4301, 5478)
+    SCENE_AVERAGE_DN                 = (2016.4, 3623.8, 3949.7, 3999.7, 4145.7, 4084.1, 4291.4, 5298.4, 6593.6)
+    SCENE_STDEV_DN                   = (143.8, 223.7, 222.0, 207.9, 208.7, 196.9, 205.7, 237.4, 271.2)
+    SCENE_MODE_DN                    = (1974, 3509, 3834, 3892, 4037, 3966, 4194, 5128, 6399)
+    SHADOWED_AREA_MINIMUM            = (0, 0, 0, 0, 0, 0, 0, 0, 0)
+    SHADOWED_AREA_MAXIMUM            = (500, 500, 500, 500, 500, 500, 500, 500, 500)
+    SHADOWED_AREA_PERCENTAGE         = (0, 0, 0, 0, 0, 0, 0, 0, 0)
+    INVALID_TYPE                     = ("SATURATION" , "MINUS" , "DUMMY_DEFECT" , "OTHER")
+    INVALID_VALUE                    = (-20000 , -21000 , -22000 , -23000)
+    INVALID_PIXELS                   = ((0 , 0 , 0 , 0), (0 , 0 , 0 , 0), (0 , 0 , 0 , 0), (0 , 0 , 0 , 0), (0 , 0 , 0 , 0), (0 , 0 , 0 , 0), (0 , 0 , 0 , 0), (0 , 0 , 0 , 0), (0 , 0 , 0 , 0))
+    OUT_OF_IMAGE_BOUNDS_VALUE        = -30000
+    OUT_OF_IMAGE_BOUNDS_PIXELS       = (0, 0, 0, 0, 0, 0, 0, 0, 0)
+    STRETCHED_FLAG                   = FALSE
+END_OBJECT                           = IMAGE
+
+OBJECT                               = IMAGE_MAP_PROJECTION
+    ^DATA_SET_MAP_PROJECTION         = "DSMAP.CAT"
+    MAP_PROJECTION_TYPE              = "SIMPLE CYLINDRICAL"
+    COORDINATE_SYSTEM_TYPE           = "BODY-FIXED ROTATING"
+    COORDINATE_SYSTEM_NAME           = "PLANETOCENTRIC"
+    A_AXIS_RADIUS                    = 1737.400 <km>
+    B_AXIS_RADIUS                    = 1737.400 <km>
+    C_AXIS_RADIUS                    = 1737.400 <km>
+    FIRST_STANDARD_PARALLEL          = "N/A"
+    SECOND_STANDARD_PARALLEL         = "N/A"
+    POSITIVE_LONGITUDE_DIRECTION     = "EAST"
+    CENTER_LATITUDE                  =   0.00000000 <deg>
+    CENTER_LONGITUDE                 =   0.00000000 <deg>
+    REFERENCE_LATITUDE               = "N/A"
+    REFERENCE_LONGITUDE              = "N/A"
+    LINE_FIRST_PIXEL                 = 1
+    LINE_LAST_PIXEL                  = 2048
+    SAMPLE_FIRST_PIXEL               = 1
+    SAMPLE_LAST_PIXEL                = 2048
+    MAP_PROJECTION_ROTATION          = 0.000000 <deg>
+    MAP_RESOLUTION                   = 2048.000000 <pixel/deg>
+    MAP_SCALE                        = 0.014806323445 <km/pixel>
+    MAXIMUM_LATITUDE                 = -16.00000000 <deg>
+    MINIMUM_LATITUDE                 = -16.99951172 <deg>
+    EASTERNMOST_LONGITUDE            =  35.99951172 <deg>
+    WESTERNMOST_LONGITUDE            =  35.00000000 <deg>
+    LINE_PROJECTION_OFFSET           = -32768.000000 <pixel>
+    SAMPLE_PROJECTION_OFFSET         = -71680.000000 <pixel>
+END_OBJECT                           = IMAGE_MAP_PROJECTION
+
+OBJECT                               = PROCESSING_PARAMETERS
+    DARK_FILE_NAME                   = (("MIV_DRK_04020_04363_M___002.csv", "MIN_DRK_04107_04192_M___003.csv"), 
+                                        ("MIV_DRK_02269_02609_S___002.csv", "MIN_DRK_02269_02354_S___003.csv"))
+    FT_FILE_NAME                     = "MIV_FTF_PRFLT_N___v01.csv"
+    FLAT_FILE_NAME                   = (("MIV_FLT_04020_04363_N___002.csv", "MIN_FLT_04107_04192_N___003.csv"), 
+                                        ("MIV_FLT_02269_02609_N___002.csv", "MIN_FLT_02269_02354_S___003.csv"))
+    EFFIC_FILE_NAME                  = ("MIV_EFF_PRFLT_N___v01.csv", "MIN_EFF_PRFLT_N___v01.csv")
+    NONLIN_FILE_NAME                 = ("MIV_NLT_PRFLT_N___v01.csv", "MIN_NLT_PRFLT_N___v01.csv")
+    RAD_CNV_COEF                     = (1.470593 <W/m**2/micron/sr>, 2.204781 <W/m**2/micron/sr>, 2.244315 <W/m**2/micron/sr>, 2.734361 <W/m**2/micron/sr>, 1.885889 <W/m**2/micron/sr>, 3.049240 <W/m**2/micron/sr>, 3.312096 <W/m**2/micron/sr>, 4.788256 <W/m**2/micron/sr>, 7.969085 <W/m**2/micron/sr>)
+    REF_CNV_COEF                     = (2.353311e-03 <1/(W/m**2/micron/sr)>, 2.450451e-03 <1/(W/m**2/micron/sr)>, 3.549924e-03 <1/(W/m**2/micron/sr)>, 3.886012e-03 <1/(W/m**2/micron/sr)>, 4.316842e-03 <1/(W/m**2/micron/sr)>, 4.316842e-03 <1/(W/m**2/micron/sr)>, 4.893535e-03 <1/(W/m**2/micron/sr)>, 7.400877e-03 <1/(W/m**2/micron/sr)>, 1.218292e-02 <1/(W/m**2/micron/sr)>)
+    STANDARD_GEOMETRY                = (30.0, 0.0, 30.0)
+    PHOTO_CORR_ID                    = "LISM ORIGINAL"
+    PHOTO_CORR_COEF                  = ((8.208575e-01, -1.900000e-02, 2.420000e-04, -1.460000e-06, 5.678000e-02, 1.913000e+00, 6.430000e-02, 2.448000e-01, 0.000000e+00, 0.000000e+00, 0.000000e+00, 6.797000e-02, 1.300000e+00, -1.440000e-02, 2.441000e-01, -2.650000e-03, 1.740000e-03, -3.810000e-04),
+                                        (8.208575e-01, -1.900000e-02, 2.420000e-04, -1.460000e-06, 6.921000e-02, 1.487000e+00, -3.820000e-02, 2.122000e-01, 0.000000e+00, 0.000000e+00, 0.000000e+00, 8.916000e-02, 9.970000e-01, -2.526000e-01, 1.986000e-01, -2.650000e-03, 1.740000e-03, -3.810000e-04),
+                                        (8.208575e-01, -1.900000e-02, 2.420000e-04, -1.460000e-06, 5.908000e-02, 1.430000e+00, 5.600000e-02, 2.270000e-01, 0.000000e+00, 0.000000e+00, 0.000000e+00, 9.298000e-02, 9.180000e-01, -2.251000e-01, 1.980000e-01, -2.650000e-03, 1.740000e-03, -3.810000e-04),
+                                        (8.208575e-01, -1.900000e-02, 2.420000e-04, -1.460000e-06, 5.345000e-02, 1.413000e+00, 1.263000e-01, 2.409000e-01, 0.000000e+00, 0.000000e+00, 0.000000e+00, 8.705000e-02, 8.830000e-01, -1.655000e-01, 2.052000e-01, -2.650000e-03, 1.740000e-03, -3.810000e-04),
+                                        (8.208575e-01, -1.900000e-02, 2.420000e-04, -1.460000e-06, 5.096000e-02, 1.377000e+00, 7.360000e-02, 2.383000e-01, 0.000000e+00, 0.000000e+00, 0.000000e+00, 9.746000e-02, 8.890000e-01, -2.248000e-01, 1.933000e-01, -2.650000e-03, 1.740000e-03, -3.810000e-04),
+                                        (8.208575e-01, -1.900000e-02, 2.420000e-04, -1.460000e-06, 5.096000e-02, 1.377000e+00, 7.360000e-02, 2.383000e-01, 0.000000e+00, 0.000000e+00, 0.000000e+00, 9.746000e-02, 8.890000e-01, -2.248000e-01, 1.933000e-01, -2.650000e-03, 1.740000e-03, -3.810000e-04),
+                                        (8.208575e-01, -1.900000e-02, 2.420000e-04, -1.460000e-06, 3.968000e-02, 1.335000e+00, 1.809000e-01, 2.632000e-01, 0.000000e+00, 0.000000e+00, 0.000000e+00, 9.486000e-02, 8.430000e-01, -2.059000e-01, 1.958000e-01, -2.650000e-03, 1.740000e-03, -3.810000e-04),
+                                        (8.208575e-01, -1.900000e-02, 2.420000e-04, -1.460000e-06, 6.407000e-02, 1.103000e+00, -6.200000e-03, 2.168000e-01, 0.000000e+00, 0.000000e+00, 0.000000e+00, 1.120100e-01, 7.730000e-01, -3.129000e-01, 1.750000e-01, -2.650000e-03, 1.740000e-03, -3.810000e-04),
+                                        (8.208575e-01, -1.900000e-02, 2.420000e-04, -1.460000e-06, 9.175000e-02, 9.540000e-01, 1.110000e-02, 1.967000e-01, 0.000000e+00, 0.000000e+00, 0.000000e+00, 1.237400e-01, 6.920000e-01, -2.914000e-01, 1.648000e-01, -2.650000e-03, 1.740000e-03, -3.810000e-04))
+    RESAMPLING_METHOD                = "Bi-Linear"
+    OVERLAP_SELECTION_ID             = "The order of overlaid images was determined based on the data acquisition condition. Images with phase angles closer to the standard geometry (30 degrees) were placed nearer the top."
+    MATCHING_MOSAIC                  = "N/A"
+    L2A_DEAD_PIXEL_THRESHOLD         = (35, 35, 35, 35, 35, 200, 200, 200, 200)
+    L2A_SATURATION_THRESHOLD         = (1023, 1023, 1023, 1023, 1023, 4095, 4095, 4095, 4095)
+    DARK_VALID_MINIMUM               = (-3, -3, -3, -3, -3, -10, -10, -10, -10)
+    FT_VALID_MINIMUM                 = -2
+    RADIANCE_SATURATION_THRESHOLD    = 425.971000 <W/m**2/micron/sr>
+    REF_SATURATION_THRESHOLD         = 0.655340 <ND>
+END_OBJECT                           = PROCESSING_PARAMETERS
+END
