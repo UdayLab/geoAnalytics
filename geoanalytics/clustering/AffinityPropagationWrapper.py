@@ -30,17 +30,32 @@ class AffinityPropagationWrapper:
         self.df = dataframe.copy()
         self.df.columns = ['x', 'y'] + list(self.df.columns[2:])
         self.labelsDF = None
+        self.centers = None
+        self.startTime = None
+        self.endTime = None
+        self.memoryUSS = None
+        self.memoryRSS = None
 
-    def getStatistics(self, start_time):
-        print("Total Execution time of proposed Algorithm:", time.time() - start_time)
-        process = psutil.Process()
-        memory_uss_kb = process.memory_full_info().uss / 1024
-        print("Memory (USS) of proposed Algorithm in KB:", memory_uss_kb)
-        memory_rss_kb = process.memory_full_info().rss / 1024
-        print("Memory (RSS) of proposed Algorithm in KB:", memory_rss_kb)
+    def getRuntime(self):
+        """
+        Prints the total runtime of the clustering algorithm.
+        """
+        print("Total Execution time of proposed Algorithm:", self.endTime - self.startTime, "seconds")
 
-    def clustering(self, damping, max_iter=300, convergence_iter=15, affinity='euclidean', random_state=None, preference=None):
-        start_time = time.time()
+    def getMemoryUSS(self):
+        """
+        Prints the memory usage (USS) of the process in kilobytes.
+        """
+        print("Memory (USS) of proposed Algorithm in KB:", self.memoryUSS)
+
+    def getMemoryRSS(self):
+        """
+        Prints the memory usage (RSS) of the process in kilobytes.
+        """
+        print("Memory (RSS) of proposed Algorithm in KB:", self.memoryRSS)
+
+    def run(self, damping = 0.5, max_iter=300, convergence_iter=15, affinity='euclidean', random_state=None, preference=None):
+        self.startTime = time.time()
         data = self.df.drop(['x', 'y'], axis=1)
         data = data.to_numpy()
         X = StandardScaler().fit_transform(data)
@@ -49,15 +64,31 @@ class AffinityPropagationWrapper:
                                            preference=preference, random_state=random_state).fit(X)
         label = self.df[['x', 'y']]
         self.labelsDF = label.assign(labels=affinityProp.labels_)
-        self.getStatistics(start_time)
-        return self.labelsDF, affinityProp.cluster_centers_
+        self.centers = affinityProp.cluster_centers_
 
-    def save(self, outputFile='AffinityLabels.csv'):
+        self.endTime = time.time()
+
+        process = psutil.Process()
+        self.memoryUSS = process.memory_full_info().uss / 1024
+        self.memoryRSS = process.memory_full_info().rss / 1024
+
+        return self.labelsDF, self.centers
+
+    def save(self, outputFileLabels='AffinityLabels.csv', outputFileCenters='AffinityCenters.csv'):
         if self.labelsDF is not None:
             try:
-                self.labelsDF.to_csv(outputFile, index=False)
-                print(f"Labels saved to: {outputFile}")
+                self.labelsDF.to_csv(outputFileLabels, index=False)
+                print(f"Labels saved to: {outputFileLabels}")
             except Exception as e:
                 print(f"Failed to save labels: {e}")
         else:
-            print("No labels to save. Please run clustering first.")
+            print("No labels to save. Please execute run() method first.")
+
+        if self.centers is not None:
+            try:
+                pd.DataFrame(self.centers).to_csv(outputFileCenters, index=False)
+                print(f"Cluster centers saved to: {outputFileCenters}")
+            except Exception as e:
+                print(f"Failed to save cluster centers: {e}")
+        else:
+            print("No cluster centers to save. Please execute run() method first.")

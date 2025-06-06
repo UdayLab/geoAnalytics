@@ -34,8 +34,8 @@ Copyright (C)  2021 Rage Uday Kiran
      You should have received a copy of the GNU General Public License
      along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-import PAMI.extras.convert.denseDF2DB as dense
-import PAMI.extras.convert.sparseDF2DB as sparse
+from PAMI.extras.convert import denseDF2DB as dense
+from PAMI.extras.convert import sparseDF2DB as sparse
 import sys,psutil,os,time
 from typing import Union
 import operator

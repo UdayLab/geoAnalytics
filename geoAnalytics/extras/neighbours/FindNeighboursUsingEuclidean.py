@@ -33,6 +33,8 @@ from math import sqrt
 import time
 import sys, psutil, os,tqdm
 import pandas as pd
+import numpy as np
+from tqdm import tqdm
 
 
 class FindNeighboursUsingEuclidean:
@@ -68,63 +70,73 @@ class FindNeighboursUsingEuclidean:
             obj.save()
     """
 
-    def __init__(self, iFile: str, maxDist: int, sep='\t',DBtype="temp") -> None:
+    def __init__(self, iFile: str, maxDist: int, sep='\t', DBtype="csv"):
         self.iFile = iFile
         self.maxEucledianDistance = maxDist
         self.seperator = sep
-        self.result = {}
-        self.DBtype =DBtype
-        self._startTime = float()
-        self._endTime = float()
-        self._memoryUSS = float()
-        self._memoryRSS = float()
-    def create(self):
-        self._startTime = time.time()
-        coordinates = []
-        with open(self.iFile, "r") as f:
-            if self.DBtype=="temp":
-                for line in f:
-                    l = line.rstrip().split(self.seperator)
-                    for i in l[1:]:
-                        i = re.sub(r'[^0-9. ]', '', i)
-                        if i not in coordinates:
-                            coordinates.append(i.rstrip().split(' '))
-            else:
-                for line in f:
-                    l = line.rstrip().split(self.seperator)
-                    for i in l:
-                        i = re.sub(r'[^0-9. ]', '', i)
-                        if i not in coordinates:
-                            coordinates.append(i.rstrip().split(' '))
-        for i in tqdm.tqdm(range(len(coordinates))):
-            for j in range(len(coordinates-i-1)):
-                    j=j+i+1
-                    firstCoordinate = coordinates[i]
-                    secondCoordinate = coordinates[j]
-                    x1 = float(firstCoordinate[0])
-                    y1 = float(firstCoordinate[1])
-                    x2 = float(secondCoordinate[0])
-                    y2 = float(secondCoordinate[1])
-                    ansX = x2 - x1
-                    ansY = y2 - y1
-                    dist = abs(pow(ansX, 2) - pow(ansY, 2))
-                    norm = sqrt(dist)
-                    if norm <= float(self.maxEucledianDistance):
-                        self.result[tuple(firstCoordinate)] = self.result.get(tuple(firstCoordinate), [])
-                        self.result[tuple(firstCoordinate)].append(secondCoordinate)
-                        self.result[tuple(secondCoordinate)] = self.result.get(tuple(secondCoordinate), [])
-                        self.result[tuple(secondCoordinate)].append(firstCoordinate)
-        self._endTime = time.time()
+        self.DBtype = DBtype
 
-    def save(self,oFile: str) -> None:
-        with open(oFile, "w+") as f:
-            for i in self.result:
-                string = "Point(" + i[0] + " " + i[1] + ")" + self.seperator
-                f.write(string)
-                for j in self.result[i]:
-                    string = "Point(" + j[0] + " " + j[1] + ")" + self.seperator
-                    f.write(string)
-                f.write("\n")
+    def createAndSave(self, oFile: str):
+        # Load coordinates
+        if self.DBtype == "csv":
+            df = pd.read_csv(self.iFile)
+            coords = df.iloc[:, [0, 1]].astype(float).values
+        else:
+            coords = []
+            seen = set()
+            with open(self.iFile, "r") as f:
+                for line in f:
+                    parts = line.rstrip().split(self.seperator)
+                    for part in parts[1:]:
+                        cleaned = re.sub(r'[^0-9. ]', '', part).strip()
+                        if cleaned and cleaned not in seen:
+                            seen.add(cleaned)
+                            try:
+                                x, y = map(float, cleaned.split())
+                                coords.append([x, y])
+                            except ValueError:
+                                continue
+            # Convert to array
+            # coords = cp.array(coords)
+            coords = np.array(coords)
+
+        if self.DBtype == "csv":
+            coords = np.asarray(coords)
+
+        if coords.shape[0] == 0:
+            return
+
+        # Compute distances on the GPU using broadcasting
+        # This creates the full distance matrix, but we will not pull all of it to CPU
+        # dists = cp.linalg.norm(coords[:, None, :] - coords[None, :, :], axis=2)
+        dists = np.linalg.norm(coords[:, None, :] - coords[None, :, :], axis=2)
+        # Create a boolean mask for neighbors within given distance excluding self (distance==0)
+        within_dist = (dists <= self.maxEucledianDistance) & (dists > 0)
+
+        print(f"Number of points: {coords.shape[0]}")
+        print(f"Number of neighbors: {within_dist.sum()}")
+
+        # Open file for direct writing
+        with open(oFile, "w") as f:
+            # Process each row individually to keep the CPU memory footprint low.
+            for i in tqdm(range(coords.shape[0])):
+                # print(f"Processing point {i+1}/{coords.shape[0]}")
+                # Transfer only the i-th point and its corresponding neighbor mask to CPU
+                # point = cp.asnumpy(coords[i])
+                point = coords[i]
+                # neighbor_mask = cp.asnumpy(within_dist[i])
+                neighbor_mask = within_dist[i]
+                if neighbor_mask.any():
+                    # Write the reference point
+                    line = f"Point({point[0]}, {point[1]})"
+                    # Transfer only the neighbor points for the true mask.
+                    # neighbors = cp.asnumpy(coords[neighbor_mask])
+                    neighbors = coords[neighbor_mask]
+                    # Append each neighbor
+                    for neighbor in neighbors:
+                        # line += f"\tPoint({neighbor[0]} {neighbor[1]})"
+                        line += f"\tPoint({int(neighbor[0])}, {int(neighbor[1])})"
+                    f.write(line + "\n")
 
     def getNeighboringInformation(self):
         df = pd.DataFrame(['\t'.join(map(str, line)) for line in self.result], columns=['Neighbors'])
