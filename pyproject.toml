@@ -44,7 +44,9 @@ dependencies = [
   'networkx',
   'deprecated',
   'fastparquet',
-  'numba'
+  'numba',
+  'rasterio',
+  'fiona'
 ]
 
 [project.urls]
