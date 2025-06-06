@@ -97,28 +97,32 @@ class Gaussianmixture:
         self.df = dataframe.copy()
         self.df.columns = ['x', 'y'] + list(self.df.columns[2:])
         self.labelsDF = None
+        self.weights_ = None
+        self.means_ = None
+        self.startTime = None
+        self.endTime = None
+        self.memoryUSS = None
+        self.memoryRSS = None
 
-    def getStatistics(self, start_time):
+    def getRuntime(self):
         """
-        Prints execution time and memory usage statistics of the clustering operation.
-
-        :param start_time: Time.time() reference from before clustering.
-
-        This method prints:
-        - Total execution time in seconds.
-        - Memory usage (USS - Unique Set Size) in kilobytes (KB), representing the memory
-          uniquely used by the process.
-        - Memory usage (RSS - Resident Set Size) in kilobytes (KB), representing the total
-          physical memory used by the process.
+        Prints the total runtime of the clustering algorithm.
         """
-        print("Total Execution time of proposed Algorithm:", time.time() - start_time)
-        process = psutil.Process()
-        memory_uss_kb = process.memory_full_info().uss / 1024
-        print("Memory (USS) of proposed Algorithm in KB:", memory_uss_kb)
-        memory_rss_kb = process.memory_full_info().rss / 1024
-        print("Memory (RSS) of proposed Algorithm in KB:", memory_rss_kb)
+        print("Total Execution time of proposed Algorithm:", self.endTime - self.startTime, "seconds")
 
-    def clustering(self, n_components=1, max_iters=100, covariance_type="full", init_params='kmeans', random_state=0):
+    def getMemoryUSS(self):
+        """
+        Prints the memory usage (USS) of the process in kilobytes.
+        """
+        print("Memory (USS) of proposed Algorithm in KB:", self.memoryUSS)
+
+    def getMemoryRSS(self):
+        """
+        Prints the memory usage (RSS) of the process in kilobytes.
+        """
+        print("Memory (RSS) of proposed Algorithm in KB:", self.memoryRSS)
+
+    def run(self, n_components=1, max_iters=100, covariance_type="full", init_params='kmeans', random_state=0):
         """
         Performs Gaussian Mixture Model clustering on the feature columns.
 
@@ -129,7 +133,7 @@ class Gaussianmixture:
         :param random_state: Random seed to ensure reproducibility.
         :return: Tuple of (DataFrame with labels, array of component weights, array of component means).
         """
-        start_time = time.time()
+        self.startTime = time.time()
         data = self.df.drop(['x', 'y'], axis=1)
         data = data.to_numpy()
         gaussianMixture = GaussianMixture(n_components=n_components, max_iter=max_iters,
@@ -138,20 +142,48 @@ class Gaussianmixture:
         gaussianResult = gaussianMixture.predict(data)
         label = self.df[['x', 'y']]
         self.labelsDF = label.assign(labels=gaussianResult)
-        self.getStatistics(start_time)
-        return self.labelsDF, gaussianMixture.weights_, gaussianMixture.means_
+        self.weights_ = gaussianMixture.weights_
+        self.means_ = gaussianMixture.means_
 
-    def save(self, outputFile='GaussianMixtureLabels.csv'):
+        self.endTime = time.time()
+
+        process = psutil.Process()
+        self.memoryUSS = process.memory_full_info().uss / 1024
+        self.memoryRSS = process.memory_full_info().rss / 1024
+
+        return self.labelsDF, self.weights_, gaussianMixture.means_
+
+
+    def save(self,
+             outputFileLabels='GaussianMixtureLabels.csv',
+             outputFileWeights='GaussianMixtureWeights.csv',
+             outputFileMeans='GaussianMixtureMeans.csv'):
         """
-        Saves the clustering result (labels) into a CSV file.
-
-        :param outputFile: Path to the output CSV file.
+        Saves labels, weights, and means to separate CSV files.
         """
         if self.labelsDF is not None:
             try:
-                self.labelsDF.to_csv(outputFile, index=False)
-                print(f"Labels saved to: {outputFile}")
+                self.labelsDF.to_csv(outputFileLabels, index=False)
+                print(f"Labels saved to: {outputFileLabels}")
             except Exception as e:
                 print(f"Failed to save labels: {e}")
         else:
-            print("No labels to save. Please run clustering first.")
+            print("No labels to save. Please execute run() method first.")
+
+        if self.weights_ is not None:
+            try:
+                pd.DataFrame(self.weights_).to_csv(outputFileWeights, index=False, header=["weights"])
+                print(f"Weights saved to: {outputFileWeights}")
+            except Exception as e:
+                print(f"Failed to save weights: {e}")
+        else:
+            print("No weights to save. Please execute run() method first.")
+
+        if self.means_ is not None:
+            try:
+                pd.DataFrame(self.means_).to_csv(outputFileMeans, index=False)
+                print(f"Means saved to: {outputFileMeans}")
+            except Exception as e:
+                print(f"Failed to save means: {e}")
+        else:
+            print("No means to save. Please execute run() method first.")
