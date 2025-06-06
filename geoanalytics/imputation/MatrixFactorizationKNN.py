@@ -26,24 +26,44 @@ class MatrixFactorizationKNN:
         self.df = dataframe.copy()
         self.df.columns = ['x', 'y'] + list(self.df.columns[2:])
         self.imputedDF = None
+        self.startTime = None
+        self.endTime = None
+        self.memoryUSS = None
+        self.memoryRSS = None
 
-    def getStatistics(self, start_time):
-        print("Total Execution time of proposed Algorithm:", time.time() - start_time)
-        process = psutil.Process()
-        memory_uss_kb = process.memory_full_info().uss / 1024
-        print("Memory (USS) of proposed Algorithm in KB:", memory_uss_kb)
-        memory_rss_kb = process.memory_full_info().rss / 1024
-        print("Memory (RSS) of proposed Algorithm in KB:", memory_rss_kb)
+    def getRuntime(self):
+        """
+        Prints the total runtime of the clustering algorithm.
+        """
+        print("Total Execution time of proposed Algorithm:", self.endTime - self.startTime, "seconds")
+
+    def getMemoryUSS(self):
+        """
+        Prints the memory usage (USS) of the process in kilobytes.
+        """
+        print("Memory (USS) of proposed Algorithm in KB:", self.memoryUSS)
+
+    def getMemoryRSS(self):
+        """
+        Prints the memory usage (RSS) of the process in kilobytes.
+        """
+        print("Memory (RSS) of proposed Algorithm in KB:", self.memoryRSS)
 
 
-    def impute(self, k = 5):
+    def run(self, k = 5):
         start_time = time.time()
         xy = self.df[['x', 'y']].reset_index(drop=True)
         data = self.df.drop(['x', 'y'], axis=1).reset_index(drop=True)
         imputedArray = KNN(k=k).fit_transform(data)
         imputedData = pd.DataFrame(imputedArray, columns=data.columns)
         self.imputedDF = pd.concat([xy, imputedData], axis=1)
-        self.getStatistics(start_time)
+
+        self.endTime = time.time()
+
+        process = psutil.Process()
+        self.memoryUSS = process.memory_full_info().uss / 1024
+        self.memoryRSS = process.memory_full_info().rss / 1024
+
         return self.imputedDF
 
 
