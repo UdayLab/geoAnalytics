@@ -1,5 +1,11 @@
 
 
+
+#input parameters for the class
+
+      rasterDataframe, condition, thresholdValues, and minimumSupport
+      save(outputPatternFile)
+
 #Extract Data
 #data = self.df.drop(['x', 'y'], axis=1)
 
