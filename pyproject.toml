@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "geoanalytics"
-version = "2025.6.4.6"
+version = "2025.6.6.1"
 description = "This software is being developed at the University of Aizu, Aizu-Wakamatsu, Fukushima, Japan"
 readme = "README.md"
 requires-python = ">=3.5"
@@ -43,7 +43,8 @@ dependencies = [
   'discord.py',
   'networkx',
   'deprecated',
-  'fastparquet'
+  'fastparquet',
+  'numba'
 ]
 
 [project.urls]
