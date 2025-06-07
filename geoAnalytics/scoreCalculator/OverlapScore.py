@@ -19,7 +19,7 @@ import numpy as np
 from sklearn.cluster import KMeans
 
 class OverlapScore:
-    def __init__(self, TrainDF, TopkDF, startBandTrainDF, startBandTopkDF):
+    def __init__(self, TrainDF, TopkDF, startBandTrainDF = 2, startBandTopkDF = 2):
         self.TrainDF = TrainDF.iloc[:, startBandTrainDF:]
         self.TopkDF = TopkDF.iloc[:, startBandTopkDF:]
 

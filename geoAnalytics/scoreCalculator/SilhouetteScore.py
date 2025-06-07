@@ -19,7 +19,7 @@ import numpy as np
 from sklearn.metrics import silhouette_score
 
 class SilhouetteScore:
-    def __init__(self, TrainDF, TopkDF, startBandTrainDF, startBandTopkDF):
+    def __init__(self, TrainDF, TopkDF, startBandTrainDF = 2, startBandTopkDF = 2):
         self.TrainDF = TrainDF.iloc[:, startBandTrainDF:]
         self.TopkDF = TopkDF.iloc[:, startBandTopkDF:]
 

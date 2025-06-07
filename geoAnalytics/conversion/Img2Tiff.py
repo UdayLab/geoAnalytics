@@ -28,7 +28,7 @@ class Img2Tiff:
         if not self.dataset:
             raise FileNotFoundError(f"Could not open file: {self.inputFile}")
 
-    def convert(self):
+    def run(self):
         if self.dataset is None:
             self.load()
         gdal.Translate(self.outputFile, self.dataset)

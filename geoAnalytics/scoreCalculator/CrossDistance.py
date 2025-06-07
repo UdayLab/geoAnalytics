@@ -19,7 +19,7 @@ import numpy as np
 from scipy.spatial.distance import cdist
 
 class CrossDistance:
-    def __init__(self, TopkDF, TrainDF, startBandTopkDF, startBandTrainDF):
+    def __init__(self, TopkDF, TrainDF, startBandTopkDF = 2, startBandTrainDF = 2):
         self.TopkDF = TopkDF.iloc[:,startBandTopkDF:]
         self.TrainDF = TrainDF.iloc[:,startBandTrainDF:]
 
