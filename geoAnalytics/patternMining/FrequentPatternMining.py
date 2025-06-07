@@ -22,10 +22,14 @@ from PAMI.extras.dbStats.TransactionalDatabase import TransactionalDatabase
 from PAMI.frequentPattern.basic import FPGrowth
 
 class FrequentPatternMining:
-    def __init__(self, dataframe, outputTransactionPath='transactionDB.csv'):
+    def __init__(self, dataframe, minSup, databaseName, condition, thresholdValue):
         self.df = dataframe.copy()
-        self.outputTransactionPath = outputTransactionPath
+        self.minSup = minSup
+        self.outputFile = outputFile
+        self.condition = condition
+        self.thresholdValue = thresholdValue
         self.transactionDF = None
+        self.obj = None
 
     def prepareTransactionalDataframe(self):
         data = self.df.drop([0, 1], axis=1)
@@ -36,7 +40,7 @@ class FrequentPatternMining:
         self.transactionDF = newDF
         print("Prepared transactional DataFrame:", self.transactionDF.shape)
 
-    def convertToTransactionDB(self, condition='>=', thresholdValue=4000):
+    def convertToTransactionDB(self):
         obj = DF2DB.DF2DB(self.transactionDF)
         obj.convert2TransactionalDatabase(
             oFile=self.outputTransactionPath,
@@ -51,9 +55,14 @@ class FrequentPatternMining:
         obj.printStats()
         obj.plotGraphs()
 
-    def run(self, minSupport=8, outputFile='FrequentPatterns.txt'):
-        obj = FPGrowth.FPGrowth(self.outputTransactionPath, minSupport)
-        obj.startMine()
-        obj.printResults()
-        obj.save(outputFile)
+    def save(self, patternsFileName):
+        self.obj.save(self.outputFile)
+
+    def run(self):
+        self.prepareTransactionalDataframe()
+        self.convertToTransactionDB()
+        self.showDBstats()
+        self.obj = FPGrowth.FPGrowth(self.outputTransactionPath, minSupport)
+        self.obj.startMine()
+        self.obj.printResults()
         print(f"Frequent patterns saved to: {outputFile}")
