@@ -88,7 +88,7 @@ Useful links to utilize the services of this library were provided below:
 ***
 # Recent Updates
 
-- **Version 2025.04.29:** 
+- **Version 2025.06.04:** 
 In this latest version, the following updates have been made:
   - Included thirteen new algorithms in imputation, **BackwardFill**, **ForwardFill**, **HotDeck**, **Interpolation**, **KNNImputation**, **MatrixFactorization**, **MeanImputation**, **MedianImputation**, **MICEImputation**, **ModeImputation**, **MultipleImputation**, **NumberImputation**, and **SoftImputation** for filling nan values.
   - Test cases are implemented using geoanalytics package.
