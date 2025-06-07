@@ -29,23 +29,43 @@ class HDBScan:
         self.df = dataframe.copy()
         self.df.columns = ['x', 'y'] + list(self.df.columns[2:])
         self.labelsDF = None
+        self.startTime = None
+        self.endTime = None
+        self.memoryUSS = None
+        self.memoryRSS = None
 
-    def getStatistics(self, start_time):
-        print("Total Execution time of proposed Algorithm:", time.time() - start_time)
-        process = psutil.Process()
-        memory_uss_kb = process.memory_full_info().uss / 1024
-        print("Memory (USS) of proposed Algorithm in KB:", memory_uss_kb)
-        memory_rss_kb = process.memory_full_info().rss / 1024
-        print("Memory (RSS) of proposed Algorithm in KB:", memory_rss_kb)
+    def getRuntime(self):
+        """
+        Prints the total runtime of the clustering algorithm.
+        """
+        print("Total Execution time of proposed Algorithm:", self.endTime - self.startTime, "seconds")
 
-    def clustering(self, min_sample = 5, min_cluster_size = 10):
-        start_time = time.time()
+    def getMemoryUSS(self):
+        """
+        Prints the memory usage (USS) of the process in kilobytes.
+        """
+        print("Memory (USS) of proposed Algorithm in KB:", self.memoryUSS)
+
+    def getMemoryRSS(self):
+        """
+        Prints the memory usage (RSS) of the process in kilobytes.
+        """
+        print("Memory (RSS) of proposed Algorithm in KB:", self.memoryRSS)
+
+    def run(self, min_sample = 5, min_cluster_size = 10):
+        self.startTime = time.time()
         data = self.df.drop(['x', 'y'], axis=1)
         data = data.to_numpy()
         hdbs = hdbscan.HDBSCAN(min_samples=min_sample, min_cluster_size=min_cluster_size, core_dist_n_jobs=1).fit(data)
         label = self.df[['x', 'y']]
         self.labelsDF = label.assign(labels=hdbs.labels_)
-        self.getStatistics(start_time)
+
+        self.endTime = time.time()
+
+        process = psutil.Process()
+        self.memoryUSS = process.memory_full_info().uss / 1024
+        self.memoryRSS = process.memory_full_info().rss / 1024
+
         return self.labelsDF
 
     def save(self, outputFile='HDBScanLabels.csv'):
@@ -56,4 +76,4 @@ class HDBScan:
             except Exception as e:
                 print(f"Failed to save labels: {e}")
         else:
-            print("No labels to save. Please run clustering first.")
+            print("No labels to save. Please execute run() method first.")
