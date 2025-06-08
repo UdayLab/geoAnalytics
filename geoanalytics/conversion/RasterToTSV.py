@@ -27,7 +27,7 @@ class RasterToTSV:
         self.start_band = start_band
         self.end_band = end_band
         #self.header = ['coordinate'] + [f'-band{band}' for band in range(start_band, end_band + 1)]
-        self.header = ['x', 'y'] + [f'-band{band}' for band in range(start_band, end_band + 1)]
+        self.header = ['x', 'y'] + [f'{band}' for band in range(start_band, end_band + 1)]
 
     def convert(self):
         if os.path.exists(self.output_file):

@@ -26,8 +26,8 @@
 #Save the new dataframe as a file, say newDF.txt
 
 # Finding neighbors using Eucledian or Geodic distances
-##from geoAnalytics.extras.neighbours import FindNeighboursUsingEuclidean as eucl
-from geoAnalytics.extras.neighbours import  FindNeighboursUsingGeodesic as geodesic
+##from geoanalytics.extras.neighbours import FindNeighboursUsingEuclidean as eucl
+from geoanalytics.extras.neighbours import  FindNeighboursUsingGeodesic as geodesic
 
 obj = geodesic.FindNeighboursUsingGeodesic('newDF.txt',100,DBtype='trans')
 

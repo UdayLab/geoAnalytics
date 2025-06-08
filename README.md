@@ -172,10 +172,11 @@ $ python
 # first import geoanalytics 
 from geoanalytics.clustering import KMeans as alg
 import pandas as pd
-df = pd.read_csv('Moon.csv',header=None,sep=',')
+
+df = pd.read_csv('Moon.csv', header=None, sep=',')
 obj = alg.KMeans(dataframe=df)
 obj.elbowMethod()
-obj.clustering(k=4,max_iter=100)
+obj.clustering(k=4, max_iter=100)
 obj.save('KMeansLabels.csv')
 ```
 
