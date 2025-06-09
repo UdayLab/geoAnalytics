@@ -1,3 +1,19 @@
+# Forward Fill is an imputation method that fills NaNs using the previous valid value, with backward fill as a fallback for trailing NaNs.
+#
+# **Importing and Using the ForwardFill Class in a Python Program**
+#
+#         import pandas as pd
+#
+#         from geoAnalytics.imputation import ForwardFill
+#
+#         df = pd.read_csv('input.csv')
+#
+#         ff = ForwardFill(df)
+#
+#         imputed_df = ff.impute()
+#
+#         ff.save('ForwardFilled.csv')
+#
 __copyright__ = """
 Copyright (C)  2022 Rage Uday Kiran
 
@@ -21,7 +37,43 @@ from tqdm import tqdm
 import pandas as pd
 
 class ForwardFill:
+    """
+    **About this algorithm**
+
+    :**Description**: Forward Fill imputes missing values using the previous valid entry, with backward fill as a fallback for trailing NaNs.
+
+    :**Parameters**:    - **dataframe** (*pd.DataFrame*): Input dataset where the first two columns are assumed to be spatial ('x', 'y') and all remaining columns are treated as features to be imputed.
+
+    :**Attributes**:    - **df** (*pd.DataFrame*): Copy of the input data, with the first two columns renamed to 'x', 'y'.
+                        - **imputedDF** (*pd.DataFrame*): Output DataFrame after missing value imputation.
+
+    **Execution methods**
+
+    .. code-block:: python
+
+            import pandas as pd
+
+            from geoAnalytics.imputation import ForwardFill
+
+            df = pd.read_csv("input.csv")
+
+            ff = ForwardFill(df)
+
+            imputed_df = ff.impute()
+
+            ff.save("ForwardFilled.csv")
+
+    **Credits**
+
+    This implementation was created and revised under the guidance of Professor Rage Uday Kiran.
+    """
+
     def __init__(self, dataframe):
+        """
+        Constructor to initialize the ForwardFill object with input DataFrame.
+
+        :param dataframe: A pandas DataFrame with at least two spatial columns and feature columns.
+        """
         self.df = dataframe.copy()
         self.df.columns = ['x', 'y'] + list(self.df.columns[2:])
         self.imputedDF = None
@@ -32,7 +84,7 @@ class ForwardFill:
 
     def getRuntime(self):
         """
-        Prints the total runtime of the clustering algorithm.
+        Prints the total runtime of the algorithm.
         """
         print("Total Execution time of proposed Algorithm:", self.endTime - self.startTime, "seconds")
 
@@ -49,6 +101,11 @@ class ForwardFill:
         print("Memory (RSS) of proposed Algorithm in KB:", self.memoryRSS)
 
     def run(self):
+        """
+        Applies forward fill imputation followed by backward fill as fallback.
+
+        :return: A pandas DataFrame with the original spatial coordinates and imputed feature values.
+        """
         start_time = time.time()
         xy = self.df[['x', 'y']].reset_index(drop=True)
         data = self.df.drop(['x', 'y'], axis=1)
@@ -65,6 +122,11 @@ class ForwardFill:
 
 
     def save(self, outputFile='ForwardFilled.csv'):
+        """
+        Saves the imputed DataFrame to a CSV file.
+
+        :param outputFile: The filename for saving the DataFrame. Defaults to 'ForwardFilled.csv'.
+        """
         if self.imputedDF is not None:
             try:
                 self.imputedDF.to_csv(outputFile, index=False)

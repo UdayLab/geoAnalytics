@@ -1,3 +1,19 @@
+# Interpolation-based missing value imputation using linear estimation strategy.
+#
+# **Importing and Using the Interpolation Class in a Python Program**
+#
+#             import pandas as pd
+#
+#             from geoAnalytics.imputation import Interpolation
+#
+#             df = pd.read_csv('input.csv')
+#
+#             ip = Interpolation(df)
+#
+#             output = ip.impute()
+#
+#             ip.save('Interpolation.csv')
+#
 __copyright__ = """
 Copyright (C)  2022 Rage Uday Kiran
 
@@ -21,7 +37,45 @@ from tqdm import tqdm
 import pandas as pd
 
 class Interpolation:
+    """
+    **About this algorithm**
+
+    :**Description**: Interpolation is a missing data imputation technique that estimates NaN values using linear interpolation between known values. It fills values in both forward and backward directions to ensure completeness.
+
+    :**Parameters**:    - Dataset (pandas DataFrame) must be provided during object initialization.
+                        - No other parameters are required during instantiation.
+
+    :**Attributes**:    - **df** (*pd.DataFrame*) -- The input data with 'x', 'y' coordinates and feature columns.
+                        - **imputedDF** (*pd.DataFrame*) -- DataFrame containing 'x', 'y', and imputed values.
+
+    **Execution methods**
+
+    **Calling from a Python program**
+
+    .. code-block:: python
+
+            import pandas as pd
+
+            from geoAnalytics.imputation import Interpolation
+
+            df = pd.read_csv("input.csv")
+
+            ip = Interpolation(df)
+
+            output = ip.impute()
+
+            ip.save('Interpolation.csv')
+
+    **Credits**
+
+    This implementation was created by     and revised by   under the guidance of Professor Rage Uday Kiran.
+    """
     def __init__(self, dataframe):
+        """
+        Constructor to initialize the Interpolation object with the input DataFrame.
+
+        :param dataframe: pandas DataFrame containing at least columns ['x', 'y'] and feature columns.
+        """
         self.df = dataframe.copy()
         self.df.columns = ['x', 'y'] + list(self.df.columns[2:])
         self.imputedDF = None
@@ -32,7 +86,7 @@ class Interpolation:
 
     def getRuntime(self):
         """
-        Prints the total runtime of the clustering algorithm.
+        Prints the total runtime of the algorithm.
         """
         print("Total Execution time of proposed Algorithm:", self.endTime - self.startTime, "seconds")
 
@@ -50,6 +104,17 @@ class Interpolation:
 
 
     def run(self):
+        """
+        Performs linear interpolation to fill missing values in the dataset.
+
+        The method:
+        - Separates 'x' and 'y' columns from the rest of the data.
+        - Applies linear interpolation along each column.
+        - Uses both forward and backward filling to handle edge NaNs.
+        - Reconstructs the complete DataFrame with imputed values.
+
+        :return: Imputed DataFrame with original 'x', 'y' columns and interpolated features.
+        """
         start_time = time.time()
         xy = self.df[['x', 'y']].reset_index(drop=True)
         data = self.df.drop(['x', 'y'], axis=1).reset_index(drop=True)
@@ -66,6 +131,11 @@ class Interpolation:
 
 
     def save(self, outputFile='Interpolation.csv'):
+        """
+        Saves the imputed DataFrame to a CSV file.
+
+        :param outputFile: The filename for saving the DataFrame. Defaults to 'Interpolation.csv'.
+        """
         if self.imputedDF is not None:
             try:
                 self.imputedDF.to_csv(outputFile, index=False)

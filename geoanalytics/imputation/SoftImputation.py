@@ -1,3 +1,28 @@
+#SoftImputation uses `fancyimpute.SoftImpute` for low-rank matrix completion, excluding 'x' and 'y' columns and reattaching them after imputation.
+#
+# **Importing this algorithm into a Python program**
+#
+#           from geoanalytics.imputation import SoftImputation as alg
+#
+#           import pandas as pd
+#
+#           df = pd.read_csv('dataset.csv')
+#
+#           obj = alg.SoftImputation(df)
+#
+#           imputed_df = obj.run()
+#
+#           obj.save('SoftImputation.csv')
+#
+#           obj.getRuntime()
+#
+#           obj.getMemoryUSS()
+#
+#           obj.getMemoryRSS()
+#
+#           print("Data after Soft Imputation:", imputed_df)
+#
+
 __copyright__ = """
 Copyright (C)  2022 Rage Uday Kiran
 
@@ -21,9 +46,56 @@ from tqdm import tqdm
 import pandas as pd
 from fancyimpute import SoftImpute
 
-
 class SoftImputation:
+    """
+    **About this algorithm**
+
+    :**Description**: SoftImputation uses `fancyimpute.SoftImpute` to perform low-rank matrix completion for missing data via soft-thresholded SVD, excluding 'x' and 'y' during imputation and reporting runtime and memory usage.
+
+    :**Parameters**:    - **dataframe** (*pandas.DataFrame*) -- *Input dataset with 'x', 'y' spatial columns followed by numerical features, possibly with missing values.*
+
+    :**Attributes**:    - **df** (*pandas.DataFrame*) -- *Internal copy of the original input DataFrame with reordered columns.*
+                        - **imputedDF** (*pandas.DataFrame*) -- *Final DataFrame after applying SoftImpute.*
+                        - **startTime** (*float*) -- *Start time of the imputation.*
+                        - **endTime** (*float*) -- *End time of the imputation.*
+                        - **memoryUSS** (*float*) -- *Memory usage (USS in KB) during the run.*
+                        - **memoryRSS** (*float*) -- *Memory usage (RSS in KB) during the run.*
+
+    **Execution methods**
+
+    **Calling from a Python program**
+
+    .. code-block:: python
+
+            from geoanalytics.imputation import SoftImputation as alg
+
+            import pandas as pd
+
+            df = pd.read_csv('dataset.csv')
+
+            obj = alg.SoftImputation(df)
+
+            imputed_df = obj.run()
+
+            obj.save('SoftImputation.csv')
+
+            obj.getRuntime()
+
+            obj.getMemoryUSS()
+
+            obj.getMemoryRSS()
+
+            print("Data after Soft Imputation:", imputed_df)
+
+
+    **Credits**
+
+    The complete program was written by               and revised by              under the supervision of Professor Rage Uday Kiran.
+    """
     def __init__(self, dataframe):
+        """
+        Initializes the SoftImputation object with a copy of the dataframe.
+        """
         self.df = dataframe.copy()
         self.df.columns = ['x', 'y'] + list(self.df.columns[2:])
         self.imputedDF = None
@@ -34,7 +106,7 @@ class SoftImputation:
 
     def getRuntime(self):
         """
-        Prints the total runtime of the clustering algorithm.
+        Prints the total runtime of the algorithm.
         """
         print("Total Execution time of proposed Algorithm:", self.endTime - self.startTime, "seconds")
 
@@ -52,6 +124,15 @@ class SoftImputation:
 
 
     def run(self):
+        """
+        Executes SoftImpute on the dataset (excluding 'x' and 'y' columns),
+        and returns the imputed DataFrame with original coordinates.
+
+        Returns:
+        --------
+        imputedDF : pandas.DataFrame
+            The DataFrame with missing values imputed.
+        """
         start_time = time.time()
         xy = self.df[['x', 'y']].reset_index(drop=True)
         data = self.df.drop(['x', 'y'], axis=1).reset_index(drop=True)
@@ -68,6 +149,9 @@ class SoftImputation:
 
 
     def save(self, outputFile='SoftImputation.csv'):
+        """
+        Saves the imputed DataFrame to a CSV file.
+        """
         if self.imputedDF is not None:
             try:
                 self.imputedDF.to_csv(outputFile, index=False)

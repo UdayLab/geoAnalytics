@@ -1,3 +1,19 @@
+# BackwardFill imputes missing values using the next valid entry in each column, with forward fill as a fallback for initial NaNs.
+#
+# **Importing and Using the BackwardFill Class in a Python Program**
+#
+#         import pandas as pd
+#
+#         from geoAnalytics.imputation import BackwardFill
+#
+#         df = pd.read_csv('input.csv')
+#
+#         imputer = BackwardFill(df)
+#
+#         output = imputer.impute()
+#
+#         imputer.save('BackwardFilled.csv')
+#
 __copyright__ = """
 Copyright (C)  2022 Rage Uday Kiran
 
@@ -21,7 +37,42 @@ from tqdm import tqdm
 import pandas as pd
 
 class BackwardFill:
+    """
+    **About this algorithm**
+
+    :**Description**: Backward Fill imputes missing values using the next valid observation, with forward fill as a fallback for leading NaNs.
+
+    :**Parameters**:    - **dataframe** (*pd.DataFrame*) -- Input dataset containing spatial columns ('x', 'y') followed by features with potential missing values.
+
+    :**Attributes**:    - **df** (*pd.DataFrame*) -- Cleaned copy of input data with 'x', 'y' as first two columns.
+                        - **imputedDF** (*pd.DataFrame*) -- Resulting DataFrame after imputation, preserving spatial columns.
+
+    **Execution methods**
+
+    .. code-block:: python
+
+            import pandas as pd
+
+            from geoAnalytics.imputation import BackwardFill
+
+            df = pd.read_csv("input.csv")
+
+            imputer = BackwardFill(df)
+
+            output = imputer.impute()
+
+            imputer.save("BackwardFilled.csv")
+
+    **Credits**
+
+    This implementation was created and revised under the guidance of Professor Rage Uday Kiran.
+    """
     def __init__(self, dataframe):
+        """
+        Constructor to initialize the BackwardFill object with input DataFrame.
+
+        :param dataframe: A pandas DataFrame with at least two spatial columns and feature columns.
+        """
         self.df = dataframe.copy()
         self.df.columns = ['x', 'y'] + list(self.df.columns[2:])
         self.imputedDF = None
@@ -32,7 +83,7 @@ class BackwardFill:
 
     def getRuntime(self):
         """
-        Prints the total runtime of the clustering algorithm.
+        Prints the total runtime of the algorithm.
         """
         print("Total Execution time of proposed Algorithm:", self.endTime - self.startTime, "seconds")
 
@@ -49,6 +100,11 @@ class BackwardFill:
         print("Memory (RSS) of proposed Algorithm in KB:", self.memoryRSS)
 
     def run(self):
+        """
+        Applies backward fill followed by forward fill to impute missing values in the feature columns.
+
+        :return: A DataFrame containing original 'x', 'y' columns and imputed feature columns.
+        """
         start_time = time.time()
         xy = self.df[['x', 'y']].reset_index(drop=True)
         data = self.df.drop(['x', 'y'], axis=1)
@@ -64,6 +120,11 @@ class BackwardFill:
         return self.imputedDF
 
     def save(self, outputFile='BackwardFilled.csv'):
+        """
+        Saves the imputed DataFrame to a CSV file.
+
+        :param outputFile: Filename to save the resulting DataFrame.
+        """
         if self.imputedDF is not None:
             try:
                 self.imputedDF.to_csv(outputFile, index=False)
