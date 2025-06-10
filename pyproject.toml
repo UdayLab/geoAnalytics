@@ -46,7 +46,11 @@ dependencies = [
   'fastparquet',
   'numba',
   'rasterio',
-  'fiona'
+  'fiona',
+  'fuzzy-c-means',
+  'pami',
+  'torch',
+  'rasterio',
 ]
 
 [project.urls]
