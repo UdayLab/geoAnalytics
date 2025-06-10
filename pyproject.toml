@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "geoanalytics"
-version = "2025.6.10.1"
+version = "2025.6.10.3"
 description = "This software is being developed at the University of Aizu, Aizu-Wakamatsu, Fukushima, Japan"
 readme = "README.md"
 requires-python = ">=3.5"
@@ -44,13 +44,7 @@ dependencies = [
   'networkx',
   'deprecated',
   'fastparquet',
-  'numba',
-  'rasterio',
-  'fiona',
-  'fuzzy-c-means',
-  'pami',
-  'torch',
-  'rasterio',
+  'numba'
 ]
 
 [project.urls]
