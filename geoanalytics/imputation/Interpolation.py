@@ -4,7 +4,7 @@
 #
 #             import pandas as pd
 #
-#             from geoAnalytics.imputation import Interpolation
+#             from geoanalytics.imputation import Interpolation
 #
 #             df = pd.read_csv('input.csv')
 #
@@ -56,7 +56,7 @@ class Interpolation:
 
             import pandas as pd
 
-            from geoAnalytics.imputation import Interpolation
+            from geoanalytics.imputation import Interpolation
 
             df = pd.read_csv("input.csv")
 

@@ -4,7 +4,7 @@
 #
 #         import pandas as pd
 #
-#         from geoAnalytics.imputation import BackwardFill
+#         from geoanalytics.imputation import BackwardFill
 #
 #         df = pd.read_csv('input.csv')
 #
@@ -53,7 +53,7 @@ class BackwardFill:
 
             import pandas as pd
 
-            from geoAnalytics.imputation import BackwardFill
+            from geoanalytics.imputation import BackwardFill
 
             df = pd.read_csv("input.csv")
 

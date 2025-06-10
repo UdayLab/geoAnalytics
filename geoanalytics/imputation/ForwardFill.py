@@ -4,7 +4,7 @@
 #
 #         import pandas as pd
 #
-#         from geoAnalytics.imputation import ForwardFill
+#         from geoanalytics.imputation import ForwardFill
 #
 #         df = pd.read_csv('input.csv')
 #
@@ -53,7 +53,7 @@ class ForwardFill:
 
             import pandas as pd
 
-            from geoAnalytics.imputation import ForwardFill
+            from geoanalytics.imputation import ForwardFill
 
             df = pd.read_csv("input.csv")
 
