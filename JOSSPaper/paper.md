@@ -68,7 +68,7 @@ The Architecture of the geoanalystics library is outlined as follows:
 
     * *Clustering* [@kMeans;@kmeansPP;@dbscan;@spectralClustering],
     * *Classiﬁcation* [@fuzzyTimeSeriesClassifier;@dtw], 
-    * *Imputation* [@donders2006gentle;@zhang2016missing;@rubin2018multiple], 
+    * *Imputation* [@donders2006gentle;@zhang2016missing;@drenchsler2020multiple], 
     * *Pattern Mining* [@frequentPatternMining;@partialPeriodicPatterns;@periodicFrequentPatternMining;@pami],
     * *Data Visualization* [@gillies2019rasterio].
 
