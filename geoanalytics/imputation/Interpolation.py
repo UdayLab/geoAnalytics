@@ -115,7 +115,7 @@ class Interpolation:
 
         :return: Imputed DataFrame with original 'x', 'y' columns and interpolated features.
         """
-        start_time = time.time()
+        self.startTime = time.time()
         xy = self.df[['x', 'y']].reset_index(drop=True)
         data = self.df.drop(['x', 'y'], axis=1).reset_index(drop=True)
         interpolatedData = data.interpolate(method='linear', limit_direction='both')

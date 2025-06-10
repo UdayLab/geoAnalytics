@@ -120,7 +120,7 @@ class MultipleImputation:
 
         :return: pandas DataFrame with imputed values and original 'x', 'y' columns.
         """
-        start_time = time.time()
+        self.startTime = time.time()
         xy = self.df[['x', 'y']].reset_index(drop=True)
         data = self.df.drop(['x', 'y'], axis=1).reset_index(drop=True)
         imputedArray = IterativeImputer(estimator=LinearRegression(), n_nearest_features=n_nearest_features, max_iter=max_iter, random_state=random_state).fit_transform(data)

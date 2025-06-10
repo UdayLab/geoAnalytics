@@ -133,7 +133,7 @@ class SoftImputation:
         imputedDF : pandas.DataFrame
             The DataFrame with missing values imputed.
         """
-        start_time = time.time()
+        self.startTime = time.time()
         xy = self.df[['x', 'y']].reset_index(drop=True)
         data = self.df.drop(['x', 'y'], axis=1).reset_index(drop=True)
         imputedData = pd.DataFrame(SoftImpute().fit_transform(data), columns=data.columns)

@@ -106,7 +106,7 @@ class ForwardFill:
 
         :return: A pandas DataFrame with the original spatial coordinates and imputed feature values.
         """
-        start_time = time.time()
+        self.startTime = time.time()
         xy = self.df[['x', 'y']].reset_index(drop=True)
         data = self.df.drop(['x', 'y'], axis=1)
         imputed = data.fillna(method='ffill').fillna(method='bfill')
