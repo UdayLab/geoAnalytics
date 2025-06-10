@@ -122,7 +122,7 @@ class Gaussianmixture:
         """
         print("Memory (RSS) of proposed Algorithm in KB:", self.memoryRSS)
 
-    def run(self, n_components=1, max_iters=100, covariance_type="full", init_params='kmeans', random_state=0):
+    def run(self, n_components=4, max_iters=100, covariance_type="full", init_params='kmeans', random_state=0):
         """
         Performs Gaussian Mixture Model clustering on the feature columns.
 
