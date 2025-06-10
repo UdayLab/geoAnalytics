@@ -50,7 +50,7 @@ class HotDeck:
 
 
     def run(self):
-        start_time = time.time()
+        self.startTime = time.time()
         xy = self.df[['x', 'y']].reset_index(drop=True)
         data = self.df.drop(['x', 'y'], axis=1).reset_index(drop=True)
 

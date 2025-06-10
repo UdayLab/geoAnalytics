@@ -405,7 +405,7 @@ We invite and encourage all community members to contribute, report bugs, fix bu
 
 # Real World Case Studies
 
-1. Lunar data analytics <a target="_blank" href="https://colab.research.google.com/github/udayLab/PAMI/blob/main/notebooks/airPollutionAnalytics.ipynb"> <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+1. Lunar data analytics <a target="_blank" href="https://github.com/UdayLab/geoanalytics/blob/main/tests/clustering/test_FuzzyCMeans.ipynb"> <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
 
 
 [Go to Top](#table-of-contents)

@@ -51,7 +51,7 @@ class KNNImputation:
 
 
     def run(self, n_neighbors=5):
-        start_time = time.time()
+        self.startTime = time.time()
         xy = self.df[['x', 'y']].reset_index(drop=True)
         data = self.df.drop(['x', 'y'], axis=1).reset_index(drop=True)
         imputedArray = KNNImputer(n_neighbors=n_neighbors).fit_transform(data)
