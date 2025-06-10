@@ -4,7 +4,7 @@ from geoanalytics.conversion import DF2DB
 class RasterDF2DB:
     def __init__(self, dataframe):
         self.df = dataframe.copy()
-        self.df.columns = ['x', 'y'] + [str(i) for i in range(1, df.shape[1] - 1)]
+        self.df.columns = ['x', 'y'] + [str(i) for i in range(1, self.df.shape[1] - 1)]
         self.transactionDF = None
 
     def prepareTransactionalDataframe(self):
