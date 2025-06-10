@@ -1,3 +1,16 @@
+# csv2Parquet converts the input CSV file to a data frame, which is then transformed into a Parquet file.
+#
+# **Importing this algorithm into a python program**
+#
+#             from PAMI.extras.convert import csvParquet as cp
+#
+#             obj = cp.CSV2Parquet(sampleDB.csv, output.parquet, sep)
+#
+#             obj.convert()
+#
+#             obj.printStats()
+#
+
 __copyright__ = """
 Copyright (C)  2022 Rage Uday Kiran
 

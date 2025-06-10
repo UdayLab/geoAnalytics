@@ -1,3 +1,19 @@
+# MeanImputation fills missing values in a DataFrame using column-wise mean substitution, with performance tracking and optional CSV export.
+#
+# **Importing and Using the MeanImputation Class in a Python Program**
+#
+#             import pandas as pd
+#
+#             from geoanalytics.imputation import MeanImputation
+#
+#             df = pd.read_csv('data_with_nans.csv')
+#
+#             obj = MeanImputation(df)
+#
+#             imputed_df = obj.impute()
+#
+#             obj.save('MeanImputation.csv')
+#
 __copyright__ = """
 Copyright (C)  2022 Rage Uday Kiran
 
@@ -21,7 +37,47 @@ from tqdm import tqdm
 import pandas as pd
 
 class MeanImputation:
+    """
+    **About this algorithm**
+
+    :**Description**: MeanImputation fills missing values in a dataset by replacing them with the mean of their respective columns.
+
+    :**Parameters**:    - **dataframe** (*pd.DataFrame*) -- A Pandas DataFrame containing missing values.
+                        - The first two columns must represent spatial/positional attributes, typically 'x' and 'y'.
+
+    :**Attributes**:    - **df** (*pd.DataFrame*) -- Original dataframe with renamed first two columns ('x', 'y') and copied features.
+                        - **imputedDF** (*pd.DataFrame*) -- Stores the resulting dataframe after mean imputation.
+
+    **Execution methods**
+
+    **Calling from a Python program**
+
+    .. code-block:: python
+
+            import pandas as pd
+
+            from geoanalytics.imputation import MeanImputation
+
+            df = pd.read_csv('data_with_nans.csv')
+
+            obj = MeanImputation(df)
+
+            imputed_df = obj.impute()
+
+            obj.save('MeanImputation.csv')
+
+    **Credits**
+
+    The complete program was written by     and revised by     under the supervision of Professor Rage Uday Kiran.
+
+    """
     def __init__(self, dataframe):
+        """
+        Constructor to initialize the MeanImputation object.
+
+        :param dataframe: Input dataframe where missing values need to be imputed.
+        :type dataframe: pd.DataFrame
+        """
         self.df = dataframe.copy()
         self.df.columns = ['x', 'y'] + list(self.df.columns[2:])
         self.imputedDF = None
@@ -32,7 +88,7 @@ class MeanImputation:
 
     def getRuntime(self):
         """
-        Prints the total runtime of the clustering algorithm.
+        Prints the total runtime of the algorithm.
         """
         print("Total Execution time of proposed Algorithm:", self.endTime - self.startTime, "seconds")
 
@@ -50,6 +106,12 @@ class MeanImputation:
 
 
     def run(self):
+        """
+        Performs mean imputation on all feature columns (excluding x and y).
+
+        :return: DataFrame with 'x', 'y', and imputed features.
+        :rtype: pd.DataFrame
+        """
         start_time = time.time()
         xy = self.df[['x', 'y']].reset_index(drop=True)
         data = self.df.drop(['x', 'y'], axis=1).reset_index(drop=True)
@@ -66,6 +128,12 @@ class MeanImputation:
 
 
     def save(self, outputFile='MeanImputation.csv'):
+        """
+        Saves the imputed DataFrame to a CSV file.
+
+        :param outputFile: File path to save the output. Defaults to 'MeanImputation.csv'.
+        :type outputFile: str
+        """
         if self.imputedDF is not None:
             try:
                 self.imputedDF.to_csv(outputFile, index=False)
