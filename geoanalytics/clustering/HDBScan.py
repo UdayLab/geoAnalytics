@@ -68,11 +68,11 @@ class HDBScan:
 
         return self.labelsDF
 
-    def save(self, outputFile='HDBScanLabels.csv'):
+    def save(self, outputFileLabels='HDBScanLabels.csv'):
         if self.labelsDF is not None:
             try:
-                self.labelsDF.to_csv(outputFile, index=False)
-                print(f"Labels saved to: {outputFile}")
+                self.labelsDF.to_csv(outputFileLabels, index=False)
+                print(f"Labels saved to: {outputFileLabels}")
             except Exception as e:
                 print(f"Failed to save labels: {e}")
         else:

@@ -20,12 +20,12 @@ import rasterio
 
 
 class NetCDFViewer():
-    def __init__(self, tiffFile):
-        self.tiffFile = tiffFile
+    def __init__(self, inputFile):
+        self.inputFile = inputFile
         self.imageData = None
 
-    def displayImage(self, cmap='gray', title='TIFF Image'):
-        with rasterio.open(self.tiffFile) as src:
+    def run(self, cmap='gray', title='NC Image'):
+        with rasterio.open(self.inputFile) as src:
             self.imageData = src.read(1)
         if self.imageData is None:
             raise ValueError("Image not loaded")
