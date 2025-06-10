@@ -4,7 +4,7 @@
 #
 #             import pandas as pd
 #
-#             from geoAnalytics.imputation import MultipleImputation
+#             from geoanalytics.imputation import MultipleImputation
 #
 #             df = pd.read_csv('input.csv')
 #
@@ -58,7 +58,7 @@ class MultipleImputation:
 
             import pandas as pd
 
-            from geoAnalytics.imputation import MultipleImputation
+            from geoanalytics.imputation import MultipleImputation
 
             df = pd.read_csv("input.csv")
 
