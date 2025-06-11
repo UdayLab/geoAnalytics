@@ -1,3 +1,27 @@
+# MICEImputation uses `fancyimpute.IterativeImputer` for MICE-based missing data completion, excluding 'x' and 'y' spatial columns and reattaching them after imputation.
+#
+# **Importing this algorithm into a Python program**
+#
+#           from geoanalytics.imputation import MICEImputation as alg
+#
+#           import pandas as pd
+#
+#           df = pd.read_csv('dataset.csv')
+#
+#           obj = alg.MICEImputation(df)
+#
+#           imputed_df = obj.run()
+#
+#           obj.save('MICEImputation.csv')
+#
+#           obj.getRuntime()
+#
+#           obj.getMemoryUSS()
+#
+#           obj.getMemoryRSS()
+#
+#           print("Data after MICE Imputation:", imputed_df)
+
 __copyright__ = """
 Copyright (C)  2022 Rage Uday Kiran
 
@@ -22,7 +46,55 @@ import pandas as pd
 from fancyimpute import IterativeImputer as MICE
 
 class MICEImputation:
+    """
+    **About this algorithm**
+
+    :**Description**: MICEImputation uses `fancyimpute.IterativeImputer` to perform MICE-based missing data imputation via chained equations. It excludes 'x' and 'y' during imputation and reports runtime and memory usage.
+
+    :**Parameters**:    - **dataframe** (*pandas.DataFrame*) -- *Input dataset with 'x', 'y' spatial columns followed by numerical features, possibly with missing values.*
+
+    :**Attributes**:    - **df** (*pandas.DataFrame*) -- *Internal copy of the original input DataFrame with reordered columns.*
+                        - **imputedDF** (*pandas.DataFrame*) -- *Final DataFrame after applying MICE Imputation.*
+                        - **startTime** (*float*) -- *Start time of the imputation.*
+                        - **endTime** (*float*) -- *End time of the imputation.*
+                        - **memoryUSS** (*float*) -- *Memory usage (USS in KB) during the run.*
+                        - **memoryRSS** (*float*) -- *Memory usage (RSS in KB) during the run.*
+
+    **Execution methods**
+
+    **Calling from a Python program**
+
+    .. code-block:: python
+
+            from geoanalytics.imputation import MICEImputation as alg
+
+            import pandas as pd
+
+            df = pd.read_csv('dataset.csv')
+
+            obj = alg.MICEImputation(df)
+
+            imputed_df = obj.run()
+
+            obj.save('MICEImputation.csv')
+
+            obj.getRuntime()
+
+            obj.getMemoryUSS()
+
+            obj.getMemoryRSS()
+
+            print("Data after MICE Imputation:", imputed_df)
+
+
+    **Credits**
+
+    The complete program was written by               and revised by              under the supervision of Professor Rage Uday Kiran.
+    """
     def __init__(self, dataframe):
+        """
+        Initializes the MICEImputation object with a copy of the dataframe.
+        """
         self.df = dataframe.copy()
         self.df.columns = ['x', 'y'] + list(self.df.columns[2:])
         self.imputedDF = None
@@ -33,7 +105,7 @@ class MICEImputation:
 
     def getRuntime(self):
         """
-        Prints the total runtime of the clustering algorithm.
+        Prints the total runtime of the algorithm.
         """
         print("Total Execution time of proposed Algorithm:", self.endTime - self.startTime, "seconds")
 
@@ -51,6 +123,14 @@ class MICEImputation:
 
 
     def run(self):
+        """
+        Executes MICE Imputation on the dataset (excluding 'x' and 'y' columns), and returns the imputed DataFrame with original coordinates.
+
+        Returns:
+        --------
+        imputedDF : pandas.DataFrame
+            The DataFrame with missing values imputed.
+        """
         self.startTime = time.time()
         xy = self.df[['x', 'y']].reset_index(drop=True)
         data = self.df.drop(['x', 'y'], axis=1).reset_index(drop=True)
@@ -68,6 +148,9 @@ class MICEImputation:
 
 
     def save(self, outputFile='MICE.csv'):
+        """
+        Saves the imputed DataFrame to a CSV file.
+        """
         if self.imputedDF is not None:
             try:
                 self.imputedDF.to_csv(outputFile, index=False)
