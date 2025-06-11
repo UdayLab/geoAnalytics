@@ -1,3 +1,27 @@
+#MedianImputation performs missing value imputation by replacing missing feature values with the median of each corresponding column, while excluding 'x' and 'y' columns and reattaching them after imputation.
+#
+# **Importing this algorithm into a Python program**
+#
+#           from geoanalytics.imputation import MedianImputation as alg
+#
+#           import pandas as pd
+#
+#           df = pd.read_csv('dataset.csv')
+#
+#           obj = alg.MedianImputation(df)
+#
+#           imputed_df = obj.run()
+#
+#           obj.save('MedianImputation.csv')
+#
+#           obj.getRuntime()
+#
+#           obj.getMemoryUSS()
+#
+#           obj.getMemoryRSS()
+#
+#           print("Data after Median Imputation:", imputed_df)
+#
 __copyright__ = """
 Copyright (C)  2022 Rage Uday Kiran
 
@@ -21,7 +45,55 @@ from tqdm import tqdm
 import pandas as pd
 
 class MedianImputation:
+    """
+    **About this algorithm**
+
+    :**Description**: MedianImputation replaces missing values in feature columns with their respective medians, excluding 'x' and 'y' spatial columns, and reports runtime and memory usage after execution.
+
+    :**Parameters**:    - **dataframe** (*pandas.DataFrame*) -- *Input dataset with 'x', 'y' spatial columns followed by numerical features with potential missing values.*
+
+    :**Attributes**:    - **df** (*pandas.DataFrame*) -- *Internal copy of the original input DataFrame with reordered columns.*
+                        - **imputedDF** (*pandas.DataFrame*) -- *Final DataFrame after applying median imputation.*
+                        - **startTime** (*float*) -- *Start time of the imputation.*
+                        - **endTime** (*float*) -- *End time of the imputation.*
+                        - **memoryUSS** (*float*) -- *Memory usage (USS in KB) during the run.*
+                        - **memoryRSS** (*float*) -- *Memory usage (RSS in KB) during the run.*
+
+    **Execution methods**
+
+    **Calling from a Python program**
+
+    .. code-block:: python
+
+            from geoanalytics.imputation import MedianImputation as alg
+
+            import pandas as pd
+
+            df = pd.read_csv('dataset.csv')
+
+            obj = alg.MedianImputation(df)
+
+            imputed_df = obj.run()
+
+            obj.save('MedianImputation.csv')
+
+            obj.getRuntime()
+
+            obj.getMemoryUSS()
+
+            obj.getMemoryRSS()
+
+            print("Data after Median Imputation:", imputed_df)
+
+
+    **Credits**
+
+    The complete program was written by               and revised by              under the supervision of Professor Rage Uday Kiran.
+    """
     def __init__(self, dataframe):
+        """
+        Initializes the MedianImputation object with a copy of the dataframe.
+        """
         self.df = dataframe.copy()
         self.df.columns = ['x', 'y'] + list(self.df.columns[2:])
         self.imputedDF = None
@@ -50,6 +122,15 @@ class MedianImputation:
 
 
     def run(self):
+        """
+        Executes median imputation on the dataset (excluding 'x' and 'y' columns),
+        and returns the imputed DataFrame with original coordinates.
+
+        Returns:
+        --------
+        imputedDF : pandas.DataFrame
+            The DataFrame with missing values imputed using column medians.
+        """
         self.startTime = time.time()
         xy = self.df[['x', 'y']].reset_index(drop=True)
         data = self.df.drop(['x', 'y'], axis=1).reset_index(drop=True)
@@ -66,6 +147,9 @@ class MedianImputation:
 
 
     def save(self, outputFile='MedianImputation.csv'):
+        """
+        Saves the imputed DataFrame to a CSV file.
+        """
         if self.imputedDF is not None:
             try:
                 self.imputedDF.to_csv(outputFile, index=False)
