@@ -36,7 +36,7 @@
 - [Documentation](#Documentation) 
 - [Getting Help](#Getting-Help)
 - [Discussion and Development](#Discussion-and-Development)
-- [Contributors](#Contributors)
+- [Contribution to geoAnalytics](#Contribution to geoAnalytics)
 - [Tutorials](#tutorials)
   - [Raster conversion](#Raster-conversion)
   - [Imputation](#0-association-rule-mining)
@@ -401,7 +401,23 @@ In our GitHub repository, the primary platform for discussing development-relate
 
 We invite and encourage all community members to contribute, report bugs, fix bugs, enhance documentation, propose improvements, and share their creative ideas.
 
+***
+# Tutorials
+### 0. Clustering
 
+| Clustering                                                                                                                                                                                                                                           |
+|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| KMeans <a target="_blank" href="https://github.com/UdayLab/geoanalytics/blob/main/tests/clustering/test_KMeans.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>                                  |
+| KMeansPP <a target="_blank" href="https://github.com/UdayLab/geoanalytics/blob/main/tests/clustering/test_KMeansPP.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>                              |
+| MEANshift <a target="_blank" href="https://github.com/UdayLab/geoanalytics/blob/main/tests/clustering/test_MEANshift.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>                            |
+| AffinityPropagation <a target="_blank" href="https://github.com/UdayLab/geoanalytics/blob/main/tests/clustering/test_AffinityPropagationWrapper.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a> |
+| Agglomerative <a target="_blank" href="https://github.com/UdayLab/geoanalytics/blob/main/tests/clustering/test_Agglomerative.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>                    |
+| DBScan <a target="_blank" href="https://github.com/UdayLab/geoanalytics/blob/main/tests/clustering/test_DBScan.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>                                  |
+| FuzzyCMeans <a target="_blank" href="https://github.com/UdayLab/geoanalytics/blob/main/tests/clustering/test_FuzzyCMeans.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>                        |
+| Gaussianmixture <a target="_blank" href="https://github.com/UdayLab/geoanalytics/blob/main/tests/clustering/test_Gaussianmixture.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>                |
+| HDBScan <a target="_blank" href="https://github.com/UdayLab/geoanalytics/blob/main/tests/clustering/test_HDBScan.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>                                |
+| OpticsClustering <a target="_blank" href="https://github.com/UdayLab/geoanalytics/blob/main/tests/clustering/test_OpticsClustering.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>              |
+| Spectral <a target="_blank" href="https://github.com/UdayLab/geoanalytics/blob/main/tests/clustering/test_Spectral.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>                              |
 
 # Real World Case Studies
 
