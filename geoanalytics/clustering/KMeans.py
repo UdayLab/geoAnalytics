@@ -165,6 +165,9 @@ class KMeans:
         return self.labelsDF, self.centers
 
     def save(self, outputFileLabels='KMeansLabels.csv', outputFileCenters='KMeansCenters.csv'):
+        """
+        Saves the imputed DataFrame to a CSV file.
+        """
         if self.labelsDF is not None:
             try:
                 self.labelsDF.to_csv(outputFileLabels, index=False)
