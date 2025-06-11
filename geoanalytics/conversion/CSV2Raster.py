@@ -1,16 +1,13 @@
-# csv2Parquet converts the input CSV file to a data frame, which is then transformed into a Parquet file.
+# CSV2Raster converts a tabular CSV file containing spatial (x, y) and attribute data into a raster format (NetCDF or GeoTIFF).
 #
-# **Importing this algorithm into a python program**
+# **Importing and Using the CSV2Raster Class in a Python Program**
 #
-#             from PAMI.extras.convert import csvParquet as cp
+#         from geoanalytics.conversion import CSV2Raster
 #
-#             obj = cp.CSV2Parquet(sampleDB.csv, output.parquet, sep)
+#         converter = CSV2Raster(inputFile="data.csv", outputFile="output.nc", sep=",", header=None)
 #
-#             obj.convert()
+#         converter.run()
 #
-#             obj.printStats()
-#
-
 __copyright__ = """
 Copyright (C)  2022 Rage Uday Kiran
 
@@ -35,7 +32,49 @@ import random
 import subprocess
 
 class CSV2Raster:
+    """
+    **About this algorithm**
+
+    :**Description**: CSV2Raster converts a structured CSV file with spatial coordinates (x, y) and attributes into raster format (NetCDF or GeoTIFF). It utilizes GDAL for rasterization and CDO for NetCDF operations.
+
+    :**Parameters**:    - **inputFile** (*str*): Path to the input CSV file.
+                        - **outputFile** (*str*): Desired name of the output raster file. Default is 'output.nc'.
+                        - **sep** (*str*): Delimiter used in the CSV file. Default is space `" "`.
+                        - **header** (*int* or *None*): Whether to consider the CSV file's first row as header. Default is `None`.
+                        - **dataframe** (*pd.DataFrame* or *str*): Optional DataFrame input (used if `inputFile` is not provided).
+
+    :**Attributes**:    - **inputFile** (*str*): Path of the input CSV file.
+                - **inputfileSep** (*str*): CSV field separator.
+                - **header** (*int* or *None*): Header configuration for the CSV file.
+                - **dataFrame** (*pd.DataFrame*): Loaded and processed data for conversion.
+                - **tempOut** (*str*): Temporary output file name to manage formats.
+                - **outputFile** (*str*): Final raster output file (default `output.nc`).
+
+    **Execution methods**
+
+    .. code-block:: python
+
+            from geoanalytics.conversion import CSV2Raster
+
+            converter = CSV2Raster(inputFile='input.csv', outputFile='converted.tif', sep=',')
+
+            converter.run()
+
+    **Credits**
+
+    This implementation was created and revised under the guidance of Professor Rage Uday Kiran.
+    """
+
     def __init__(self, inputFile='', outputFile='output.nc', sep=" ", header = None, dataframe=''):
+        """
+        Constructor to initialize the CSV2Raster converter.
+
+        :param input_file: Path to the CSV file.
+        :param output_file: Target output filename (NetCDF or GeoTIFF).
+        :param sep: Delimiter used in the CSV file.
+        :param dataframe: Optional Pandas DataFrame if data is already loaded.
+        """
+
         self.inputFile = inputFile
         self.inputfileSep = sep
         self.header = header
@@ -44,6 +83,18 @@ class CSV2Raster:
         self.dataFrame = dataframe
 
     def run(self):
+        """
+        Converts the CSV data to raster format using GDAL and CDO.
+
+        1. Load CSV data into a Pandas DataFrame (if not already provided).
+        2. Sort the data by spatial coordinates ('y', then 'x').
+        3. Convert each feature column into a temporary NetCDF file using GDAL.
+        4. Rename the default variable 'Band1' to actual column names using `ncrename`.
+        5. Concatenate all NetCDF files into a single file using `cdo cat`.
+        6. Convert to final output format: NetCDF or GeoTIFF.
+        7. Clean up temporary files.
+        """
+
         if self.inputFile != '':
             self.dataFrame = pd.read_csv(self.inputFile, sep=self.inputfileSep, header=None)
 
