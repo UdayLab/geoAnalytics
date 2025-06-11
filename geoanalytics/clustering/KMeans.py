@@ -1,17 +1,22 @@
 # K-means is a popular and efficient clustering algorithm that partitions data into K distinct groups by iteratively minimizing the distance between data points and their assigned cluster centroids.
+
+# **Importing this algorithm into a Python program**
 #
-# **Importing this algorithm into a python program**
+#           from geoanalytics.clustering import KMeans as alg
 #
-#             import geoanalytics.clustering.kMeans as alg
+#           import pandas as pd
 #
-#             dataframe = df # read the dataframe with pandas
+#           df = pd.read_csv('dataset.csv')
 #
-#             obj = alg.kMeans(dataframe)
+#           obj = alg.KMeans(df)
 #
-#             obj.elbowMethod()
+#           obj.elbowMethod()
 #
-#             obj.run(6, max_iter=100) # here 6 represents number of clusters
+#           labels, centers = obj.clustering(k=3)
 #
+#           print("Clustered Data with Labels:\n", labels)
+#
+#           print("Cluster Centers:\n", centers)
 
 
 
@@ -42,7 +47,50 @@ import pandas as pd
 
 
 class KMeans:
+    """
+    **About this algorithm**
+
+    :**Description**:   KMeans clusters data into k groups using scikit-learn's algorithm, excluding 'x' and 'y' spatial columns. It supports elbow plot visualization, and tracks runtime and memory usage.
+
+    :**Parameters**:    - **dataframe** (*pandas.DataFrame*) -- *Input dataset with 'x', 'y' spatial columns and other features.*
+                        - **k** (*int*) -- *Number of clusters for the algorithm.*
+                        - **max_iter** (*int*) -- *Maximum number of iterations for convergence.*
+                        - **sep** (*str*) -- *Separator (default is tab-space if reading from file, not used in this context).*
+
+    :**Attributes**:    - **df** (*pandas.DataFrame*) -- *Internal copy of the input DataFrame with column order ['x', 'y', features...].*
+                        - **memory_kb** (*float*) -- *Memory used in kilobytes (USS) during clustering.*
+                        - **runtime_sec** (*float*) -- *Runtime duration of clustering in seconds.*
+
+    **Execution methods**
+
+    **Calling from a Python program**
+
+    .. code-block:: python
+
+            from geoanalytics.clustering import KMeans as alg
+
+            import pandas as pd
+
+            df = pd.read_csv('dataset.csv')
+
+            obj = alg.KMeans(df)
+
+            obj.elbowMethod()
+
+            labels, centers = obj.clustering(k=3)
+
+            print("Clustered Data with Labels:\n", labels)
+
+            print("Cluster Centers:\n", centers)
+
+    **Credits**
+
+    The complete program was written by               and revised by              under the supervision of Professor Rage Uday Kiran.
+    """
     def __init__(self, dataframe):
+        """
+        Initializes the KMeans object by standardizing the column order and copying the dataframe.
+        """
         self.df = dataframe.copy()
         self.df.columns = ['x', 'y'] + list(self.df.columns[2:])
         self.labelsDF = None
@@ -54,7 +102,7 @@ class KMeans:
 
     def getRuntime(self):
         """
-        Prints the total runtime of the clustering algorithm.
+        Computes and prints the runtime and USS memory used by the process.
         """
         print("Total Execution time of proposed Algorithm:", self.endTime - self.startTime, "seconds")
 
@@ -71,6 +119,10 @@ class KMeans:
         print("Memory (RSS) of proposed Algorithm in KB:", self.memoryRSS)
 
     def elbowMethod(self):
+        """
+        Plots the elbow graph to help determine the optimal number of clusters (k).
+        Uses WCSS (Within-Cluster Sum of Squares) and excludes 'x', 'y' from the computation.
+        """
         wcss = []
         k_values = range(1, 11)
         data = self.df.drop(['x', 'y'], axis=1)
@@ -86,6 +138,16 @@ class KMeans:
         plt.show()
 
     def run(self, k = 4, max_iter=100):
+        """
+        Applies KMeans clustering to the dataset, excluding 'x' and 'y', and returns labeled data and cluster centers.
+
+        Returns:
+        --------
+        labels : pandas.DataFrame
+            DataFrame containing 'x', 'y', and the predicted cluster labels.
+        centers : numpy.ndarray
+            Array of shape (k, n_features) representing the coordinates of cluster centers.
+        """
         self.startTime = time.time()
         data = self.df.drop(['x', 'y'], axis=1)
         data = data.to_numpy()
