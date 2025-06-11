@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "geoanalytics"
-version = "2025.6.11.2"
+version = "2025.6.12.1"
 description = "This software is being developed at the University of Aizu, Aizu-Wakamatsu, Fukushima, Japan"
 readme = "README.md"
 requires-python = ">=3.5"
