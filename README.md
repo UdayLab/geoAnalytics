@@ -38,7 +38,7 @@
 - [Discussion and Development](#Discussion-and-Development)
 - [Contribution to geoAnalytics](#Contribution-to-geoAnalytics)
 - [Tutorials](#tutorials)
-    - [Clustering](#0. Clustering)
+    - [Clustering](#0-Clustering)
     - [Raster conversion](#Raster-conversion)
     - [Imputation](#0-association-rule-mining)
     - [Normalization](#1-pattern-mining-in-binary-transactional-databases)
