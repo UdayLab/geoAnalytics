@@ -44,11 +44,11 @@ class CSV2Raster:
                         - **dataframe** (*pd.DataFrame* or *str*): Optional DataFrame input (used if `inputFile` is not provided).
 
     :**Attributes**:    - **inputFile** (*str*): Path of the input CSV file.
-                - **inputfileSep** (*str*): CSV field separator.
-                - **header** (*int* or *None*): Header configuration for the CSV file.
-                - **dataFrame** (*pd.DataFrame*): Loaded and processed data for conversion.
-                - **tempOut** (*str*): Temporary output file name to manage formats.
-                - **outputFile** (*str*): Final raster output file (default `output.nc`).
+                        - **inputfileSep** (*str*): CSV field separator.
+                        - **header** (*int* or *None*): Header configuration for the CSV file.
+                        - **dataFrame** (*pd.DataFrame*): Loaded and processed data for conversion.
+                        - **tempOut** (*str*): Temporary output file name to manage formats.
+                        - **outputFile** (*str*): Final raster output file (default `output.nc`).
 
     **Execution methods**
 
