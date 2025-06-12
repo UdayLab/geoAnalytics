@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean &mdash; geoanalytics 2025.12.06 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            geoanalytics
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">geoanalytics</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">geoanalytics</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean</h1><div class="highlight"><pre>
+<span></span><span class="c1"># findNeighboursUsingEuclidean is a code used to create a neighbourhood file using Euclidean distance.</span>
+<span class="c1">#</span>
+<span class="c1">#  **Importing this algorithm into a python program**</span>
+<span class="c1"># --------------------------------------------------------</span>
+<span class="c1">#</span>
+<span class="c1">#     from PAMI.extras.neighbours import findNeighboursUsingEuclidean as db</span>
+<span class="c1">#</span>
+<span class="c1">#     obj = db.findNeighboursUsingGeodesic(iFile, oFile, 10, &quot;\t&quot;)</span>
+<span class="c1">#</span>
+<span class="c1">#     obj.save()</span>
+<span class="c1">#</span>
+
+
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Copyright (C)  2021 Rage Uday Kiran</span>
+
+<span class="s2">     This program is free software: you can redistribute it and/or modify</span>
+<span class="s2">     it under the terms of the GNU General Public License as published by</span>
+<span class="s2">     the Free Software Foundation, either version 3 of the License, or</span>
+<span class="s2">     (at your option) any later version.</span>
+
+<span class="s2">     This program is distributed in the hope that it will be useful,</span>
+<span class="s2">     but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="s2">     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="s2">     GNU General Public License for more details.</span>
+
+<span class="s2">     You should have received a copy of the GNU General Public License</span>
+<span class="s2">     along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sqrt</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">psutil</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span><span class="nn">tqdm</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+
+<div class="viewcode-block" id="FindNeighboursUsingEuclidean"><a class="viewcode-back" href="../../../../geoanalytics.extras.neighbours.html#geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean.FindNeighboursUsingEuclidean">[docs]</a><span class="k">class</span> <span class="nc">FindNeighboursUsingEuclidean</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class create a neighbourhood file using euclid distance.</span>
+
+<span class="sd">    :Attribute:</span>
+
+<span class="sd">        :param iFile : file</span>
+<span class="sd">            Input file name or path of the input file</span>
+<span class="sd">        :param maxDist : int</span>
+<span class="sd">            The user can specify maxEuclideanDistance.</span>
+<span class="sd">            This program find pairs of values whose Euclidean distance is less than or equal to maxEucledianDistace</span>
+<span class="sd">            and store the pairs.</span>
+<span class="sd">        :param  sep: str :</span>
+<span class="sd">                    This variable is used to distinguish items from one another in a transaction. The default seperator is tab space. However, the users can override their default separator.</span>
+
+<span class="sd">    :Methods:</span>
+
+<span class="sd">        mine()</span>
+<span class="sd">            find and store the pairs of values whose Euclidean distance is less than or equal to maxEucledianDistace.</span>
+<span class="sd">        getFileName()</span>
+<span class="sd">            This function returns output file name.</span>
+
+<span class="sd">    **Importing this algorithm into a python program**</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">            from PAMI.extras.neighbours import findNeighboursUsingEuclidean as db</span>
+
+<span class="sd">            obj = db.findNeighboursUsingEuclidean(iFile, oFile, 10, &quot;\t&quot;)</span>
+
+<span class="sd">            obj.save()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iFile</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">maxDist</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">DBtype</span><span class="o">=</span><span class="s2">&quot;csv&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iFile</span> <span class="o">=</span> <span class="n">iFile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxEucledianDistance</span> <span class="o">=</span> <span class="n">maxDist</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seperator</span> <span class="o">=</span> <span class="n">sep</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DBtype</span> <span class="o">=</span> <span class="n">DBtype</span>
+
+<div class="viewcode-block" id="FindNeighboursUsingEuclidean.createAndSave"><a class="viewcode-back" href="../../../../geoanalytics.extras.neighbours.html#geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean.FindNeighboursUsingEuclidean.createAndSave">[docs]</a>    <span class="k">def</span> <span class="nf">createAndSave</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">oFile</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="c1"># Load coordinates</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">DBtype</span> <span class="o">==</span> <span class="s2">&quot;csv&quot;</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iFile</span><span class="p">)</span>
+            <span class="n">coords</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">coords</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">seen</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iFile</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">parts</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seperator</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+                        <span class="n">cleaned</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^0-9. ]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">part</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="n">cleaned</span> <span class="ow">and</span> <span class="n">cleaned</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+                            <span class="n">seen</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">cleaned</span><span class="p">)</span>
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">cleaned</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+                                <span class="n">coords</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">])</span>
+                            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                                <span class="k">continue</span>
+            <span class="c1"># Convert to array</span>
+            <span class="c1"># coords = cp.array(coords)</span>
+            <span class="n">coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">DBtype</span> <span class="o">==</span> <span class="s2">&quot;csv&quot;</span><span class="p">:</span>
+            <span class="n">coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Compute distances on the GPU using broadcasting</span>
+        <span class="c1"># This creates the full distance matrix, but we will not pull all of it to CPU</span>
+        <span class="c1"># dists = cp.linalg.norm(coords[:, None, :] - coords[None, :, :], axis=2)</span>
+        <span class="n">dists</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">coords</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">coords</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="c1"># Create a boolean mask for neighbors within given distance excluding self (distance==0)</span>
+        <span class="n">within_dist</span> <span class="o">=</span> <span class="p">(</span><span class="n">dists</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxEucledianDistance</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">dists</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of points: </span><span class="si">{</span><span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of neighbors: </span><span class="si">{</span><span class="n">within_dist</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Open file for direct writing</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">oFile</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="c1"># Process each row individually to keep the CPU memory footprint low.</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">coords</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+                <span class="c1"># print(f&quot;Processing point {i+1}/{coords.shape[0]}&quot;)</span>
+                <span class="c1"># Transfer only the i-th point and its corresponding neighbor mask to CPU</span>
+                <span class="c1"># point = cp.asnumpy(coords[i])</span>
+                <span class="n">point</span> <span class="o">=</span> <span class="n">coords</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="c1"># neighbor_mask = cp.asnumpy(within_dist[i])</span>
+                <span class="n">neighbor_mask</span> <span class="o">=</span> <span class="n">within_dist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">neighbor_mask</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                    <span class="c1"># Write the reference point</span>
+                    <span class="n">line</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Point(</span><span class="si">{</span><span class="n">point</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">point</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span>
+                    <span class="c1"># Transfer only the neighbor points for the true mask.</span>
+                    <span class="c1"># neighbors = cp.asnumpy(coords[neighbor_mask])</span>
+                    <span class="n">neighbors</span> <span class="o">=</span> <span class="n">coords</span><span class="p">[</span><span class="n">neighbor_mask</span><span class="p">]</span>
+                    <span class="c1"># Append each neighbor</span>
+                    <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">neighbors</span><span class="p">:</span>
+                        <span class="c1"># line += f&quot;\tPoint({neighbor[0]} {neighbor[1]})&quot;</span>
+                        <span class="n">line</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Point(</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">neighbor</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">neighbor</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s2">)&quot;</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FindNeighboursUsingEuclidean.getNeighboringInformation"><a class="viewcode-back" href="../../../../geoanalytics.extras.neighbours.html#geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean.FindNeighboursUsingEuclidean.getNeighboringInformation">[docs]</a>    <span class="k">def</span> <span class="nf">getNeighboringInformation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">line</span><span class="p">))</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Neighbors&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">df</span></div>
+
+<div class="viewcode-block" id="FindNeighboursUsingEuclidean.getRuntime"><a class="viewcode-back" href="../../../../geoanalytics.extras.neighbours.html#geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean.FindNeighboursUsingEuclidean.getRuntime">[docs]</a>    <span class="k">def</span> <span class="nf">getRuntime</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the runtime of the transactional database</span>
+
+<span class="sd">        :return: the runtime of the transactional database</span>
+
+
+<span class="sd">        :rtype: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_endTime</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_startTime</span></div>
+
+<div class="viewcode-block" id="FindNeighboursUsingEuclidean.getMemoryUSS"><a class="viewcode-back" href="../../../../geoanalytics.extras.neighbours.html#geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean.FindNeighboursUsingEuclidean.getMemoryUSS">[docs]</a>    <span class="k">def</span> <span class="nf">getMemoryUSS</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+
+        <span class="n">process</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_memoryUSS</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">memory_full_info</span><span class="p">()</span><span class="o">.</span><span class="n">uss</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_memoryUSS</span></div>
+
+<div class="viewcode-block" id="FindNeighboursUsingEuclidean.getMemoryRSS"><a class="viewcode-back" href="../../../../geoanalytics.extras.neighbours.html#geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean.FindNeighboursUsingEuclidean.getMemoryRSS">[docs]</a>    <span class="k">def</span> <span class="nf">getMemoryRSS</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+
+        <span class="n">process</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_memoryRSS</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">memory_info</span><span class="p">()</span><span class="o">.</span><span class="n">rss</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_memoryRSS</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="n">FindNeighboursUsingEuclidean</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Vanitha Kattumuri.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

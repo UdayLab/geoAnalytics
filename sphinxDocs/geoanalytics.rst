@@ -9,8 +9,12 @@ Subpackages
 
    geoanalytics.clustering
    geoanalytics.conversion
+   geoanalytics.extras
    geoanalytics.imputation
    geoanalytics.oneClassClassifiers
+   geoanalytics.patternMining
+   geoanalytics.scoreCalculator
+   geoanalytics.visualization
 
 Submodules
 ----------

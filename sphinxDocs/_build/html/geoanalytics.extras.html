@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>geoanalytics.extras package &mdash; geoanalytics 2025.12.06 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="geoanalytics.extras.database package" href="geoanalytics.extras.database.html" />
+    <link rel="prev" title="geoanalytics.conversion package" href="geoanalytics.conversion.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            geoanalytics
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">geoanalytics</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="geoanalytics.html">geoanalytics package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="geoanalytics.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="geoanalytics.clustering.html">geoanalytics.clustering package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="geoanalytics.conversion.html">geoanalytics.conversion package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">geoanalytics.extras package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="geoanalytics.imputation.html">geoanalytics.imputation package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="geoanalytics.oneClassClassifiers.html">geoanalytics.oneClassClassifiers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="geoanalytics.patternMining.html">geoanalytics.patternMining package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="geoanalytics.scoreCalculator.html">geoanalytics.scoreCalculator package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="geoanalytics.visualization.html">geoanalytics.visualization package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#module-geoanalytics.analytics">geoanalytics.analytics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#module-geoanalytics.clustering">geoanalytics.clustering module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#module-geoanalytics.config">geoanalytics.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#geoanalytics-csv2raster-module">geoanalytics.csv2raster module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#module-geoanalytics.oneclassClassifiers">geoanalytics.oneclassClassifiers module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#module-geoanalytics.plotGUI">geoanalytics.plotGUI module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#geoanalytics-raster2csv-module">geoanalytics.raster2CSV module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#geoanalytics-repository-module">geoanalytics.repository module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#module-geoanalytics.scoreCalculator">geoanalytics.scoreCalculator module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#module-geoanalytics">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">geoanalytics</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">geoanalytics</a></li>
+          <li class="breadcrumb-item"><a href="geoanalytics.html">geoanalytics package</a></li>
+      <li class="breadcrumb-item active">geoanalytics.extras package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/geoanalytics.extras.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="geoanalytics-extras-package">
+<h1>geoanalytics.extras package<a class="headerlink" href="#geoanalytics-extras-package" title="Permalink to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="geoanalytics.extras.database.html">geoanalytics.extras.database package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="geoanalytics.extras.database.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geoanalytics.extras.database.html#module-geoanalytics.extras.database.repository">geoanalytics.extras.database.repository module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geoanalytics.extras.database.html#module-geoanalytics.extras.database">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="geoanalytics.extras.neighbours.html">geoanalytics.extras.neighbours package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="geoanalytics.extras.neighbours.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geoanalytics.extras.neighbours.html#module-geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean">geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geoanalytics.extras.neighbours.html#module-geoanalytics.extras.neighbours.FindNeighboursUsingGeodesic">geoanalytics.extras.neighbours.FindNeighboursUsingGeodesic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geoanalytics.extras.neighbours.html#module-geoanalytics.extras.neighbours">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="geoanalytics.extras.visualize.html">geoanalytics.extras.visualize package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="geoanalytics.extras.visualize.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geoanalytics.extras.visualize.html#module-geoanalytics.extras.visualize.visualizePatterns">geoanalytics.extras.visualize.visualizePatterns module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geoanalytics.extras.visualize.html#module-geoanalytics.extras.visualize">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-geoanalytics.extras">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-geoanalytics.extras" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="geoanalytics.conversion.html" class="btn btn-neutral float-left" title="geoanalytics.conversion package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="geoanalytics.extras.database.html" class="btn btn-neutral float-right" title="geoanalytics.extras.database package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Vanitha Kattumuri.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

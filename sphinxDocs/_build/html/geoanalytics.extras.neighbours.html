@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>geoanalytics.extras.neighbours package &mdash; geoanalytics 2025.12.06 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="geoanalytics.extras.visualize package" href="geoanalytics.extras.visualize.html" />
+    <link rel="prev" title="geoanalytics.extras.database package" href="geoanalytics.extras.database.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            geoanalytics
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">geoanalytics</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="geoanalytics.html">geoanalytics package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="geoanalytics.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="geoanalytics.clustering.html">geoanalytics.clustering package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="geoanalytics.conversion.html">geoanalytics.conversion package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="geoanalytics.extras.html">geoanalytics.extras package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="geoanalytics.imputation.html">geoanalytics.imputation package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="geoanalytics.oneClassClassifiers.html">geoanalytics.oneClassClassifiers package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="geoanalytics.patternMining.html">geoanalytics.patternMining package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="geoanalytics.scoreCalculator.html">geoanalytics.scoreCalculator package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="geoanalytics.visualization.html">geoanalytics.visualization package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#module-geoanalytics.analytics">geoanalytics.analytics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#module-geoanalytics.clustering">geoanalytics.clustering module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#module-geoanalytics.config">geoanalytics.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#geoanalytics-csv2raster-module">geoanalytics.csv2raster module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#module-geoanalytics.oneclassClassifiers">geoanalytics.oneclassClassifiers module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#module-geoanalytics.plotGUI">geoanalytics.plotGUI module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#geoanalytics-raster2csv-module">geoanalytics.raster2CSV module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#geoanalytics-repository-module">geoanalytics.repository module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#module-geoanalytics.scoreCalculator">geoanalytics.scoreCalculator module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geoanalytics.html#module-geoanalytics">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">geoanalytics</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">geoanalytics</a></li>
+          <li class="breadcrumb-item"><a href="geoanalytics.html">geoanalytics package</a></li>
+          <li class="breadcrumb-item"><a href="geoanalytics.extras.html">geoanalytics.extras package</a></li>
+      <li class="breadcrumb-item active">geoanalytics.extras.neighbours package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/geoanalytics.extras.neighbours.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="geoanalytics-extras-neighbours-package">
+<h1>geoanalytics.extras.neighbours package<a class="headerlink" href="#geoanalytics-extras-neighbours-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean">
+<span id="geoanalytics-extras-neighbours-findneighboursusingeuclidean-module"></span><h2>geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean module<a class="headerlink" href="#module-geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean.FindNeighboursUsingEuclidean">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean.</span></span><span class="sig-name descname"><span class="pre">FindNeighboursUsingEuclidean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iFile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxDist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'\t'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DBtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/extras/neighbours/FindNeighboursUsingEuclidean.html#FindNeighboursUsingEuclidean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean.FindNeighboursUsingEuclidean" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class create a neighbourhood file using euclid distance.</p>
+<dl class="field-list">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>:param iFile<span class="classifier">file</span></dt><dd><p>Input file name or path of the input file</p>
+</dd>
+<dt>:param maxDist<span class="classifier">int</span></dt><dd><p>The user can specify maxEuclideanDistance.
+This program find pairs of values whose Euclidean distance is less than or equal to maxEucledianDistace
+and store the pairs.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">param  sep<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str :
+This variable is used to distinguish items from one another in a transaction. The default seperator is tab space. However, the users can override their default separator.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Methods<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>mine()</dt><dd><p>find and store the pairs of values whose Euclidean distance is less than or equal to maxEucledianDistace.</p>
+</dd>
+<dt>getFileName()</dt><dd><p>This function returns output file name.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PAMI.extras.neighbours</span> <span class="kn">import</span> <span class="n">findNeighboursUsingEuclidean</span> <span class="k">as</span> <span class="n">db</span>
+
+<span class="n">obj</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">findNeighboursUsingEuclidean</span><span class="p">(</span><span class="n">iFile</span><span class="p">,</span> <span class="n">oFile</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;   &quot;</span><span class="p">)</span>
+
+<span class="n">obj</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean.FindNeighboursUsingEuclidean.createAndSave">
+<span class="sig-name descname"><span class="pre">createAndSave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oFile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/extras/neighbours/FindNeighboursUsingEuclidean.html#FindNeighboursUsingEuclidean.createAndSave"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean.FindNeighboursUsingEuclidean.createAndSave" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean.FindNeighboursUsingEuclidean.getMemoryRSS">
+<span class="sig-name descname"><span class="pre">getMemoryRSS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/geoanalytics/extras/neighbours/FindNeighboursUsingEuclidean.html#FindNeighboursUsingEuclidean.getMemoryRSS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean.FindNeighboursUsingEuclidean.getMemoryRSS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean.FindNeighboursUsingEuclidean.getMemoryUSS">
+<span class="sig-name descname"><span class="pre">getMemoryUSS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/geoanalytics/extras/neighbours/FindNeighboursUsingEuclidean.html#FindNeighboursUsingEuclidean.getMemoryUSS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean.FindNeighboursUsingEuclidean.getMemoryUSS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean.FindNeighboursUsingEuclidean.getNeighboringInformation">
+<span class="sig-name descname"><span class="pre">getNeighboringInformation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/extras/neighbours/FindNeighboursUsingEuclidean.html#FindNeighboursUsingEuclidean.getNeighboringInformation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean.FindNeighboursUsingEuclidean.getNeighboringInformation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean.FindNeighboursUsingEuclidean.getRuntime">
+<span class="sig-name descname"><span class="pre">getRuntime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/geoanalytics/extras/neighbours/FindNeighboursUsingEuclidean.html#FindNeighboursUsingEuclidean.getRuntime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.extras.neighbours.FindNeighboursUsingEuclidean.FindNeighboursUsingEuclidean.getRuntime" title="Permalink to this definition"></a></dt>
+<dd><p>Get the runtime of the transactional database</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the runtime of the transactional database</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-geoanalytics.extras.neighbours.FindNeighboursUsingGeodesic">
+<span id="geoanalytics-extras-neighbours-findneighboursusinggeodesic-module"></span><h2>geoanalytics.extras.neighbours.FindNeighboursUsingGeodesic module<a class="headerlink" href="#module-geoanalytics.extras.neighbours.FindNeighboursUsingGeodesic" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="geoanalytics.extras.neighbours.FindNeighboursUsingGeodesic.FindNeighboursUsingGeodesic">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geoanalytics.extras.neighbours.FindNeighboursUsingGeodesic.</span></span><span class="sig-name descname"><span class="pre">FindNeighboursUsingGeodesic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iFile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxDist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'\t'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DBtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'temp'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/extras/neighbours/FindNeighboursUsingGeodesic.html#FindNeighboursUsingGeodesic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.extras.neighbours.FindNeighboursUsingGeodesic.FindNeighboursUsingGeodesic" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class create a neighbourhood file using Geodesic distance.</p>
+<dl class="field-list">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>:param iFile<span class="classifier">file</span></dt><dd><p>Input file name or path of the input file</p>
+</dd>
+<dt>:param maxDist<span class="classifier">float</span></dt><dd><p>The user can specify maxDist in Km(Kilometers).
+This program find pairs of values whose Geodesic distance is less than or equal to maxDistace
+and store the pairs.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">param  sep<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str :
+This variable is used to distinguish items from one another in a transaction. The default seperator is tab space. However, the users can override their default separator.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Methods<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>mine()</dt><dd><p>find and store the pairs of values whose Geodesic distance is less than or equal to maxDistace.</p>
+</dd>
+<dt>getFileName()</dt><dd><p>This function returns output file name.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">PAMI.extras.neighbours</span> <span class="kn">import</span> <span class="n">findNeighboursUsingGeodesic</span> <span class="k">as</span> <span class="n">db</span>
+
+ <span class="n">obj</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">findNeighboursUsingGeodesic</span><span class="p">(</span><span class="n">iFile</span><span class="p">,</span> <span class="n">oFile</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;   &quot;</span><span class="p">)</span>
+
+<span class="n">obj</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="geoanalytics.extras.neighbours.FindNeighboursUsingGeodesic.FindNeighboursUsingGeodesic.create">
+<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/geoanalytics/extras/neighbours/FindNeighboursUsingGeodesic.html#FindNeighboursUsingGeodesic.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.extras.neighbours.FindNeighboursUsingGeodesic.FindNeighboursUsingGeodesic.create" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geoanalytics.extras.neighbours.FindNeighboursUsingGeodesic.FindNeighboursUsingGeodesic.getMemoryRSS">
+<span class="sig-name descname"><span class="pre">getMemoryRSS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/geoanalytics/extras/neighbours/FindNeighboursUsingGeodesic.html#FindNeighboursUsingGeodesic.getMemoryRSS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.extras.neighbours.FindNeighboursUsingGeodesic.FindNeighboursUsingGeodesic.getMemoryRSS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geoanalytics.extras.neighbours.FindNeighboursUsingGeodesic.FindNeighboursUsingGeodesic.getMemoryUSS">
+<span class="sig-name descname"><span class="pre">getMemoryUSS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/geoanalytics/extras/neighbours/FindNeighboursUsingGeodesic.html#FindNeighboursUsingGeodesic.getMemoryUSS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.extras.neighbours.FindNeighboursUsingGeodesic.FindNeighboursUsingGeodesic.getMemoryUSS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geoanalytics.extras.neighbours.FindNeighboursUsingGeodesic.FindNeighboursUsingGeodesic.getNeighboringInformation">
+<span class="sig-name descname"><span class="pre">getNeighboringInformation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/geoanalytics/extras/neighbours/FindNeighboursUsingGeodesic.html#FindNeighboursUsingGeodesic.getNeighboringInformation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.extras.neighbours.FindNeighboursUsingGeodesic.FindNeighboursUsingGeodesic.getNeighboringInformation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geoanalytics.extras.neighbours.FindNeighboursUsingGeodesic.FindNeighboursUsingGeodesic.getRuntime">
+<span class="sig-name descname"><span class="pre">getRuntime</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/geoanalytics/extras/neighbours/FindNeighboursUsingGeodesic.html#FindNeighboursUsingGeodesic.getRuntime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.extras.neighbours.FindNeighboursUsingGeodesic.FindNeighboursUsingGeodesic.getRuntime" title="Permalink to this definition"></a></dt>
+<dd><p>Get the runtime of the transactional database</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the runtime of the transactional database</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geoanalytics.extras.neighbours.FindNeighboursUsingGeodesic.FindNeighboursUsingGeodesic.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oFile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/geoanalytics/extras/neighbours/FindNeighboursUsingGeodesic.html#FindNeighboursUsingGeodesic.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#geoanalytics.extras.neighbours.FindNeighboursUsingGeodesic.FindNeighboursUsingGeodesic.save" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-geoanalytics.extras.neighbours">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-geoanalytics.extras.neighbours" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="geoanalytics.extras.database.html" class="btn btn-neutral float-left" title="geoanalytics.extras.database package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="geoanalytics.extras.visualize.html" class="btn btn-neutral float-right" title="geoanalytics.extras.visualize package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Vanitha Kattumuri.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
