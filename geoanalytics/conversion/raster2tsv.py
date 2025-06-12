@@ -1,3 +1,13 @@
+# raster2tsv is a raster data extraction and conversion utility that reads selected bands from a raster file (e.g., GeoTIFF),extracts geospatial coordinates and pixel values, and exports the information into a tab-separated values (TSV) format.
+#
+# **Importing and Using the raster2tsv Class in a Python Program**
+#
+#             from geoanalytics.conversion import raster2tsv
+#
+#             cmd = "-band 1 -band 2 -srcwin 0 0 100 100 -skip 2 raster_input.tif output.tsv"
+#
+#             raster2tsv(cmd)
+
 __copyright__ = """
 Copyright (C)  2022 Rage Uday Kiran
 
@@ -42,8 +52,56 @@ def Usage():
 # Program mainline.
 #
 class raster2tsv:
+    """
+    **About this algorithm**
+
+    :**Description**: raster2tsv is a raster data extraction and conversion utility that reads selected bands from a raster file (e.g., GeoTIFF),extracts geospatial coordinates and pixel values, and exports the information into a tab-separated values (TSV) format.
+
+    :**Parameters**:    - **-band b (*int*, repeatable): Specifies which raster bands to extract. If not provided, defaults to band 1.
+                        - **-srcwin xoff yoff width height** (*int x 4*, optional): Defines a rectangular sub-window (offset and size) of the raster to process.
+                        - **-skip factor** (*int*, optional): Sets a sampling factor, allowing the program to skip pixels for faster processing.
+                        - **srcfile** (*str*): Path to the input raster file (e.g., `.tif` or `.img`).
+                        - **dstfile** (*str*, optional): Path to the output `.tsv` file. If not provided, output is printed to standard output.
+
+    :**Attributes**:    - **srcfile** (*str*): Raster file being read.
+                        -**dstfile** (*str*): Output TSV file receiving the data.
+                        - **band_nums** (*list[int]*): List of band indices to extract.
+                        - **srcwin** (*tuple[int, int, int, int]*): Tuple representing the rectangular window to process (x offset, y offset, width, height).
+                        - **skip** (*int*): Sampling interval for skipping pixels.
+                        - **gt** (*tuple*): GeoTransform tuple used to compute real-world coordinates (x, y).
+
+    **Execution methods**
+
+    **Calling from a Python program**
+
+    .. code-block:: python
+
+            from geoanalytics.conversion import raster2tsv
+
+            cmd = "-band 1 -band 2 -srcwin 0 0 100 100 -skip 2 raster_input.tif output.tsv"
+
+            raster2tsv(cmd)
+
+
+     **Credits**
+
+    This implementation was created and revised under the guidance of Professor Rage Uday Kiran.
+    """
 
     def __init__(self, parameter):
+        """
+        Initializes the raster2tsv object and performs the raster-to-TSV conversion process.
+
+        :param parameter: A string of space-separated command-line-style arguments.
+        Expected format includes:
+            - '-band b' (int): Specify raster band(s) to extract.
+            - '-srcwin xoff yoff width height' (int x 4): Define subwindow to read.
+            - '-skip factor' (int): Skip factor for sampling (e.g., 2 means process every second pixel).
+            - 'srcfile' (str): Path to the raster file.
+            - 'dstfile' (str, optional): Path to save the TSV output.
+
+        The method reads the specified bands from the raster file, computes the geospatial coordinates, extracts pixel values, and writes them in a tab-separated format to the given output file (or stdout).
+        """
         # self.parameter = parameter
         srcwin = None
         skip = 1
