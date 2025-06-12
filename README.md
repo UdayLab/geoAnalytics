@@ -41,10 +41,7 @@
     - [Clustering](#0-Clustering)
     - [Raster conversion](#Raster-conversion)
     - [Imputation](#0-association-rule-mining)
-    - [Normalization](#1-pattern-mining-in-binary-transactional-databases)
-    - [Classification](#2-pattern-mining-in-binary-temporal-databases)
     - [Pattern Mining](#Pattern-mining)
-    - [Score Calculation](#4-mining-patterns-from-utility-or-non-binary-databases)
 - [Real-World Case Studies](#real-world-case-studies)
 
 
