@@ -46,7 +46,8 @@ dependencies = [
   'fastparquet',
   'numba',
   'pami',
-  'rasterio'
+  'rasterio',
+  'fancyimpute'
 ]
 
 [project.urls]
